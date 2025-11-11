@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Telugu Letter A - Point Visualization</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .svg-container {
+            border: 2px solid #ddd;
+            background: white;
+            margin: 20px auto;
+            display: block;
+        }
+        .point {
+            cursor: pointer;
+        }
+        .point circle {
+            fill: red;
+            stroke: darkred;
+            stroke-width: 2;
+        }
+        .point text {
+            font-size: 12px;
+            font-weight: bold;
+            fill: black;
+            text-anchor: middle;
+            dominant-baseline: middle;
+        }
+        .point:hover circle {
+            fill: orange;
+            r: 8;
+        }
+        .info {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+        .stroke-info {
+            margin: 10px 0;
+            padding: 10px;
+            background: #e8f4f8;
+            border-left: 4px solid #2196F3;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Telugu Letter 'A' - Point Visualization</h1>
+        <p style="text-align: center; color: #666;">
+            <strong>How to read:</strong> Each numbered circle shows the <strong>Global Index</strong> (0, 1, 2, ...) 
+            which corresponds to the order in the JSON file. Points are color-coded by stroke. 
+            Hover or click on points to see details. The number on each point is its position in the JSON array.
+        </p>
+        <p style="text-align: center; color: #888; font-size: 0.9em;">
+            <strong>JSON Mapping:</strong> The first point in stroke 0 = index 0, 
+            first point in stroke 1 = index (number of points in stroke 0), etc.
+        </p>
+        
+        <svg class="svg-container" viewBox="-4.575999999999999 -7.665999999999999 181.152 208.502" width="800" height="800">
+            <!-- Letter path -->
+            <path d="M 12.51,160.30
+           C 12.51,160.30 60.70,27.56 60.70,27.56
+             62.76,21.96 66.25,17.00 70.81,13.16
+             75.27,9.43 80.93,7.43 86.74,7.55
+             92.48,7.48 98.06,9.42 102.52,13.03
+             107.16,16.78 110.56,21.84 112.28,27.56
+             112.28,27.56 159.50,160.30 159.50,160.30
+             160.03,161.94 160.47,163.61 160.83,165.29
+             161.17,166.70 161.37,168.13 161.44,169.57
+             161.48,171.71 161.07,173.84 160.24,175.82
+             159.41,177.79 158.17,179.57 156.61,181.04
+             155.08,182.54 153.28,183.72 151.29,184.52
+             149.31,185.31 147.19,185.71 145.05,185.68
+             140.06,185.68 136.15,184.58 133.31,182.37
+             130.34,179.95 128.19,176.68 127.16,172.99
+             127.16,172.99 119.93,150.05 119.93,150.05
+             119.93,150.05 52.97,150.05 52.97,150.05
+             52.97,150.05 45.75,172.49 45.75,172.49
+             44.75,176.27 42.65,179.67 39.72,182.26
+             36.99,184.53 33.21,185.67 28.40,185.68
+             23.75,185.74 19.25,183.99 15.88,180.79
+             14.16,179.26 12.80,177.38 11.89,175.28
+             10.97,173.17 10.52,170.89 10.58,168.60
+             10.53,167.29 10.61,165.98 10.81,164.69
+             11.87,162.25 12.35,160.78 12.51,160.30 Z
+           M 63.59,116.37
+           C 63.59,116.37 109.36,116.37 109.36,116.37
+             109.36,116.37 86.74,45.56 86.74,45.56
+             86.74,45.56 63.59,116.37 63.59,116.37 Z" 
+                  fill="lightblue" 
+                  stroke="black" 
+                  stroke-width="3" 
+                  opacity="0.3"/>
+            
+            <!-- Points -->
+            <g class="point" data-index="0" data-stroke="0" data-point-index="0">
+                <circle cx="128.5432727272727" cy="10.525449664429528" r="6" fill="#FF6B6B" stroke="white" stroke-width="1"/>
+                <text x="128.5432727272727" y="10.525449664429528" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central" font-weight="bold">0</text>
+                <title>Global Index: 0, Stroke: 0, Point in Stroke: 0, Coords: 0.6375,0.18</title>
+            </g>
+            <g class="point" data-index="1" data-stroke="0" data-point-index="1">
+                <circle cx="91.48945454545454" cy="-7.665999999999999" r="6" fill="#FF6B6B" stroke="white" stroke-width="1"/>
+                <text x="91.48945454545454" y="-7.665999999999999" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central" font-weight="bold">1</text>
+                <title>Global Index: 1, Stroke: 0, Point in Stroke: 1, Coords: 0.5025,0.115</title>
+            </g>
+            <g class="point" data-index="2" data-stroke="0" data-point-index="2">
+                <circle cx="47.57381818181818" cy="-4.867315436241611" r="6" fill="#FF6B6B" stroke="white" stroke-width="1"/>
+                <text x="47.57381818181818" y="-4.867315436241611" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central" font-weight="bold">2</text>
+                <title>Global Index: 2, Stroke: 0, Point in Stroke: 2, Coords: 0.3425,0.125</title>
+            </g>
+            <g class="point" data-index="3" data-stroke="0" data-point-index="3">
+                <circle cx="11.206181818181816" cy="18.921503355704694" r="6" fill="#FF6B6B" stroke="white" stroke-width="1"/>
+                <text x="11.206181818181816" y="18.921503355704694" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central" font-weight="bold">3</text>
+                <title>Global Index: 3, Stroke: 0, Point in Stroke: 3, Coords: 0.21,0.21</title>
+            </g>
+            <g class="point" data-index="4" data-stroke="0" data-point-index="4">
+                <circle cx="-3.2036363636363614" cy="60.90177181208054" r="6" fill="#FF6B6B" stroke="white" stroke-width="1"/>
+                <text x="-3.2036363636363614" y="60.90177181208054" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central" font-weight="bold">4</text>
+                <title>Global Index: 4, Stroke: 0, Point in Stroke: 4, Coords: 0.1575,0.36</title>
+            </g>
+            <g class="point" data-index="5" data-stroke="0" data-point-index="5">
+                <circle cx="-4.575999999999999" cy="107.77973825503355" r="6" fill="#FF6B6B" stroke="white" stroke-width="1"/>
+                <text x="-4.575999999999999" y="107.77973825503355" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central" font-weight="bold">5</text>
+                <title>Global Index: 5, Stroke: 0, Point in Stroke: 5, Coords: 0.1525,0.5275</title>
+            </g>
+            <g class="point" data-index="6" data-stroke="0" data-point-index="6">
+                <circle cx="9.83381818181818" cy="152.5586912751678" r="6" fill="#FF6B6B" stroke="white" stroke-width="1"/>
+                <text x="9.83381818181818" y="152.5586912751678" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central" font-weight="bold">6</text>
+                <title>Global Index: 6, Stroke: 0, Point in Stroke: 6, Coords: 0.205,0.6875</title>
+            </g>
+            <g class="point" data-index="7" data-stroke="0" data-point-index="7">
+                <circle cx="36.594909090909084" cy="184.74356375838929" r="6" fill="#FF6B6B" stroke="white" stroke-width="1"/>
+                <text x="36.594909090909084" y="184.74356375838929" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central" font-weight="bold">7</text>
+                <title>Global Index: 7, Stroke: 0, Point in Stroke: 7, Coords: 0.3025,0.8025</title>
+            </g>
+            <g class="point" data-index="8" data-stroke="0" data-point-index="8">
+                <circle cx="71.59018181818182" cy="200.836" r="6" fill="#FF6B6B" stroke="white" stroke-width="1"/>
+                <text x="71.59018181818182" y="200.836" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central" font-weight="bold">8</text>
+                <title>Global Index: 8, Stroke: 0, Point in Stroke: 8, Coords: 0.43,0.86</title>
+            </g>
+            <g class="point" data-index="9" data-stroke="0" data-point-index="9">
+                <circle cx="103.15454545454546" cy="194.53895973154366" r="6" fill="#FF6B6B" stroke="white" stroke-width="1"/>
+                <text x="103.15454545454546" y="194.53895973154366" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central" font-weight="bold">9</text>
+                <title>Global Index: 9, Stroke: 0, Point in Stroke: 9, Coords: 0.545,0.8375</title>
+            </g>
+            <g class="point" data-index="10" data-stroke="1" data-point-index="0">
+                <circle cx="174.51745454545457" cy="-6.266657718120807" r="6" fill="#4ECDC4" stroke="white" stroke-width="1"/>
+                <text x="174.51745454545457" y="-6.266657718120807" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central" font-weight="bold">10</text>
+                <title>Global Index: 10, Stroke: 1, Point in Stroke: 0, Coords: 0.805,0.12</title>
+            </g>
+            <g class="point" data-index="11" data-stroke="1" data-point-index="1">
+                <circle cx="176.576" cy="40.61130872483221" r="6" fill="#4ECDC4" stroke="white" stroke-width="1"/>
+                <text x="176.576" y="40.61130872483221" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central" font-weight="bold">11</text>
+                <title>Global Index: 11, Stroke: 1, Point in Stroke: 1, Coords: 0.8125,0.2875</title>
+            </g>
+            <g class="point" data-index="12" data-stroke="1" data-point-index="2">
+                <circle cx="176.576" cy="81.89190604026847" r="6" fill="#4ECDC4" stroke="white" stroke-width="1"/>
+                <text x="176.576" y="81.89190604026847" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central" font-weight="bold">12</text>
+                <title>Global Index: 12, Stroke: 1, Point in Stroke: 2, Coords: 0.8125,0.435</title>
+            </g>
+            <g class="point" data-index="13" data-stroke="1" data-point-index="3">
+                <circle cx="175.88981818181819" cy="117.57513422818792" r="6" fill="#4ECDC4" stroke="white" stroke-width="1"/>
+                <text x="175.88981818181819" y="117.57513422818792" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central" font-weight="bold">13</text>
+                <title>Global Index: 13, Stroke: 1, Point in Stroke: 3, Coords: 0.81,0.5625</title>
+            </g>
+            <g class="point" data-index="14" data-stroke="1" data-point-index="4">
+                <circle cx="174.51745454545457" cy="156.75671812080537" r="6" fill="#4ECDC4" stroke="white" stroke-width="1"/>
+                <text x="174.51745454545457" y="156.75671812080537" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central" font-weight="bold">14</text>
+                <title>Global Index: 14, Stroke: 1, Point in Stroke: 4, Coords: 0.805,0.7025</title>
+            </g>
+            <g class="point" data-index="15" data-stroke="1" data-point-index="5">
+                <circle cx="176.576" cy="200.13632885906043" r="6" fill="#4ECDC4" stroke="white" stroke-width="1"/>
+                <text x="176.576" y="200.13632885906043" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central" font-weight="bold">15</text>
+                <title>Global Index: 15, Stroke: 1, Point in Stroke: 5, Coords: 0.8125,0.8575</title>
+            </g>
+        </svg>
+        
+        <div class="info">
+            <h2>Point Details</h2>
+            <p><strong>Total Points:</strong> 16</p>
+            <p><strong>Total Strokes:</strong> 2</p>
+            
+            <h3>Current Stroke Structure:</h3>
+
+            <div class="stroke-info">
+                <strong>Stroke 1</strong> (10 points):
+                <table>
+                    <tr>
+                        <th>Global Index</th>
+                        <th>Point Index</th>
+                        <th>Coordinates</th>
+                        <th>X</th>
+                        <th>Y</th>
+                    </tr>
+
+                    <tr style="background-color: #fff3cd; font-weight: bold;">
+                        <td><strong>0</strong> → START</td>
+                        <td>0</td>
+                        <td><code>0.6375,0.18</code></td>
+                        <td>0.6375</td>
+                        <td>0.1800</td>
+                    </tr>
+
+                    <tr style="">
+                        <td><strong>1</strong> </td>
+                        <td>1</td>
+                        <td><code>0.5025,0.115</code></td>
+                        <td>0.5025</td>
+                        <td>0.1150</td>
+                    </tr>
+
+                    <tr style="">
+                        <td><strong>2</strong> </td>
+                        <td>2</td>
+                        <td><code>0.3425,0.125</code></td>
+                        <td>0.3425</td>
+                        <td>0.1250</td>
+                    </tr>
+
+                    <tr style="">
+                        <td><strong>3</strong> </td>
+                        <td>3</td>
+                        <td><code>0.21,0.21</code></td>
+                        <td>0.2100</td>
+                        <td>0.2100</td>
+                    </tr>
+
+                    <tr style="">
+                        <td><strong>4</strong> </td>
+                        <td>4</td>
+                        <td><code>0.1575,0.36</code></td>
+                        <td>0.1575</td>
+                        <td>0.3600</td>
+                    </tr>
+
+                    <tr style="">
+                        <td><strong>5</strong> </td>
+                        <td>5</td>
+                        <td><code>0.1525,0.5275</code></td>
+                        <td>0.1525</td>
+                        <td>0.5275</td>
+                    </tr>
+
+                    <tr style="">
+                        <td><strong>6</strong> </td>
+                        <td>6</td>
+                        <td><code>0.205,0.6875</code></td>
+                        <td>0.2050</td>
+                        <td>0.6875</td>
+                    </tr>
+
+                    <tr style="">
+                        <td><strong>7</strong> </td>
+                        <td>7</td>
+                        <td><code>0.3025,0.8025</code></td>
+                        <td>0.3025</td>
+                        <td>0.8025</td>
+                    </tr>
+
+                    <tr style="">
+                        <td><strong>8</strong> </td>
+                        <td>8</td>
+                        <td><code>0.43,0.86</code></td>
+                        <td>0.4300</td>
+                        <td>0.8600</td>
+                    </tr>
+
+                    <tr style="background-color: #d1ecf1; font-weight: bold;">
+                        <td><strong>9</strong> → END</td>
+                        <td>9</td>
+                        <td><code>0.545,0.8375</code></td>
+                        <td>0.5450</td>
+                        <td>0.8375</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="stroke-info">
+                <strong>Stroke 2</strong> (6 points):
+                <table>
+                    <tr>
+                        <th>Global Index</th>
+                        <th>Point Index</th>
+                        <th>Coordinates</th>
+                        <th>X</th>
+                        <th>Y</th>
+                    </tr>
+
+                    <tr style="background-color: #fff3cd; font-weight: bold;">
+                        <td><strong>10</strong> → START</td>
+                        <td>0</td>
+                        <td><code>0.805,0.12</code></td>
+                        <td>0.8050</td>
+                        <td>0.1200</td>
+                    </tr>
+
+                    <tr style="">
+                        <td><strong>11</strong> </td>
+                        <td>1</td>
+                        <td><code>0.8125,0.2875</code></td>
+                        <td>0.8125</td>
+                        <td>0.2875</td>
+                    </tr>
+
+                    <tr style="">
+                        <td><strong>12</strong> </td>
+                        <td>2</td>
+                        <td><code>0.8125,0.435</code></td>
+                        <td>0.8125</td>
+                        <td>0.4350</td>
+                    </tr>
+
+                    <tr style="">
+                        <td><strong>13</strong> </td>
+                        <td>3</td>
+                        <td><code>0.81,0.5625</code></td>
+                        <td>0.8100</td>
+                        <td>0.5625</td>
+                    </tr>
+
+                    <tr style="">
+                        <td><strong>14</strong> </td>
+                        <td>4</td>
+                        <td><code>0.805,0.7025</code></td>
+                        <td>0.8050</td>
+                        <td>0.7025</td>
+                    </tr>
+
+                    <tr style="background-color: #d1ecf1; font-weight: bold;">
+                        <td><strong>15</strong> → END</td>
+                        <td>5</td>
+                        <td><code>0.8125,0.8575</code></td>
+                        <td>0.8125</td>
+                        <td>0.8575</td>
+                    </tr>
+                </table>
+            </div>
+
+            <h3>All Points (for reference):</h3>
+            <table>
+                <tr>
+                    <th>Index</th>
+                    <th>Stroke</th>
+                    <th>Coordinates</th>
+                    <th>X</th>
+                    <th>Y</th>
+                </tr>
+
+                <tr>
+                    <td>0</td>
+                    <td>0</td>
+                    <td><code>0.6375,0.18</code></td>
+                    <td>0.6375</td>
+                    <td>0.1800</td>
+                </tr>
+
+                <tr>
+                    <td>1</td>
+                    <td>0</td>
+                    <td><code>0.5025,0.115</code></td>
+                    <td>0.5025</td>
+                    <td>0.1150</td>
+                </tr>
+
+                <tr>
+                    <td>2</td>
+                    <td>0</td>
+                    <td><code>0.3425,0.125</code></td>
+                    <td>0.3425</td>
+                    <td>0.1250</td>
+                </tr>
+
+                <tr>
+                    <td>3</td>
+                    <td>0</td>
+                    <td><code>0.21,0.21</code></td>
+                    <td>0.2100</td>
+                    <td>0.2100</td>
+                </tr>
+
+                <tr>
+                    <td>4</td>
+                    <td>0</td>
+                    <td><code>0.1575,0.36</code></td>
+                    <td>0.1575</td>
+                    <td>0.3600</td>
+                </tr>
+
+                <tr>
+                    <td>5</td>
+                    <td>0</td>
+                    <td><code>0.1525,0.5275</code></td>
+                    <td>0.1525</td>
+                    <td>0.5275</td>
+                </tr>
+
+                <tr>
+                    <td>6</td>
+                    <td>0</td>
+                    <td><code>0.205,0.6875</code></td>
+                    <td>0.2050</td>
+                    <td>0.6875</td>
+                </tr>
+
+                <tr>
+                    <td>7</td>
+                    <td>0</td>
+                    <td><code>0.3025,0.8025</code></td>
+                    <td>0.3025</td>
+                    <td>0.8025</td>
+                </tr>
+
+                <tr>
+                    <td>8</td>
+                    <td>0</td>
+                    <td><code>0.43,0.86</code></td>
+                    <td>0.4300</td>
+                    <td>0.8600</td>
+                </tr>
+
+                <tr>
+                    <td>9</td>
+                    <td>0</td>
+                    <td><code>0.545,0.8375</code></td>
+                    <td>0.5450</td>
+                    <td>0.8375</td>
+                </tr>
+
+                <tr>
+                    <td>10</td>
+                    <td>1</td>
+                    <td><code>0.805,0.12</code></td>
+                    <td>0.8050</td>
+                    <td>0.1200</td>
+                </tr>
+
+                <tr>
+                    <td>11</td>
+                    <td>1</td>
+                    <td><code>0.8125,0.2875</code></td>
+                    <td>0.8125</td>
+                    <td>0.2875</td>
+                </tr>
+
+                <tr>
+                    <td>12</td>
+                    <td>1</td>
+                    <td><code>0.8125,0.435</code></td>
+                    <td>0.8125</td>
+                    <td>0.4350</td>
+                </tr>
+
+                <tr>
+                    <td>13</td>
+                    <td>1</td>
+                    <td><code>0.81,0.5625</code></td>
+                    <td>0.8100</td>
+                    <td>0.5625</td>
+                </tr>
+
+                <tr>
+                    <td>14</td>
+                    <td>1</td>
+                    <td><code>0.805,0.7025</code></td>
+                    <td>0.8050</td>
+                    <td>0.7025</td>
+                </tr>
+
+                <tr>
+                    <td>15</td>
+                    <td>1</td>
+                    <td><code>0.8125,0.8575</code></td>
+                    <td>0.8125</td>
+                    <td>0.8575</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    
+    <script>
+        // Add click handlers to show point details
+        document.querySelectorAll('.point').forEach(point => {
+            point.addEventListener('click', function() {
+                const idx = this.getAttribute('data-index');
+                const stroke = this.getAttribute('data-stroke');
+                alert(`Point Index: ${idx}\nStroke: ${stroke}\nUse this index when creating stroke order.`);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive SVG Tracing Tool</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .control-panel {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+        
+        .control-panel h2 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #555;
+        }
+        
+        textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            resize: vertical;
+        }
+        
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #45a049;
+        }
+        
+        button.secondary {
+            background: #2196F3;
+        }
+        
+        button.secondary:hover {
+            background: #0b7dda;
+        }
+        
+        button.danger {
+            background: #f44336;
+        }
+        
+        button.danger:hover {
+            background: #da190b;
+        }
+        
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .canvas-container {
+            position: relative;
+            border: 2px solid #333;
+            border-radius: 8px;
+            background: white;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        #svgCanvas {
+            display: block;
+            cursor: crosshair;
+        }
+        
+        .status {
+            padding: 15px;
+            background: #e3f2fd;
+            border-left: 4px solid #2196F3;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        
+        .instructions {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        
+        .instructions ol {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+        
+        .instructions li {
+            margin: 5px 0;
+        }
+        
+        .stroke-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin: 15px 0;
+        }
+        
+        .stroke-info {
+            background: #e8f5e9;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        
+        .point-list {
+            max-height: 200px;
+            overflow-y: auto;
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+        }
+        
+        .json-output {
+            background: #263238;
+            color: #aed581;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        .point-marker {
+            fill: #f44336;
+            stroke: white;
+            stroke-width: 2;
+            cursor: pointer;
+            pointer-events: none;
+        }
+        
+        .point-marker:hover {
+            fill: #ff6b6b;
+        }
+        
+        .trace-line {
+            stroke: #4CAF50;
+            stroke-width: 3;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            pointer-events: none;
+        }
+        
+        .current-stroke {
+            stroke: #2196F3;
+            stroke-width: 4;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            pointer-events: none;
+        }
+        
+        #svgCanvas {
+            user-select: none;
+            -webkit-user-select: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Interactive SVG Tracing Tool</h1>
+        
+        <div class="instructions">
+            <strong>How to use:</strong>
+            <ol>
+                <li>Paste your SVG path in the "SVG Path Input" field (or load from Telugu letter)</li>
+                <li>Click "Load SVG" to display the path</li>
+                <li>Click "Start New Stroke" to begin tracing</li>
+                <li><strong>Free-hand tracing:</strong> Click and drag along the path - points will be recorded continuously</li>
+                <li><strong>Point-by-point:</strong> Or click individual points on the path</li>
+                <li>Release mouse to pause, click "Finish Current Stroke" when done</li>
+                <li>Repeat for all strokes</li>
+                <li>Click "Generate JSON" to get the final JSON output</li>
+            </ol>
+            <p style="margin-top: 10px; color: #666;">
+                <strong>Tip:</strong> You can start tracing from anywhere on the path. Just click and drag in the direction you want to trace!
+            </p>
+        </div>
+        
+        <div class="controls">
+            <div class="control-panel">
+                <h2>SVG Path Input</h2>
+                <textarea id="svgPathInput" placeholder="Paste SVG path here (e.g., M 100 100 L 200 200...)"></textarea>
+                <div style="margin-top: 10px;">
+                    <button onclick="loadFromTeluguLetter()">Load from Telugu Letter</button>
+                    <button class="secondary" onclick="loadSVG()">Load SVG</button>
+                </div>
+                <select id="teluguLetterSelect" style="margin-top: 10px; padding: 8px; width: 100%;">
+                    <option value="">Select Telugu Letter...</option>
+                    <option value="a">అ (a)</option>
+                    <option value="aa">ఆ (aa)</option>
+                    <option value="i">ఇ (i)</option>
+                    <option value="ii">ఈ (ii)</option>
+                    <option value="u">ఉ (u)</option>
+                    <option value="uu">ఊ (uu)</option>
+                    <!-- Add more letters as needed -->
+                </select>
+            </div>
+            
+            <div class="control-panel">
+                <h2>Tracing Controls</h2>
+                <div class="stroke-controls">
+                    <button id="startStrokeBtn" onclick="startNewStroke()">Start New Stroke</button>
+                    <button id="finishStrokeBtn" onclick="finishCurrentStroke()" disabled>Finish Current Stroke</button>
+                    <button class="danger" onclick="clearAll()">Clear All</button>
+                </div>
+                <div class="stroke-info">
+                    <strong>Status:</strong> <span id="statusText">Ready - Load SVG first</span><br>
+                    <strong>Current Stroke:</strong> <span id="currentStrokeNum">-</span><br>
+                    <strong>Points in Current Stroke:</strong> <span id="pointsCount">0</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="canvas-container">
+            <svg id="svgCanvas" width="800" height="600"></svg>
+        </div>
+        
+        <div class="status">
+            <strong>Trace Points:</strong> Click and drag along the SVG path to trace free-hand, or click individual points. 
+            Points are recorded in the order you trace. You can start from anywhere on the path!
+            <br><strong>Tip:</strong> Make sure you're clicking/dragging directly on or very close to the blue letter outline. 
+            The tool will snap to the path if you're within 20 pixels.
+        </div>
+        
+        <div class="control-panel" style="margin-top: 20px;">
+            <h2>Recorded Points</h2>
+            <div class="point-list" id="pointsList">No points recorded yet.</div>
+            <button class="secondary" onclick="generateJSON()">Generate JSON</button>
+            <button onclick="copyJSON()">Copy JSON</button>
+        </div>
+        
+        <div class="control-panel" style="margin-top: 20px;">
+            <h2>Generated JSON Output</h2>
+            <div class="json-output" id="jsonOutput">JSON will appear here after clicking "Generate JSON"</div>
+        </div>
+    </div>
+
+    <script>
+        let svgPath = null;
+        let svgElement = null;
+        let currentStroke = [];
+        let allStrokes = [];
+        let isTracing = false;
+        let isDrawing = false;
+        let pathLength = 0;
+        let pathElement = null;
+        let lastPoint = null;
+        let sampleInterval = null;
+        
+        // Load SVG path from Telugu letter
+        async function loadFromTeluguLetter() {
+            const letter = document.getElementById('teluguLetterSelect').value;
+            if (!letter) {
+                alert('Please select a Telugu letter');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`lib/assets/phontics_assets_points/telugu_phontics/${letter}_big_PointsInfo.json`);
+                if (!response.ok) {
+                    // Try to load the SVG path from Dart file instead
+                    loadSVGPathFromDart(letter);
+                    return;
+                }
+                
+                // If we have JSON, we still need the SVG path
+                loadSVGPathFromDart(letter);
+            } catch (error) {
+                loadSVGPathFromDart(letter);
+            }
+        }
+        
+        async function loadSVGPathFromDart(letter) {
+            try {
+                const response = await fetch(`lib/src/phontics_constants/telugu_shape_paths.dart`);
+                const text = await response.text();
+                
+                // Extract the path using regex
+                const pattern = new RegExp(`${letter}Big\\s*=\\s*'''([^']+)'''`, 's');
+                const match = text.match(pattern);
+                
+                if (match) {
+                    document.getElementById('svgPathInput').value = match[1].trim();
+                    loadSVG();
+                } else {
+                    alert('Could not find SVG path for this letter');
+                }
+            } catch (error) {
+                alert('Error loading SVG path. Please paste it manually.');
+            }
+        }
+        
+        function loadSVG() {
+            const pathInput = document.getElementById('svgPathInput').value.trim();
+            if (!pathInput) {
+                alert('Please enter an SVG path');
+                return;
+            }
+            
+            // Clean up the path - remove newlines and extra spaces
+            svgPath = pathInput.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
+            
+            const canvas = document.getElementById('svgCanvas');
+            canvas.innerHTML = '';
+            
+            // Create SVG path element
+            pathElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            pathElement.setAttribute('d', svgPath);
+            pathElement.setAttribute('fill', 'lightblue');
+            pathElement.setAttribute('stroke', 'black');
+            pathElement.setAttribute('stroke-width', '2');
+            pathElement.setAttribute('opacity', '0.3');
+            pathElement.style.cursor = 'crosshair';
+            
+            canvas.appendChild(pathElement);
+            
+            // Wait a moment for the path to render, then get bounds
+            setTimeout(() => {
+                try {
+                    // Get path bounds and set viewBox
+                    const bbox = pathElement.getBBox();
+                    const padding = 50;
+                    
+                    if (bbox.width > 0 && bbox.height > 0) {
+                        canvas.setAttribute('viewBox', 
+                            `${bbox.x - padding} ${bbox.y - padding} ${bbox.width + 2*padding} ${bbox.height + 2*padding}`);
+                        
+                        // Calculate total path length for point sampling
+                        pathLength = pathElement.getTotalLength();
+                        
+                        // Add event handlers for both click and free-hand drawing
+                        pathElement.addEventListener('click', onPathClick);
+                        pathElement.addEventListener('mousedown', onPathMouseDown);
+                        pathElement.addEventListener('mousemove', onPathMouseMove);
+                        pathElement.addEventListener('mouseup', onPathMouseUp);
+                        pathElement.addEventListener('mouseleave', onPathMouseLeave);
+                        
+                        // Also add to canvas for better area coverage
+                        canvas.addEventListener('mousedown', onCanvasMouseDown);
+                        canvas.addEventListener('mousemove', onCanvasMouseMove);
+                        canvas.addEventListener('mouseup', onCanvasMouseUp);
+                        canvas.addEventListener('mouseleave', onCanvasMouseLeave);
+                        
+                        updateStatus('SVG loaded. Click "Start New Stroke", then click or drag along the path to trace.');
+                    } else {
+                        alert('Error: Could not calculate path bounds. Please check the SVG path format.');
+                        console.error('Path bounds:', bbox);
+                        console.error('SVG Path:', svgPath);
+                    }
+                } catch (error) {
+                    alert('Error loading SVG: ' + error.message);
+                    console.error('Error:', error);
+                    console.error('SVG Path:', svgPath);
+                }
+            }, 100);
+        }
+        
+        function onPathMouseDown(event) {
+            if (!isTracing) return;
+            event.preventDefault();
+            isDrawing = true;
+            lastPoint = null;
+            addPointFromEvent(event);
+        }
+        
+        function onPathMouseMove(event) {
+            if (!isTracing || !isDrawing) return;
+            event.preventDefault();
+            addPointFromEvent(event, true); // true = is continuous drawing
+        }
+        
+        function onPathMouseUp(event) {
+            if (!isTracing) return;
+            isDrawing = false;
+            lastPoint = null;
+        }
+        
+        function onPathMouseLeave(event) {
+            if (!isTracing) return;
+            isDrawing = false;
+            lastPoint = null;
+        }
+        
+        function onCanvasMouseDown(event) {
+            if (!isTracing) return;
+            event.preventDefault();
+            isDrawing = true;
+            lastPoint = null;
+            addPointFromEvent(event);
+        }
+        
+        function onCanvasMouseMove(event) {
+            if (!isTracing || !isDrawing) return;
+            event.preventDefault();
+            addPointFromEvent(event, true);
+        }
+        
+        function onCanvasMouseUp(event) {
+            if (!isTracing) return;
+            isDrawing = false;
+            lastPoint = null;
+        }
+        
+        function onCanvasMouseLeave(event) {
+            if (!isTracing) return;
+            isDrawing = false;
+            lastPoint = null;
+        }
+        
+        function addPointFromEvent(event, isContinuous = false) {
+            const point = getPointOnPath(event);
+            if (!point) {
+                console.error('Could not get point from event');
+                return;
+            }
+            
+            // Validate point coordinates
+            if (isNaN(point.x) || isNaN(point.y)) {
+                console.error('Invalid point coordinates:', point);
+                return;
+            }
+            
+            // For continuous drawing, only add point if it's far enough from last point
+            if (isContinuous && lastPoint) {
+                const distance = Math.sqrt(
+                    Math.pow(point.x - lastPoint.x, 2) + 
+                    Math.pow(point.y - lastPoint.y, 2)
+                );
+                // Only add point if moved at least 5 pixels (adjust as needed)
+                if (distance < 5) return;
+            }
+            
+            // Normalize coordinates to 0-1 range
+            // We need to use the actual bounding box of the path
+            const bbox = pathElement.getBBox();
+            
+            // Ensure we have valid dimensions
+            if (bbox.width <= 0 || bbox.height <= 0) {
+                console.error('Invalid bounding box:', bbox);
+                return;
+            }
+            
+            // Normalize: map from [bbox.x, bbox.x + bbox.width] to [0, 1]
+            // and from [bbox.y, bbox.y + bbox.height] to [0, 1]
+            let normalizedX = (point.x - bbox.x) / bbox.width;
+            let normalizedY = (point.y - bbox.y) / bbox.height;
+            
+            // Debug: log if coordinates are way off
+            if (normalizedX < -0.5 || normalizedX > 1.5 || normalizedY < -0.5 || normalizedY > 1.5) {
+                console.warn('Point outside expected range:', {
+                    point: {x: point.x, y: point.y},
+                    bbox: bbox,
+                    normalized: {x: normalizedX, y: normalizedY}
+                });
+            }
+            
+            // Clamp to 0-1 range to avoid negative values
+            const clampedX = Math.max(0, Math.min(1, normalizedX));
+            const clampedY = Math.max(0, Math.min(1, normalizedY));
+            
+            // Add point to current stroke
+            const pointData = {
+                x: clampedX,
+                y: clampedY,
+                originalX: point.x,
+                originalY: point.y
+            };
+            
+            currentStroke.push(pointData);
+            lastPoint = point;
+            
+            // Draw point marker (only show every Nth point for continuous drawing)
+            if (!isContinuous || currentStroke.length % 3 === 0) {
+                drawPointMarker(point.x, point.y, currentStroke.length - 1);
+            }
+            
+            // Draw trace line
+            if (currentStroke.length > 1) {
+                drawTraceLine();
+            }
+            
+            updatePointsDisplay();
+        }
+        
+        function getPointOnPath(event) {
+            if (!pathElement) return null;
+            
+            const canvas = document.getElementById('svgCanvas');
+            const rect = canvas.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+            
+            // Convert screen coordinates to SVG coordinates
+            const pt = canvas.createSVGPoint();
+            pt.x = x;
+            pt.y = y;
+            const svgPoint = pt.matrixTransform(canvas.getScreenCTM().inverse());
+            
+            // For free-hand drawing, we want to use the actual mouse position
+            // but optionally snap to the path if close enough
+            // First, try to find the closest point on the path
+            let closestPoint = null;
+            let minDistance = Infinity;
+            let closestLength = 0;
+            
+            // Sample more densely for better accuracy
+            const sampleStep = Math.max(1, pathLength / 2000); // Increased density
+            for (let i = 0; i <= pathLength; i += sampleStep) {
+                const pathPoint = pathElement.getPointAtLength(i);
+                const distance = Math.sqrt(
+                    Math.pow(svgPoint.x - pathPoint.x, 2) + 
+                    Math.pow(svgPoint.y - pathPoint.y, 2)
+                );
+                
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    closestPoint = pathPoint;
+                    closestLength = i;
+                }
+            }
+            
+            // Only snap to path if very close (within 20 pixels)
+            // Otherwise use the actual mouse position for free-hand drawing
+            if (minDistance <= 20) {
+                return closestPoint;
+            } else {
+                // Use actual mouse position for free-hand drawing
+                return { x: svgPoint.x, y: svgPoint.y };
+            }
+        }
+        
+        function onPathClick(event) {
+            if (!isTracing) {
+                alert('Please click "Start New Stroke" first');
+                return;
+            }
+            
+            // If already drawing, don't add duplicate point
+            if (isDrawing) return;
+            
+            addPointFromEvent(event, false);
+        }
+        
+        function drawPointMarker(x, y, index) {
+            // Validate coordinates
+            if (isNaN(x) || isNaN(y) || x === undefined || y === undefined) {
+                console.error('Invalid marker coordinates:', {x, y, index});
+                return;
+            }
+            
+            const canvas = document.getElementById('svgCanvas');
+            
+            // Only show markers for every 5th point during continuous drawing to avoid clutter
+            // Always show first, last, and every 10th point
+            if (index > 0 && index % 10 !== 0 && index !== currentStroke.length - 1) {
+                return; // Skip drawing this marker
+            }
+            
+            const marker = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            marker.setAttribute('cx', x);
+            marker.setAttribute('cy', y);
+            marker.setAttribute('r', '4');
+            marker.setAttribute('class', 'point-marker');
+            marker.setAttribute('data-index', index);
+            canvas.appendChild(marker);
+            
+            // Add number label for key points
+            if (index === 0 || index % 10 === 0 || index === currentStroke.length - 1) {
+                const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                text.setAttribute('x', x);
+                text.setAttribute('y', y - 8);
+                text.setAttribute('font-size', '9');
+                text.setAttribute('fill', 'white');
+                text.setAttribute('text-anchor', 'middle');
+                text.setAttribute('font-weight', 'bold');
+                text.textContent = index;
+                canvas.appendChild(text);
+            }
+        }
+        
+        function drawTraceLine() {
+            const canvas = document.getElementById('svgCanvas');
+            
+            // Remove old trace line for current stroke
+            const oldLine = canvas.querySelector('.current-stroke');
+            if (oldLine) oldLine.remove();
+            
+            if (currentStroke.length < 2) return;
+            
+            // Validate that all points have valid coordinates
+            const validPoints = currentStroke.filter(p => 
+                p.originalX !== undefined && 
+                p.originalY !== undefined &&
+                !isNaN(p.originalX) && 
+                !isNaN(p.originalY)
+            );
+            
+            if (validPoints.length < 2) return;
+            
+            const line = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+            const points = validPoints.map(p => `${p.originalX},${p.originalY}`).join(' ');
+            line.setAttribute('points', points);
+            line.setAttribute('class', 'current-stroke');
+            line.setAttribute('fill', 'none');
+            canvas.appendChild(line);
+        }
+        
+        function startNewStroke() {
+            if (!pathElement) {
+                alert('Please load SVG first');
+                return;
+            }
+            
+            // Clear any previous drawing artifacts
+            const canvas = document.getElementById('svgCanvas');
+            const tempLines = canvas.querySelectorAll('.current-stroke');
+            tempLines.forEach(line => line.remove());
+            
+            isTracing = true;
+            isDrawing = false;
+            currentStroke = [];
+            lastPoint = null;
+            document.getElementById('startStrokeBtn').disabled = true;
+            document.getElementById('finishStrokeBtn').disabled = false;
+            updateStatus(`Tracing stroke ${allStrokes.length + 1}. Click and drag along the path, or click individual points. Make sure to drag ON the blue outline.`);
+        }
+        
+        function finishCurrentStroke() {
+            if (currentStroke.length === 0) {
+                alert('No points in current stroke. Add at least one point.');
+                return;
+            }
+            
+            // Stop any ongoing drawing
+            isDrawing = false;
+            lastPoint = null;
+            
+            allStrokes.push([...currentStroke]);
+            currentStroke = [];
+            isTracing = false;
+            
+            document.getElementById('startStrokeBtn').disabled = false;
+            document.getElementById('finishStrokeBtn').disabled = true;
+            
+            // Convert current stroke line to permanent trace line
+            const canvas = document.getElementById('svgCanvas');
+            const currentLine = canvas.querySelector('.current-stroke');
+            if (currentLine) {
+                currentLine.setAttribute('class', 'trace-line');
+            }
+            
+            updateStatus(`Stroke ${allStrokes.length} completed. Click "Start New Stroke" for the next stroke.`);
+            updatePointsDisplay();
+        }
+        
+        function clearAll() {
+            if (confirm('Clear all strokes and points?')) {
+                allStrokes = [];
+                currentStroke = [];
+                isTracing = false;
+                isDrawing = false;
+                lastPoint = null;
+                
+                const canvas = document.getElementById('svgCanvas');
+                // Remove all markers and lines, keep only the path
+                const markers = canvas.querySelectorAll('.point-marker, text, .trace-line, .current-stroke');
+                markers.forEach(m => m.remove());
+                
+                document.getElementById('startStrokeBtn').disabled = false;
+                document.getElementById('finishStrokeBtn').disabled = true;
+                updateStatus('Cleared. Ready to start tracing.');
+                updatePointsDisplay();
+            }
+        }
+        
+        function updatePointsDisplay() {
+            const listDiv = document.getElementById('pointsList');
+            const currentStrokeNum = allStrokes.length + (isTracing ? 1 : 0);
+            document.getElementById('currentStrokeNum').textContent = isTracing ? currentStrokeNum : '-';
+            document.getElementById('pointsCount').textContent = currentStroke.length;
+            
+            if (allStrokes.length === 0 && currentStroke.length === 0) {
+                listDiv.textContent = 'No points recorded yet.';
+                return;
+            }
+            
+            let html = '';
+            allStrokes.forEach((stroke, strokeIdx) => {
+                html += `<strong>Stroke ${strokeIdx + 1}</strong> (${stroke.length} points):<br>`;
+                stroke.forEach((pt, ptIdx) => {
+                    html += `  ${ptIdx}: (${pt.x.toFixed(4)}, ${pt.y.toFixed(4)})<br>`;
+                });
+                html += '<br>';
+            });
+            
+            if (currentStroke.length > 0) {
+                html += `<strong>Current Stroke ${currentStrokeNum}</strong> (${currentStroke.length} points):<br>`;
+                currentStroke.forEach((pt, ptIdx) => {
+                    html += `  ${ptIdx}: (${pt.x.toFixed(4)}, ${pt.y.toFixed(4)})<br>`;
+                });
+            }
+            
+            listDiv.innerHTML = html;
+        }
+        
+        function updateStatus(message) {
+            document.getElementById('statusText').textContent = message;
+        }
+        
+        function generateJSON() {
+            if (allStrokes.length === 0) {
+                alert('No strokes recorded. Please trace at least one stroke.');
+                return;
+            }
+            
+            const strokes = allStrokes.map(stroke => ({
+                points: stroke.map(pt => `${pt.x.toFixed(4)},${pt.y.toFixed(4)}`)
+            }));
+            
+            const json = {
+                strokes: strokes
+            };
+            
+            const jsonOutput = document.getElementById('jsonOutput');
+            jsonOutput.textContent = JSON.stringify(json, null, 2);
+        }
+        
+        function copyJSON() {
+            const jsonOutput = document.getElementById('jsonOutput').textContent;
+            if (!jsonOutput || jsonOutput.includes('will appear here')) {
+                alert('Please generate JSON first');
+                return;
+            }
+            
+            navigator.clipboard.writeText(jsonOutput).then(() => {
+                alert('JSON copied to clipboard!');
+            }).catch(err => {
+                alert('Failed to copy. Please select and copy manually.');
+            });
+        }
+    </script>
+</body>
+</html>
+
