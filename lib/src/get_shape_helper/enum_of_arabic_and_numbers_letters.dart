@@ -253,7 +253,7 @@ class TypeExtensionTracking {
     bool isBig = true,
   }) {
     return TraceModel(
-      letterViewSize: sizeOfLetter,
+      letterViewSize: const Size(1000, 1000), // Use larger view size to match TTF coordinate space
       indexPathPaintStyle: PaintingStyle.stroke,
       dottedPathPaintStyle: PaintingStyle.stroke,
       dottedPath: dottedPath, // This shows the tracing direction
