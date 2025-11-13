@@ -31,6 +31,9 @@ final PaintingStyle? dottedPathPaintStyle;
 final double? strokeIndex;
 
 final double? distanceToCheck;
+
+  // For debugging: Different color for each stroke
+  final List<Color>? strokeColors;
   LetterPathsModel({
         this.isSpace=false,
 
@@ -57,6 +60,7 @@ final double? distanceToCheck;
     this.hasFinishedOneStroke = false,
     this.currentStroke = 0,
     this.currentStrokeProgress = -1,
+    this.strokeColors,
   })  : paths = paths ?? [],
         currentDrawingPath = ui.Path(),
         allStrokePoints = allStrokePoints ?? [];

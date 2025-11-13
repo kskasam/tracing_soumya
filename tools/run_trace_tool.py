@@ -79,25 +79,28 @@ def main():
     Handler = CustomHTTPRequestHandler
     
     with socketserver.TCPServer(("", actual_port), Handler) as httpd:
-        url = f"http://localhost:{actual_port}/tools/telugu_stroke_editor.html"
-        url_old = f"http://localhost:{actual_port}/tools/interactive_trace_tool.html"
+        url_fixed = f"http://localhost:{actual_port}/tools/telugu_stroke_editor_fixed.html"
+        url_old1 = f"http://localhost:{actual_port}/tools/telugu_stroke_editor.html"
+        url_old2 = f"http://localhost:{actual_port}/tools/interactive_trace_tool.html"
         print("="*80)
         print("Telugu Stroke Editor Tools")
         print("="*80)
-        print("\nTwo tools available:")
+        print("\nAvailable tools:")
         if actual_port != PORT:
             print(f"\n⚠️  Port {PORT} was in use. Using port {actual_port} instead.")
         print(f"\nServer starting on port {actual_port}...")
-        print(f"\n1. NEW IMPROVED TOOL (Recommended):")
-        print(f"   {url}")
-        print(f"\n2. Original Tool:")
-        print(f"   {url_old}")
+        print(f"\n1. ⭐ FIXED TOOL (USE THIS - matches Flutter coordinates!):")
+        print(f"   {url_fixed}")
+        print(f"\n2. Old Tool (coordinate mismatch):")
+        print(f"   {url_old1}")
+        print(f"\n3. Original Tool:")
+        print(f"   {url_old2}")
         print("\nPress Ctrl+C to stop the server")
         print("="*80)
         
         # Try to open browser automatically
         try:
-            webbrowser.open(url)
+            webbrowser.open(url_fixed)
         except:
             pass
         

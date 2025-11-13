@@ -114,7 +114,7 @@ class _TracingWordGameState extends State<TracingWordGame> {
                                   clipBehavior: Clip.none,
                                   children: [
                                     CustomPaint(
-                                      size: tracingCubit.viewSize,
+                                      size: state.letterPathsModels[index].viewSize, // Use per-letter viewSize
                                       painter: PhoneticsPainter(
                                         strokeIndex: state
                                             .letterPathsModels[index]

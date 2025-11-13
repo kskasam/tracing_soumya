@@ -113,7 +113,7 @@ class _TracingCharsGameState extends State<TracingCharsGame> {
                                   children: [
                                     CustomPaint(
                                       // isComplex: true,
-                                      size: tracingCubit.viewSize,
+                                      size: state.letterPathsModels[index].viewSize, // Use per-letter viewSize
               
                                       painter: PhoneticsPainter(
                                         strokeIndex: state
@@ -167,6 +167,9 @@ class _TracingCharsGameState extends State<TracingCharsGame> {
                                         dottedPathPaintStyle: state
                                             .letterPathsModels[index]
                                             .dottedPathPaintStyle,
+                                        strokeColors: state
+                                            .letterPathsModels[index]
+                                            .strokeColors,
                                       ),
                                     ),
                                     if (state.activeIndex == index && widget.showAnchor)

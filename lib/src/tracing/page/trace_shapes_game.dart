@@ -106,11 +106,11 @@ class _TracingGeometricShapesGameState
                                 }
                               },
                               onPanEnd: (details) {},
-                              child: Stack(
-                                clipBehavior: Clip.none,
-                                children: [
-                                  CustomPaint(
-                                    size: tracingCubit.viewSize,
+                                child: Stack(
+                                  clipBehavior: Clip.none,
+                                  children: [
+                                    CustomPaint(
+                                      size: state.letterPathsModels[index].viewSize, // Use per-letter viewSize
                                     painter: PhoneticsPainter(
                                       strokeIndex: state
                                           .letterPathsModels[index].strokeIndex,

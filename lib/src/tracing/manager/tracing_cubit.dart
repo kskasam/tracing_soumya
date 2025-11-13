@@ -82,26 +82,38 @@ class TracingCubit extends Cubit<TracingState> {
 
       final transformedPath = _applyTransformation(
         parsedPath,
-        viewSize,
+        letterModel.letterViewSize, // Use letterViewSize instead of hardcoded viewSize
       );
 
       final dottedPathTransformed = _applyTransformationForOtherPathsDotted(
           dottedPath,
-          viewSize,
+          letterModel.letterViewSize, // Use letterViewSize
           letterModel.positionDottedPath,
           letterModel.scaledottedPath);
       final indexPathTransformed = _applyTransformationForOtherPathsIndex(
           dottedIndexPath,
-          viewSize,
+          letterModel.letterViewSize, // Use letterViewSize
           letterModel.positionIndexPath,
           letterModel.scaleIndexPath);
 
       final allStrokePoints = await _loadPointsFromJson(
         letterModel.pointsJsonFile,
-        viewSize,
+        letterModel.letterViewSize, // Use letterViewSize instead of hardcoded viewSize
+        parsedPath, // Pass the SVG path for proper transformation
       );
       final anchorPos =
           allStrokePoints.isNotEmpty ? allStrokePoints[0][0] : Offset.zero;
+      
+      // Debug Telugu coordinates
+      if (letterModel.pointsJsonFile.contains('telugu')) {
+        print('=== Telugu Debug ===');
+        print('Letter: ${letterModel.pointsJsonFile}');
+        print('letterViewSize: ${letterModel.letterViewSize}');
+        print('SVG bounds: ${parsedPath.getBounds()}');
+        print('First JSON point AFTER transformation: ${allStrokePoints.isNotEmpty ? allStrokePoints[0][0] : "none"}');
+        print('anchorPos: $anchorPos');
+        print('==================');
+      }
 
       model.add(LetterPathsModel(
           isSpace: letterModel.isSpace,
@@ -120,7 +132,8 @@ class TracingCubit extends Cubit<TracingState> {
           anchorPos: anchorPos,
           distanceToCheck: letterModel.distanceToCheck,
           indexPathPaintStyle: letterModel.indexPathPaintStyle,
-          dottedPathPaintStyle: letterModel.dottedPathPaintStyle));
+          dottedPathPaintStyle: letterModel.dottedPathPaintStyle,
+          strokeColors: letterModel.strokeColors));
     }
 
     emit(state.copyWith(
@@ -230,18 +243,44 @@ class TracingCubit extends Cubit<TracingState> {
   }
 
   Future<List<List<Offset>>> _loadPointsFromJson(
-      String path, Size viewSize) async {
+      String path, Size viewSize, Path svgPath) async {
     final jsonString = await rootBundle.loadString('packages/tracing_game/$path');
 
     final jsonData = jsonDecode(jsonString);
     final List<List<Offset>> strokePointsList = [];
+
+    // Get SVG transformation parameters (same as _applyTransformation)
+    final Rect originalBounds = svgPath.getBounds();
+    final Size originalSize = Size(originalBounds.width, originalBounds.height);
+    final double scaleX = viewSize.width / originalSize.width;
+    final double scaleY = viewSize.height / originalSize.height;
+    final double scale = math.min(scaleX, scaleY);
+    final double translateX =
+        (viewSize.width - originalSize.width * scale) / 2 -
+            originalBounds.left * scale;
+    final double translateY =
+        (viewSize.height - originalSize.height * scale) / 2 -
+            originalBounds.top * scale;
 
     for (var stroke in jsonData['strokes']) {
       final List<dynamic> strokePointsData = stroke['points'];
       final points = strokePointsData.map<Offset>((pointString) {
         final coords =
             pointString.split(',').map((e) => double.parse(e)).toList();
-        return Offset(coords[0] * viewSize.width, coords[1] * viewSize.height);
+        
+        // CRITICAL FIX: Apply SAME transformation as SVG!
+        // Matrix4.identity()..scale(s)..translate(t) means: (point + translate) * scale
+        // So we need to apply translate first, then scale
+        
+        // Step 1: Map normalized coords (0-1) to SVG coordinate space
+        final svgX = originalBounds.left + coords[0] * originalSize.width;
+        final svgY = originalBounds.top + coords[1] * originalSize.height;
+        
+        // Step 2: Apply translate, then scale (matching Matrix4 behavior)
+        final transformedX = (svgX + translateX) * scale;
+        final transformedY = (svgY + translateY) * scale;
+        
+        return Offset(transformedX, transformedY);
       }).toList();
       strokePointsList.add(points);
     }

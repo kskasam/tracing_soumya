@@ -25,6 +25,10 @@ final double? scaledottedPath;
 final double? distanceToCheck;
 final Size  letterViewSize;
 final double? strokeIndex;
+
+  // For debugging: Different color for each stroke
+  final List<Color>? strokeColors;
+
   TraceModel({
         this.isSpace=false,
 
@@ -48,6 +52,7 @@ final double? strokeIndex;
     required this.letterPath,
     required this.pointsJsonFile,
     // required this.pointColor,
+    this.strokeColors,
 
   });
 
@@ -72,6 +77,7 @@ final double? strokeIndex;
     double? distanceToCheck,
     Size? letterViewSize,
     double? strokeIndex,
+    List<Color>? strokeColors,
   }) {
     return TraceModel(
       isSpace: isSpace ?? this.isSpace,
@@ -94,6 +100,7 @@ final double? strokeIndex;
       distanceToCheck: distanceToCheck ?? this.distanceToCheck,
       letterViewSize: letterViewSize ?? this.letterViewSize,
       strokeIndex: strokeIndex ?? this.strokeIndex,
+      strokeColors: strokeColors ?? this.strokeColors,
     );
   }
 }

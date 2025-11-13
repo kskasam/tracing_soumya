@@ -21,6 +21,9 @@ class PhoneticsPainter extends CustomPainter {
   final double? strokeIndex;
   final PaintingStyle? indexPathPaintStyle;
   final PaintingStyle? dottedPathPaintStyle;
+  
+  // New: List of colors for each stroke (for debugging)
+  final List<Color>? strokeColors;
 
   PhoneticsPainter({
     this.strokeIndex,
@@ -40,6 +43,7 @@ class PhoneticsPainter extends CustomPainter {
     required this.viewSize,
     required this.letterColor,
     this.letterShader,
+    this.strokeColors,
   });
 
   @override
@@ -84,9 +88,23 @@ class PhoneticsPainter extends CustomPainter {
       ..strokeJoin = StrokeJoin.round
       ..strokeWidth = strokeWidth ?? 55;
 
-    // Draw all paths
-    for (var path in paths) {
-      canvas.drawPath(path, strokePaint);
+    // Draw all paths with different colors if strokeColors is provided
+    if (strokeColors != null && strokeColors!.isNotEmpty) {
+      for (int i = 0; i < paths.length; i++) {
+        // Use different color for each stroke, cycling through if needed
+        final color = strokeColors![i % strokeColors!.length];
+        strokePaint.color = color;
+        canvas.drawPath(paths[i], strokePaint);
+      }
+      // Current drawing path uses the color of the current stroke
+      if (paths.length < strokeColors!.length) {
+        strokePaint.color = strokeColors![paths.length];
+      }
+    } else {
+      // Default behavior: use single strokeColor for all
+      for (var path in paths) {
+        canvas.drawPath(path, strokePaint);
+      }
     }
 
     // Draw the current drawing path (if needed)
