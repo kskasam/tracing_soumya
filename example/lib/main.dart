@@ -30,7 +30,6 @@ class _MyAppState extends State<MyApp> {
           children: [
             Expanded(
               child: TracingCharsGame(
-                showAnchor: true,
                 // Test with Telugu letter అ (a) - focus on fixing hand icon alignment
                 traceShapeModel: [
                   TraceCharsModel(chars: [
