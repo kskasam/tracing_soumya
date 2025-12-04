@@ -34,6 +34,10 @@ final double? distanceToCheck;
 
   // For debugging: Different color for each stroke
   final List<Color>? strokeColors;
+  
+  // Debug: Original SVG bounds (before transformation)
+  final Rect? svgBounds;
+  
   LetterPathsModel({
         this.isSpace=false,
 
@@ -61,6 +65,7 @@ final double? distanceToCheck;
     this.currentStroke = 0,
     this.currentStrokeProgress = -1,
     this.strokeColors,
+    this.svgBounds,
   })  : paths = paths ?? [],
         currentDrawingPath = ui.Path(),
         allStrokePoints = allStrokePoints ?? [];

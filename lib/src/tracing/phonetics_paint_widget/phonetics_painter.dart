@@ -24,6 +24,14 @@ class PhoneticsPainter extends CustomPainter {
   
   // New: List of colors for each stroke (for debugging)
   final List<Color>? strokeColors;
+  
+  // New: JSON path visualization (for debugging alignment)
+  final List<List<Offset>>? jsonPathPoints;
+  final bool showJsonPath;
+  
+  // Debug: SVG bounds for visualization
+  final Rect? svgBounds;
+  final bool showDebugOverlays;
 
   PhoneticsPainter({
     this.strokeIndex,
@@ -44,10 +52,81 @@ class PhoneticsPainter extends CustomPainter {
     required this.letterColor,
     this.letterShader,
     this.strokeColors,
+    this.jsonPathPoints,
+    this.showJsonPath = false,
+    this.svgBounds,
+    this.showDebugOverlays = true,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
+    // DEBUG OVERLAYS: Draw coordinate spaces and bounds FIRST (behind everything)
+    if (showDebugOverlays) {
+      // BLUE: ViewSize rectangle - the coordinate space used for transformations
+      final viewSizePaint = Paint()
+        ..color = Colors.blue.withOpacity(0.3)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 2.0;
+      canvas.drawRect(
+        Rect.fromLTWH(0, 0, viewSize.width, viewSize.height),
+        viewSizePaint,
+      );
+      
+      // GREEN: SVG bounds (original SVG coordinate space)
+      if (svgBounds != null) {
+        final svgBoundsPaint = Paint()
+          ..color = Colors.green.withOpacity(0.5)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 2.5;
+        // Draw dashed effect manually
+        _drawDashedRect(canvas, svgBounds!, svgBoundsPaint, [8, 4]);
+      }
+      
+      // ORANGE: Actual canvas size (might differ from viewSize due to FittedBox)
+      final canvasSizePaint = Paint()
+        ..color = Colors.orange.withOpacity(0.4)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 2.0;
+      _drawDashedRect(
+        canvas,
+        Rect.fromLTWH(0, 0, size.width, size.height),
+        canvasSizePaint,
+        [5, 3],
+      );
+      
+      // PURPLE: JSON bounds (calculate from JSON points)
+      if (jsonPathPoints != null && jsonPathPoints!.isNotEmpty) {
+        double? minX, minY, maxX, maxY;
+        for (var stroke in jsonPathPoints!) {
+          for (var point in stroke) {
+            minX = minX == null ? point.dx : (minX < point.dx ? minX : point.dx);
+            minY = minY == null ? point.dy : (minY < point.dy ? minY : point.dy);
+            maxX = maxX == null ? point.dx : (maxX > point.dx ? maxX : point.dx);
+            maxY = maxY == null ? point.dy : (maxY > point.dy ? maxY : point.dy);
+          }
+        }
+        if (minX != null && minY != null && maxX != null && maxY != null) {
+          final jsonBoundsPaint = Paint()
+            ..color = Colors.purple.withOpacity(0.5)
+            ..style = PaintingStyle.stroke
+            ..strokeWidth = 2.5;
+          _drawDashedRect(
+            canvas,
+            Rect.fromLTRB(minX, minY, maxX, maxY),
+            jsonBoundsPaint,
+            [10, 5],
+          );
+        }
+      }
+      
+      // Draw corner markers for (0,0) and viewSize
+      final cornerPaint = Paint()
+        ..color = Colors.blue
+        ..style = PaintingStyle.fill;
+      canvas.drawCircle(Offset(0, 0), 5, cornerPaint);
+      canvas.drawCircle(Offset(viewSize.width, viewSize.height), 5, cornerPaint);
+    }
+    
     // Paint for the letter path
     final letterPaint = Paint()
       ..color = letterColor
@@ -76,6 +155,39 @@ class PhoneticsPainter extends CustomPainter {
         ..strokeWidth = strokeIndex ?? 2.0;
       canvas.drawPath(indexPath!, debugPaint);
     }
+    
+    // Draw JSON path for debugging alignment (BEFORE clipping)
+    if (showJsonPath && jsonPathPoints != null && jsonPathPoints!.isNotEmpty) {
+      final jsonPathPaint = Paint()
+        ..color = Colors.purple
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 3.0
+        ..strokeCap = StrokeCap.round
+        ..strokeJoin = StrokeJoin.round;
+      
+      // Draw each stroke from JSON
+      for (var stroke in jsonPathPoints!) {
+        if (stroke.isEmpty) continue;
+        
+        final jsonPath = Path();
+        jsonPath.moveTo(stroke[0].dx, stroke[0].dy);
+        for (int i = 1; i < stroke.length; i++) {
+          jsonPath.lineTo(stroke[i].dx, stroke[i].dy);
+        }
+        canvas.drawPath(jsonPath, jsonPathPaint);
+      }
+      
+      // Also draw points as circles for better visibility
+      final pointPaint = Paint()
+        ..color = Colors.purple
+        ..style = PaintingStyle.fill;
+      for (var stroke in jsonPathPoints!) {
+        for (var point in stroke) {
+          canvas.drawCircle(point, 4.0, pointPaint);
+        }
+      }
+    }
+    
     // Clip the canvas to the letter path to prevent drawing outside
     canvas.save();
     canvas.clipPath(letterImage);
@@ -124,4 +236,37 @@ class PhoneticsPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(CustomPainter oldDelegate) => true;
+  
+  // Helper to draw dashed rectangle
+  void _drawDashedRect(Canvas canvas, Rect rect, Paint paint, List<double> dashPattern) {
+    final dashWidth = dashPattern[0];
+    final dashSpace = dashPattern.length > 1 ? dashPattern[1] : dashPattern[0];
+    final path = Path();
+    
+    // Top edge
+    for (double x = rect.left; x < rect.right; x += dashWidth + dashSpace) {
+      path.moveTo(x, rect.top);
+      path.lineTo((x + dashWidth).clamp(rect.left, rect.right), rect.top);
+    }
+    
+    // Right edge
+    for (double y = rect.top; y < rect.bottom; y += dashWidth + dashSpace) {
+      path.moveTo(rect.right, y);
+      path.lineTo(rect.right, (y + dashWidth).clamp(rect.top, rect.bottom));
+    }
+    
+    // Bottom edge
+    for (double x = rect.right; x > rect.left; x -= dashWidth + dashSpace) {
+      path.moveTo(x, rect.bottom);
+      path.lineTo((x - dashWidth).clamp(rect.left, rect.right), rect.bottom);
+    }
+    
+    // Left edge
+    for (double y = rect.bottom; y > rect.top; y -= dashWidth + dashSpace) {
+      path.moveTo(rect.left, y);
+      path.lineTo(rect.left, (y - dashWidth).clamp(rect.top, rect.bottom));
+    }
+    
+    canvas.drawPath(path, paint);
+  }
 }

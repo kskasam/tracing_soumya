@@ -88,10 +88,24 @@ class _TracingGeometricShapesGameState
                       state.letterPathsModels.length,
                       (index) {
             
-                        return FittedBox(
-                          fit: BoxFit.contain,
-                          child: Container(
-                            padding: EdgeInsets.only(right:index< state.letterPathsModels.length-1?50:0),
+                        return Container(
+                          // RED border: Container bounds (suspicious sizing issue)
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.red,
+                              width: 3.0,
+                            ),
+                          ),
+                          // Padding visualization
+                          padding: EdgeInsets.only(
+                            right: index < state.letterPathsModels.length - 1 ? 50 : 0,
+                            top: 5,
+                            bottom: 5,
+                            left: 5,
+                          ),
+                          margin: const EdgeInsets.all(8), // Visual margin
+                          child: FittedBox(
+                            fit: BoxFit.contain,
                             child: GestureDetector(
                               onPanStart: (details) {
                                 if (index == state.activeIndex) {
@@ -155,6 +169,14 @@ class _TracingGeometricShapesGameState
                                       dottedPathPaintStyle: state
                                           .letterPathsModels[index]
                                           .dottedPathPaintStyle,
+                                      jsonPathPoints: state
+                                          .letterPathsModels[index]
+                                          .allStrokePoints,
+                                      showJsonPath: true, // Show JSON path for debugging
+                                      svgBounds: state
+                                          .letterPathsModels[index]
+                                          .svgBounds,
+                                      showDebugOverlays: true, // Show debug overlays
                                     ),
                                   ),
                                     if (state.activeIndex == index && widget.showAnchor)

@@ -83,13 +83,22 @@ class _TracingCharsGameState extends State<TracingCharsGame> {
                       children: List.generate(
                         state.letterPathsModels.length,
                         (index) {
-                          return SizedBox(
+                          return Container(
+                            // FIXED: Was swapped - now correct
                             height:
-                                state.letterPathsModels[index].viewSize.width,
+                                state.letterPathsModels[index].viewSize.height,
                             width: state
-                                .letterPathsModels[index].viewSize.height,
-                        
-                            // color: Colors.green,
+                                .letterPathsModels[index].viewSize.width,
+                            // RED border: Container bounds (suspicious sizing issue)
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.red,
+                                width: 3.0,
+                              ),
+                            ),
+                            // Padding visualization
+                            padding: const EdgeInsets.all(5),
+                            margin: const EdgeInsets.all(8), // Visual margin
                             child: FittedBox(
                               fit: BoxFit.contain,
                               child: GestureDetector(
@@ -170,6 +179,14 @@ class _TracingCharsGameState extends State<TracingCharsGame> {
                                         strokeColors: state
                                             .letterPathsModels[index]
                                             .strokeColors,
+                                        jsonPathPoints: state
+                                            .letterPathsModels[index]
+                                            .allStrokePoints,
+                                        showJsonPath: true, // Show JSON path for debugging
+                                        svgBounds: state
+                                            .letterPathsModels[index]
+                                            .svgBounds,
+                                        showDebugOverlays: true, // Show debug overlays
                                       ),
                                     ),
                                     if (state.activeIndex == index && widget.showAnchor)

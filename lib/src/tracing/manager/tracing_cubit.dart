@@ -104,12 +104,15 @@ class TracingCubit extends Cubit<TracingState> {
       final anchorPos =
           allStrokePoints.isNotEmpty ? allStrokePoints[0][0] : Offset.zero;
       
+      // Store original SVG bounds for debugging
+      final originalSvgBounds = parsedPath.getBounds();
+      
       // Debug Telugu coordinates
       if (letterModel.pointsJsonFile.contains('telugu')) {
         print('=== Telugu Debug ===');
         print('Letter: ${letterModel.pointsJsonFile}');
         print('letterViewSize: ${letterModel.letterViewSize}');
-        print('SVG bounds: ${parsedPath.getBounds()}');
+        print('SVG bounds: $originalSvgBounds');
         print('First JSON point AFTER transformation: ${allStrokePoints.isNotEmpty ? allStrokePoints[0][0] : "none"}');
         print('anchorPos: $anchorPos');
         print('==================');
@@ -133,7 +136,8 @@ class TracingCubit extends Cubit<TracingState> {
           distanceToCheck: letterModel.distanceToCheck,
           indexPathPaintStyle: letterModel.indexPathPaintStyle,
           dottedPathPaintStyle: letterModel.dottedPathPaintStyle,
-          strokeColors: letterModel.strokeColors));
+          strokeColors: letterModel.strokeColors,
+          svgBounds: originalSvgBounds));
     }
 
     emit(state.copyWith(
@@ -154,19 +158,31 @@ class TracingCubit extends Cubit<TracingState> {
     final double scaleX = viewSize.width / originalSize.width;
     final double scaleY = viewSize.height / originalSize.height;
     double scale = math.min(scaleX, scaleY);
-    // Calculate the translation needed to center the path within the view size
-    final double translateX =
-        (viewSize.width - originalSize.width * scale) / 2 -
-            originalBounds.left * scale;
-    final double translateY =
-        (viewSize.height - originalSize.height * scale) / 2 -
-            originalBounds.top * scale;
-
-    // Create a matrix for the transformation
-
+    
+    // FIXED: Transform in correct order:
+    // 1. Translate path so its top-left is at (0,0) - removes SVG offset
+    // 2. Scale the path
+    // 3. Translate to center within viewSize
+    
+    // Step 1: Translate to origin (remove SVG's offset)
+    final double offsetX = -originalBounds.left;
+    final double offsetY = -originalBounds.top;
+    
+    // Step 2: Scale
+    // (scale is already calculated)
+    
+    // Step 3: Center within viewSize
+    final double centerX = (viewSize.width - originalSize.width * scale) / 2;
+    final double centerY = (viewSize.height - originalSize.height * scale) / 2;
+    
+    // Combined transformation: translate to origin, scale, then center
+    // Matrix4 applies operations in reverse order (right to left):
+    // translate(center) * scale * translate(offset)
+    // So we write: translate(offset) then scale then translate(center)
     Matrix4 matrix = Matrix4.identity()
-      ..scale(scale, scale)
-      ..translate(translateX, translateY);
+      ..translate(centerX, centerY)  // Step 3: Center (applied last)
+      ..scale(scale, scale)          // Step 2: Scale (applied second)
+      ..translate(offsetX, offsetY); // Step 1: Move to origin (applied first)
 
     // Apply the transformation to the path
     return path.transform(matrix.storage);
@@ -255,12 +271,10 @@ class TracingCubit extends Cubit<TracingState> {
     final double scaleX = viewSize.width / originalSize.width;
     final double scaleY = viewSize.height / originalSize.height;
     final double scale = math.min(scaleX, scaleY);
-    final double translateX =
-        (viewSize.width - originalSize.width * scale) / 2 -
-            originalBounds.left * scale;
-    final double translateY =
-        (viewSize.height - originalSize.height * scale) / 2 -
-            originalBounds.top * scale;
+    
+    // Calculate center offset (same as in _applyTransformation)
+    final double centerX = (viewSize.width - originalSize.width * scale) / 2;
+    final double centerY = (viewSize.height - originalSize.height * scale) / 2;
 
     for (var stroke in jsonData['strokes']) {
       final List<dynamic> strokePointsData = stroke['points'];
@@ -269,16 +283,26 @@ class TracingCubit extends Cubit<TracingState> {
             pointString.split(',').map((e) => double.parse(e)).toList();
         
         // CRITICAL FIX: Apply SAME transformation as SVG!
-        // Matrix4.identity()..scale(s)..translate(t) means: (point + translate) * scale
-        // So we need to apply translate first, then scale
+        // Transformation order: translate to origin -> scale -> center
         
         // Step 1: Map normalized coords (0-1) to SVG coordinate space
         final svgX = originalBounds.left + coords[0] * originalSize.width;
         final svgY = originalBounds.top + coords[1] * originalSize.height;
         
-        // Step 2: Apply translate, then scale (matching Matrix4 behavior)
-        final transformedX = (svgX + translateX) * scale;
-        final transformedY = (svgY + translateY) * scale;
+        // Step 2: Apply the same transformation as SVG path:
+        // 1. Translate to origin (remove SVG offset)
+        final offsetX = -originalBounds.left;
+        final offsetY = -originalBounds.top;
+        final centeredX = svgX + offsetX;  // Now at (0,0) relative to bounds
+        final centeredY = svgY + offsetY;
+        
+        // 2. Scale
+        final scaledX = centeredX * scale;
+        final scaledY = centeredY * scale;
+        
+        // 3. Center within viewSize (use pre-calculated centerX/centerY)
+        final transformedX = scaledX + centerX;
+        final transformedY = scaledY + centerY;
         
         return Offset(transformedX, transformedY);
       }).toList();
