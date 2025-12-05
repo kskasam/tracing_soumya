@@ -85,11 +85,15 @@ class TracingCubit extends Cubit<TracingState> {
         letterModel.letterViewSize, // Use letterViewSize instead of hardcoded viewSize
       );
 
+      // Get the original SVG bounds to use for centerline transformation
+      final originalSvgBounds = parsedPath.getBounds();
+
       final dottedPathTransformed = _applyTransformationForOtherPathsDotted(
           dottedPath,
           letterModel.letterViewSize, // Use letterViewSize
           letterModel.positionDottedPath,
-          letterModel.scaledottedPath);
+          letterModel.scaledottedPath,
+          originalSvgBounds); // Pass main SVG bounds
       final indexPathTransformed = _applyTransformationForOtherPathsIndex(
           dottedIndexPath,
           letterModel.letterViewSize, // Use letterViewSize
@@ -104,10 +108,7 @@ class TracingCubit extends Cubit<TracingState> {
       final anchorPos =
           allStrokePoints.isNotEmpty ? allStrokePoints[0][0] : Offset.zero;
       
-      // Store original SVG bounds for debugging
-      final originalSvgBounds = parsedPath.getBounds();
-      
-      // Debug Telugu coordinates
+      // Debug Telugu coordinates (originalSvgBounds already declared above)
       if (letterModel.pointsJsonFile.contains('telugu')) {
         print('=== Telugu Debug ===');
         print('Letter: ${letterModel.pointsJsonFile}');
@@ -232,23 +233,24 @@ class TracingCubit extends Cubit<TracingState> {
   }
 
   Path _applyTransformationForOtherPathsDotted(
-      Path path, Size viewSize, Size? size, double? pathscale) {
-    // Get the bounds of the original path
-    final Rect originalBounds = path.getBounds();
+      Path path, Size viewSize, Size? size, double? pathscale, Rect? svgBounds) {
+    // IMPORTANT: Use the main SVG's bounds for transformation, not the centerline's own bounds
+    // This ensures the centerline aligns with the main SVG path
+    final Rect originalBounds = svgBounds ?? path.getBounds();
     final Size originalSize = Size(originalBounds.width, originalBounds.height);
 
-    // Calculate the scale factor to fit the path within the view size
+    // Calculate the scale factor to fit the SVG within the view size
     final double scaleX = viewSize.width / originalSize.width;
     final double scaleY = viewSize.height / originalSize.height;
     double scale = math.min(scaleX, scaleY);
     scale = pathscale == null ? scale : scale * pathscale;
 
     // FIXED: Use the same 3-step transformation as main SVG path
-    // 1. Translate to origin (remove path's offset)
+    // 1. Translate to origin (remove SVG's offset)
     // 2. Scale the path
     // 3. Center within viewSize (or apply additional position offset if size is provided)
     
-    // Step 1: Translate to origin (remove path's offset)
+    // Step 1: Translate to origin (remove SVG's offset)
     final double offsetX = -originalBounds.left;
     final double offsetY = -originalBounds.top;
     

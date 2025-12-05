@@ -183,7 +183,9 @@ class PhoneticsPainter extends CustomPainter {
         ..strokeWidth = 3.0
         ..strokeCap = StrokeCap.round
         ..strokeJoin = StrokeJoin.round;
-      canvas.drawPath(dottedPath!, centerlinePaint);
+      // Draw as dotted/dashed line instead of solid
+      // Pattern: [dashLength, gapLength] - increased gap for more spacing
+      _drawDashedPath(canvas, dottedPath!, centerlinePaint, [5.0, 8.0]);
       
       // Draw centerline bounds border (CYAN) if debug overlays are enabled
       if (showDebugOverlays) {
@@ -390,5 +392,34 @@ class PhoneticsPainter extends CustomPainter {
     }
     
     canvas.drawPath(path, paint);
+  }
+  
+  // Helper to draw dashed/dotted path along any arbitrary path
+  void _drawDashedPath(Canvas canvas, Path path, Paint paint, List<double> dashPattern) {
+    final dashLength = dashPattern[0];
+    final gapLength = dashPattern.length > 1 ? dashPattern[1] : dashPattern[0];
+    final dashPath = Path();
+    
+    // Use computeMetrics to get path segments
+    for (final metric in path.computeMetrics()) {
+      double distance = 0.0;
+      bool drawDash = true;
+      
+      while (distance < metric.length) {
+        if (drawDash) {
+          // Draw dash segment
+          final endDistance = (distance + dashLength).clamp(0.0, metric.length);
+          final dashSegment = metric.extractPath(distance, endDistance);
+          dashPath.addPath(dashSegment, Offset.zero);
+          distance = endDistance;
+        } else {
+          // Skip gap
+          distance += gapLength;
+        }
+        drawDash = !drawDash;
+      }
+    }
+    
+    canvas.drawPath(dashPath, paint);
   }
 }
