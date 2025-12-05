@@ -119,6 +119,40 @@ class PhoneticsPainter extends CustomPainter {
         }
       }
       
+      // CYAN/TEAL: Centerline (dotted path) bounds
+      if (dottedPath != null) {
+        try {
+          final centerlineBounds = dottedPath!.getBounds();
+          final centerlineBoundsPaint = Paint()
+            ..color = Colors.cyan.withOpacity(0.5)
+            ..style = PaintingStyle.stroke
+            ..strokeWidth = 2.5;
+          _drawDashedRect(
+            canvas,
+            centerlineBounds,
+            centerlineBoundsPaint,
+            [6, 3],
+          );
+          
+          // Draw corner markers for centerline bounds
+          final centerlineCornerPaint = Paint()
+            ..color = Colors.cyan
+            ..style = PaintingStyle.fill;
+          canvas.drawCircle(
+            Offset(centerlineBounds.left, centerlineBounds.top),
+            4,
+            centerlineCornerPaint,
+          );
+          canvas.drawCircle(
+            Offset(centerlineBounds.right, centerlineBounds.bottom),
+            4,
+            centerlineCornerPaint,
+          );
+        } catch (e) {
+          // If path is invalid, skip
+        }
+      }
+      
       // Draw corner markers for (0,0) and viewSize
       final cornerPaint = Paint()
         ..color = Colors.blue
@@ -140,12 +174,100 @@ class PhoneticsPainter extends CustomPainter {
     // Draw the letter path with color
     canvas.drawPath(letterImage, letterPaint);
  
+    // Draw centerline (dotted path) with enhanced debugging visualization
     if (dottedPath != null) {
-      final debugPaint = Paint()
+      // Draw centerline path with thicker stroke for visibility
+      final centerlinePaint = Paint()
         ..color = dottedColor
         ..style = dottedPathPaintStyle ?? PaintingStyle.stroke
-        ..strokeWidth = 2.0;
-      canvas.drawPath(dottedPath!, debugPaint);
+        ..strokeWidth = 3.0
+        ..strokeCap = StrokeCap.round
+        ..strokeJoin = StrokeJoin.round;
+      canvas.drawPath(dottedPath!, centerlinePaint);
+      
+      // Draw centerline bounds border (CYAN) if debug overlays are enabled
+      if (showDebugOverlays) {
+        try {
+          final centerlineBounds = dottedPath!.getBounds();
+          
+          // CYAN border around centerline bounds (similar to container border)
+          final centerlineBorderPaint = Paint()
+            ..color = Colors.cyan
+            ..style = PaintingStyle.stroke
+            ..strokeWidth = 2.0;
+          canvas.drawRect(centerlineBounds, centerlineBorderPaint);
+          
+          // Show padding/margin visualization for centerline
+          // Calculate "padding" - space between centerline bounds and SVG bounds
+          if (svgBounds != null) {
+            final paddingLeft = centerlineBounds.left - svgBounds!.left;
+            final paddingTop = centerlineBounds.top - svgBounds!.top;
+            final paddingRight = svgBounds!.right - centerlineBounds.right;
+            final paddingBottom = svgBounds!.bottom - centerlineBounds.bottom;
+            
+            // Draw padding visualization (light cyan fill)
+            if (paddingLeft > 0 || paddingTop > 0 || paddingRight > 0 || paddingBottom > 0) {
+              final paddingPaint = Paint()
+                ..color = Colors.cyan.withOpacity(0.2)
+                ..style = PaintingStyle.fill;
+              
+              // Top padding
+              if (paddingTop > 0) {
+                canvas.drawRect(
+                  Rect.fromLTRB(
+                    svgBounds!.left,
+                    svgBounds!.top,
+                    svgBounds!.right,
+                    centerlineBounds.top,
+                  ),
+                  paddingPaint,
+                );
+              }
+              
+              // Bottom padding
+              if (paddingBottom > 0) {
+                canvas.drawRect(
+                  Rect.fromLTRB(
+                    svgBounds!.left,
+                    centerlineBounds.bottom,
+                    svgBounds!.right,
+                    svgBounds!.bottom,
+                  ),
+                  paddingPaint,
+                );
+              }
+              
+              // Left padding
+              if (paddingLeft > 0) {
+                canvas.drawRect(
+                  Rect.fromLTRB(
+                    svgBounds!.left,
+                    centerlineBounds.top,
+                    centerlineBounds.left,
+                    centerlineBounds.bottom,
+                  ),
+                  paddingPaint,
+                );
+              }
+              
+              // Right padding
+              if (paddingRight > 0) {
+                canvas.drawRect(
+                  Rect.fromLTRB(
+                    centerlineBounds.right,
+                    centerlineBounds.top,
+                    svgBounds!.right,
+                    centerlineBounds.bottom,
+                  ),
+                  paddingPaint,
+                );
+              }
+            }
+          }
+        } catch (e) {
+          // If path is invalid, skip
+        }
+      }
     }
 
     if (indexPath != null) {

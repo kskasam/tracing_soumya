@@ -193,32 +193,40 @@ class TracingCubit extends Cubit<TracingState> {
     final Rect originalBounds = path.getBounds();
     final Size originalSize = Size(originalBounds.width, originalBounds.height);
 
-    // Calculate the scale factor to fit the SVG within the view size
+    // Calculate the scale factor to fit the path within the view size
     final double scaleX = viewSize.width / originalSize.width;
     final double scaleY = viewSize.height / originalSize.height;
 
     double scale = math.min(scaleX, scaleY);
     scale = pathscale == null ? scale : scale * pathscale;
 
-    // Calculate the translation needed to center the path within the view size
-    final double translateX =
-        (viewSize.width - originalSize.width * scale) / 2 -
-            originalBounds.left * scale;
-    final double translateY =
-        (viewSize.height - originalSize.height * scale) / 2 -
-            originalBounds.top * scale;
-
-    // Create a matrix for the transformation
-
-    Matrix4 matrix = Matrix4.identity()
-      ..scale(scale, scale)
-      ..translate(translateX, translateY);
-
+    // FIXED: Use the same 3-step transformation as main SVG path
+    // 1. Translate to origin (remove path's offset)
+    // 2. Scale the path
+    // 3. Center within viewSize (or apply additional position offset if size is provided)
+    
+    // Step 1: Translate to origin (remove path's offset)
+    final double offsetX = -originalBounds.left;
+    final double offsetY = -originalBounds.top;
+    
+    // Step 2: Scale (already calculated)
+    
+    // Step 3: Center within viewSize
+    double centerX = (viewSize.width - originalSize.width * scale) / 2;
+    double centerY = (viewSize.height - originalSize.height * scale) / 2;
+    
+    // Apply additional position offset if provided
     if (size != null) {
-      matrix = Matrix4.identity()
-        ..scale(scale, scale)
-        ..translate(translateX + size.width, translateY + size.height);
+      centerX += size.width;
+      centerY += size.height;
     }
+    
+    // Combined transformation: translate to origin, scale, then center
+    // Matrix4 applies operations in reverse order (right to left):
+    Matrix4 matrix = Matrix4.identity()
+      ..translate(centerX, centerY)  // Step 3: Center (applied last)
+      ..scale(scale, scale)          // Step 2: Scale (applied second)
+      ..translate(offsetX, offsetY); // Step 1: Move to origin (applied first)
     // Apply the transformation to the path
     return path.transform(matrix.storage);
   }
@@ -229,31 +237,40 @@ class TracingCubit extends Cubit<TracingState> {
     final Rect originalBounds = path.getBounds();
     final Size originalSize = Size(originalBounds.width, originalBounds.height);
 
-    // Calculate the scale factor to fit the SVG within the view size
+    // Calculate the scale factor to fit the path within the view size
     final double scaleX = viewSize.width / originalSize.width;
     final double scaleY = viewSize.height / originalSize.height;
     double scale = math.min(scaleX, scaleY);
     scale = pathscale == null ? scale : scale * pathscale;
 
-    // Calculate the translation needed to center the path within the view size
-    final double translateX =
-        (viewSize.width - originalSize.width * scale) / 2 -
-            originalBounds.left * scale;
-    final double translateY =
-        (viewSize.height - originalSize.height * scale) / 2 -
-            originalBounds.top * scale;
-
-    // Create a matrix for the transformation
-
-    Matrix4 matrix = Matrix4.identity()
-      ..scale(scale, scale)
-      ..translate(translateX, translateY);
-
+    // FIXED: Use the same 3-step transformation as main SVG path
+    // 1. Translate to origin (remove path's offset)
+    // 2. Scale the path
+    // 3. Center within viewSize (or apply additional position offset if size is provided)
+    
+    // Step 1: Translate to origin (remove path's offset)
+    final double offsetX = -originalBounds.left;
+    final double offsetY = -originalBounds.top;
+    
+    // Step 2: Scale (already calculated)
+    
+    // Step 3: Center within viewSize
+    double centerX = (viewSize.width - originalSize.width * scale) / 2;
+    double centerY = (viewSize.height - originalSize.height * scale) / 2;
+    
+    // Apply additional position offset if provided
     if (size != null) {
-      matrix = Matrix4.identity()
-        ..scale(scale, scale)
-        ..translate(translateX + size.width, translateY + size.height);
+      centerX += size.width;
+      centerY += size.height;
     }
+    
+    // Combined transformation: translate to origin, scale, then center
+    // Matrix4 applies operations in reverse order (right to left):
+    Matrix4 matrix = Matrix4.identity()
+      ..translate(centerX, centerY)  // Step 3: Center (applied last)
+      ..scale(scale, scale)          // Step 2: Scale (applied second)
+      ..translate(offsetX, offsetY); // Step 1: Move to origin (applied first)
+    
     // Apply the transformation to the path
     return path.transform(matrix.storage);
   }
