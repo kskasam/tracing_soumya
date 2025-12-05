@@ -30,13 +30,19 @@ class _MyAppState extends State<MyApp> {
           children: [
             Expanded(
               child: TracingCharsGame(
-                // Test with Telugu letter అ (a) - focus on fixing hand icon alignment
+                // Test with Telugu letters అ (a) and ఆ (aa)
                 traceShapeModel: [
                   TraceCharsModel(chars: [
                     TraceCharModel(
                       char: 'అ', // Telugu vowel "a"
                       traceShapeOptions: const TraceShapeOptions(
                         innerPaintColor: Colors.orange,
+                      ),
+                    ),
+                    TraceCharModel(
+                      char: 'ఆ', // Telugu vowel "aa"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.blue,
                       ),
                     ),
                   ]),
@@ -80,28 +86,7 @@ class _MyAppState extends State<MyApp> {
                 ],
               ),
             ),
-            Expanded(
-              child: TracingWordGame(
-                words: [
-                  // Test English words for now
-                  TraceWordModel(
-                      word: 'Hi',
-                      traceShapeOptions:
-                          const TraceShapeOptions(indexColor: Colors.green)),
-                ],
-                onTracingUpdated: (int currentTracingIndex) async {
-                  print('/////onTracingUpdated:' +
-                      currentTracingIndex.toString());
-                },
-                onGameFinished: (int screenIndex) async {
-                  print('/////onGameFinished:' + screenIndex.toString());
-                },
-                onCurrentTracingScreenFinished: (int currentScreenIndex) async {
-                  print('/////onCurrentTracingScreenFinished:' +
-                      currentScreenIndex.toString());
-                },
-              ),
-            ),
+            // Removed TracingWordGame with 'Hi' (H and I letters)
           ],
         ),
       ),

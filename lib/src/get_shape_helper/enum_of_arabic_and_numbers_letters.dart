@@ -306,7 +306,18 @@ class TypeExtensionTracking {
           isBig: true,
         ));
         break;
-      // TODO: Add more Telugu letters here once 'అ' is working correctly
+      case 'ఆ': // aa
+        list.add(_createTeluguTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: TeluguShapePaths.aaBig,
+          smallPath: TeluguShapePaths.aaSmall,
+          dottedPath: TeluguShapePaths.aaDotted,
+          bigJsonFile: ShapePointsManger.teluguAaBig,
+          smallJsonFile: ShapePointsManger.teluguAaSmall,
+          isBig: true,
+        ));
+        break;
+      // TODO: Add more Telugu letters here
       default:
         // Return empty list for unsupported Telugu letters
         break;
@@ -1801,6 +1812,8 @@ class TypeExtensionTracking {
               strokeWidth: 33.25,
               scaleIndexPath: .4,
               positionIndexPath: const Size(-30, -55),
+
+              
               positionDottedPath: const Size(0, 10),
               scaledottedPath: .8,
               letterPath: EnglishShapePaths2.blowerShape,
