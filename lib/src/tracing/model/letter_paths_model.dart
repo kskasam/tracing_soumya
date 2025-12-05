@@ -47,7 +47,7 @@ final double? distanceToCheck;
     this.distanceToCheck,
     this.indexPathPaintStyle,
     this.dottedPathPaintStyle,
-    this.strokeWidth=5.625,
+    this.strokeWidth=7.5,
     this.indexColor = Colors.black,
     this.outerPaintColor = Colors.red,
     this.innerPaintColor = Colors.blue,

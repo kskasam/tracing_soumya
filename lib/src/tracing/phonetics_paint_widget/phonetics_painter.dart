@@ -326,7 +326,7 @@ class PhoneticsPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round
       ..strokeJoin = StrokeJoin.round
-      ..strokeWidth = strokeWidth ?? 5.625;
+      ..strokeWidth = strokeWidth ?? 7.5;
 
     // Draw all paths with different colors if strokeColors is provided
     if (strokeColors != null && strokeColors!.isNotEmpty) {
@@ -352,8 +352,8 @@ class PhoneticsPainter extends CustomPainter {
 
     // Draw the cursor/ball inside the clipped area
     if (cursorPosition != null) {
-      // Ball radius matches half the stroke width to fill only the path it moves
-      final cursorRadius = (strokeWidth ?? 5.625) / 2;
+      // Ball radius is slightly smaller than half the stroke width for better visibility
+      final cursorRadius = ((strokeWidth ?? 7.5) / 2) * 0.8; // 20% smaller
       final fillPaint = Paint()
         ..color = strokeColor.withOpacity(0.9)
         ..style = PaintingStyle.fill;

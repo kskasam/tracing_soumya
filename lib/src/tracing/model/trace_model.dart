@@ -32,7 +32,7 @@ final double? strokeIndex;
   TraceModel({
         this.isSpace=false,
 
-    this.letterViewSize=const Size(200,200),
+    this.letterViewSize=const Size(240,240),
     this.disableDividedStrokes,
     this.strokeIndex,
     this.distanceToCheck,
@@ -42,7 +42,7 @@ final double? strokeIndex;
 
     this.indexPathPaintStyle,
     this.dottedPathPaintStyle,
-    this.strokeWidth=5.625,
+    this.strokeWidth=7.5,
      this.indexColor = Colors.black,
     this.outerPaintColor = Colors.red,
     this.innerPaintColor = Colors.blue,
