@@ -16,6 +16,7 @@ final bool? disableDivededStrokes;
   late List<List<Offset>> allStrokePoints;
 
   Offset? anchorPos;
+  Offset? cursorPosition;
   Size viewSize;
   bool letterTracingFinished;
   bool hasFinishedOneStroke;
@@ -46,7 +47,7 @@ final double? distanceToCheck;
     this.distanceToCheck,
     this.indexPathPaintStyle,
     this.dottedPathPaintStyle,
-    this.strokeWidth=55,
+    this.strokeWidth=5.625,
     this.indexColor = Colors.black,
     this.outerPaintColor = Colors.red,
     this.innerPaintColor = Colors.blue,
@@ -59,6 +60,7 @@ final double? distanceToCheck;
     List<ui.Path>? paths,
     List<List<Offset>>? allStrokePoints,
     this.anchorPos,
+    this.cursorPosition,
     this.viewSize = const Size(200, 200),
     this.letterTracingFinished = false,
     this.hasFinishedOneStroke = false,
@@ -82,6 +84,7 @@ final double? distanceToCheck;
     List<ui.Path>? paths,
     List<List<Offset>>? allStrokePoints,
     Offset? anchorPos,
+    Offset? cursorPosition,
     Size? viewSize,
     bool? letterTracingFinished,
     bool? hasFinishedOneStroke,
@@ -105,6 +108,7 @@ final double? distanceToCheck;
       paths: paths ?? this.paths,
       allStrokePoints: allStrokePoints ?? this.allStrokePoints,
       anchorPos: anchorPos ?? this.anchorPos,
+      cursorPosition: cursorPosition ?? this.cursorPosition,
       viewSize: viewSize ?? this.viewSize,
       letterTracingFinished:
           letterTracingFinished ?? this.letterTracingFinished,

@@ -32,6 +32,9 @@ class PhoneticsPainter extends CustomPainter {
   // Debug: SVG bounds for visualization
   final Rect? svgBounds;
   final bool showDebugOverlays;
+  
+  // Cursor position for drawing the ball
+  final Offset? cursorPosition;
 
   PhoneticsPainter({
     this.strokeIndex,
@@ -56,6 +59,7 @@ class PhoneticsPainter extends CustomPainter {
     this.showJsonPath = false,
     this.svgBounds,
     this.showDebugOverlays = true,
+    this.cursorPosition,
   });
 
   @override
@@ -322,7 +326,7 @@ class PhoneticsPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round
       ..strokeJoin = StrokeJoin.round
-      ..strokeWidth = strokeWidth ?? 55;
+      ..strokeWidth = strokeWidth ?? 5.625;
 
     // Draw all paths with different colors if strokeColors is provided
     if (strokeColors != null && strokeColors!.isNotEmpty) {
@@ -345,6 +349,21 @@ class PhoneticsPainter extends CustomPainter {
 
     // Draw the current drawing path (if needed)
     canvas.drawPath(currentDrawingPath, strokePaint);
+
+    // Draw the cursor/ball inside the clipped area
+    if (cursorPosition != null) {
+      // Ball radius matches half the stroke width to fill only the path it moves
+      final cursorRadius = (strokeWidth ?? 5.625) / 2;
+      final fillPaint = Paint()
+        ..color = strokeColor.withOpacity(0.9)
+        ..style = PaintingStyle.fill;
+      final borderPaint = Paint()
+        ..color = Colors.white
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 2.0;
+      canvas.drawCircle(cursorPosition!, cursorRadius, fillPaint);
+      canvas.drawCircle(cursorPosition!, cursorRadius, borderPaint);
+    }
 
     // final pointPaint = Paint()
     //   ..color = Colors.black

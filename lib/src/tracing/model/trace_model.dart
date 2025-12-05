@@ -42,7 +42,7 @@ final double? strokeIndex;
 
     this.indexPathPaintStyle,
     this.dottedPathPaintStyle,
-    this.strokeWidth=55,
+    this.strokeWidth=5.625,
      this.indexColor = Colors.black,
     this.outerPaintColor = Colors.red,
     this.innerPaintColor = Colors.blue,

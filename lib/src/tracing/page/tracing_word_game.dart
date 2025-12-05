@@ -184,41 +184,45 @@ class _TracingWordGameState extends State<TracingWordGame> {
                                             .letterPathsModels[index]
                                             .svgBounds,
                                         showDebugOverlays: true, // Show debug overlays
+                                        cursorPosition: state
+                                            .letterPathsModels[index]
+                                            .cursorPosition,
                                       ),
                                     ),
-                                    if (state.activeIndex == index &&
-                                        widget.showAnchor)
-                                      Positioned(
-                                        top: state
-                                            .letterPathsModels[
-                                                state.activeIndex]
-                                            .anchorPos!
-                                            .dy - 15, // Center the ball
-                                        left: state
-                                            .letterPathsModels[
-                                                state.activeIndex]
-                                            .anchorPos!
-                                            .dx - 15, // Center the ball
-                                        child: Container(
-                                          width: 30,
-                                          height: 30,
-                                          decoration: BoxDecoration(
-                                            color: Colors.red,
-                                            shape: BoxShape.circle,
-                                            border: Border.all(
-                                              color: Colors.white,
-                                              width: 3,
-                                            ),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Colors.black26,
-                                                blurRadius: 4,
-                                                offset: Offset(0, 2),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
+                                    // Ball is now drawn inside the painter
+                                    // if (state.activeIndex == index &&
+                                    //     widget.showAnchor)
+                                    //   Positioned(
+                                    //     top: state
+                                    //         .letterPathsModels[
+                                    //             state.activeIndex]
+                                    //         .anchorPos!
+                                    //         .dy - 15, // Center the ball
+                                    //     left: state
+                                    //         .letterPathsModels[
+                                    //             state.activeIndex]
+                                    //         .anchorPos!
+                                    //         .dx - 15, // Center the ball
+                                    //     child: Container(
+                                    //       width: 30,
+                                    //       height: 30,
+                                    //       decoration: BoxDecoration(
+                                    //         color: Colors.red,
+                                    //         shape: BoxShape.circle,
+                                    //         border: Border.all(
+                                    //           color: Colors.white,
+                                    //           width: 3,
+                                    //         ),
+                                    //         boxShadow: [
+                                    //           BoxShadow(
+                                    //             color: Colors.black26,
+                                    //             blurRadius: 4,
+                                    //             offset: Offset(0, 2),
+                                    //           ),
+                                    //         ],
+                                    //       ),
+                                    //     ),
+                                    //   ),
                                   ],
                                 ),
                               ),

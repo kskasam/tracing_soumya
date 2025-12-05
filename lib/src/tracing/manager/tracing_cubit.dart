@@ -134,6 +134,7 @@ class TracingCubit extends Cubit<TracingState> {
           allStrokePoints: allStrokePoints,
           letterImage: transformedPath,
           anchorPos: anchorPos,
+          cursorPosition: anchorPos,
           distanceToCheck: letterModel.distanceToCheck,
           indexPathPaintStyle: letterModel.indexPathPaintStyle,
           dottedPathPaintStyle: letterModel.dottedPathPaintStyle,
@@ -353,6 +354,7 @@ emit(state.copyWith(drawingStates: DrawingStates.tracing));
                 currentStrokePoints.first.dx, currentStrokePoints.first.dy);
 
           state.letterPathsModels[state.activeIndex].anchorPos = singlePoint;
+          state.letterPathsModels[state.activeIndex].cursorPosition = singlePoint;
           state.letterPathsModels[state.activeIndex].currentDrawingPath =
               newDrawingPath;
 
@@ -405,12 +407,31 @@ emit(state.copyWith(drawingStates: DrawingStates.tracing));
       
       // BALL-ON-RAILS: Find the nearest point on the current stroke that user is dragging toward
       final currentProgress = state.letterPathsModels[state.activeIndex].currentStrokeProgress;
+      
+      // Get current ball position
+      final currentBallPos = state.letterPathsModels[state.activeIndex].cursorPosition ?? 
+                             currentStrokePoints[currentProgress > 0 ? currentProgress - 1 : 0];
+      
+      // Check if cursor has moved too far from current ball position (prevents jumps at curves)
+      final maxLateralDistance = 45.0; // Maximum distance cursor can be from ball
+      final cursorDistanceFromBall = (position - currentBallPos).distance;
+      
+      // If cursor is too far from ball, don't move the ball (user moved cursor off path)
+      if (cursorDistanceFromBall > maxLateralDistance) {
+        return;
+      }
+      
       int? bestPointIndex;
       double minDistance = double.infinity;
       final distanceThreshold = state.letterPathsModels[state.activeIndex].distanceToCheck ?? 50.0;
       
+      // Limit how many points ahead we can jump in one update to prevent sudden jumps at curves
+      // This ensures smooth progression along the path
+      final maxLookAhead = 5; // Only check next 5 points for even smoother movement
+      final endIndex = (currentProgress + maxLookAhead).clamp(0, currentStrokePoints.length);
+      
       // Check points ahead of current progress (allow moving forward along the path)
-      for (int i = currentProgress; i < currentStrokePoints.length; i++) {
+      for (int i = currentProgress; i < endIndex; i++) {
         final point = currentStrokePoints[i];
         final distance = (point - position).distance;
         
@@ -421,8 +442,12 @@ emit(state.copyWith(drawingStates: DrawingStates.tracing));
         }
       }
       
-      // If found a nearby point ahead, snap ball to it and fill path up to it
+      // Only move if we found a point and it's not too small of a movement
       if (bestPointIndex != null && bestPointIndex >= currentProgress) {
+        // Prevent tiny movements (similar to _progressEpsilon in flutter_tracing)
+        if (bestPointIndex == currentProgress) {
+          return; // Don't move if still at same point
+        }
         // Update progress to this point
         state.letterPathsModels[state.activeIndex].currentStrokeProgress = bestPointIndex + 1;
         
@@ -437,6 +462,7 @@ emit(state.copyWith(drawingStates: DrawingStates.tracing));
         
         // Update ball position (anchor) to the found point
         state.letterPathsModels[state.activeIndex].anchorPos = currentStrokePoints[bestPointIndex];
+        state.letterPathsModels[state.activeIndex].cursorPosition = currentStrokePoints[bestPointIndex];
         state.letterPathsModels[state.activeIndex].currentDrawingPath = newDrawingPath;
         
         emit(state.copyWith(letterPathsModels: state.letterPathsModels));
@@ -475,6 +501,8 @@ emit(state.copyWith(drawingStates: DrawingStates.tracing));
         ..moveTo(endPointOfPreviousStroke.dx, endPointOfPreviousStroke.dy);
       currentModel.currentDrawingPath = newDrawingPath;
       currentModel.anchorPos =
+          currentModel.allStrokePoints[currentModel.currentStroke].first;
+      currentModel.cursorPosition =
           currentModel.allStrokePoints[currentModel.currentStroke].first;
       emit(state.copyWith(letterPathsModels: state.letterPathsModels));
     } else if (!currentModel.letterTracingFinished) {
