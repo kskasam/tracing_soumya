@@ -184,14 +184,29 @@ class _TracingGeometricShapesGameState
                                       top: state
                                           .letterPathsModels[state.activeIndex]
                                           .anchorPos!
-                                          .dy,
+                                          .dy - 15, // Center the ball
                                       left: state
                                           .letterPathsModels[state.activeIndex]
                                           .anchorPos!
-                                          .dx,
-                                      child: Image.asset(
-                                        'packages/tracing_game/assets/images/position_2_finger.png',
-                                        height: 50,
+                                          .dx - 15, // Center the ball
+                                      child: Container(
+                                        width: 30,
+                                        height: 30,
+                                        decoration: BoxDecoration(
+                                          color: Colors.red,
+                                          shape: BoxShape.circle,
+                                          border: Border.all(
+                                            color: Colors.white,
+                                            width: 3,
+                                          ),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Colors.black26,
+                                              blurRadius: 4,
+                                              offset: Offset(0, 2),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                 ],

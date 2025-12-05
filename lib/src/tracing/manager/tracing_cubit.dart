@@ -402,49 +402,48 @@ emit(state.copyWith(drawingStates: DrawingStates.tracing));
     if (state.letterPathsModels[state.activeIndex].currentStrokeProgress >= 0 &&
         state.letterPathsModels[state.activeIndex].currentStrokeProgress <
             currentStrokePoints.length) {
-      if (currentStrokePoints.length == 1) {
-        final singlePoint = currentStrokePoints[0];
-        if (isValidPoint(singlePoint, position,
-            state.letterPathsModels[state.activeIndex].distanceToCheck)) {
-          final newDrawingPath = state
-              .letterPathsModels[state.activeIndex].currentDrawingPath
-            ..lineTo(
-                currentStrokePoints.first.dx, currentStrokePoints.first.dy);
-
-          state.letterPathsModels[state.activeIndex].anchorPos = singlePoint;
-          state.letterPathsModels[state.activeIndex].currentDrawingPath =
-              newDrawingPath;
-
-          completeStroke();
-          return;
-        } else {}
-      } else {
-        if (isValidPoint(
-            currentStrokePoints[state
-                .letterPathsModels[state.activeIndex].currentStrokeProgress],
-            position,
-            state.letterPathsModels[state.activeIndex].distanceToCheck)) {
-          state.letterPathsModels[state.activeIndex].currentStrokeProgress =
-              state.letterPathsModels[state.activeIndex].currentStrokeProgress +
-                  1;
-
-          final point = currentStrokePoints[
-              state.letterPathsModels[state.activeIndex].currentStrokeProgress -
-                  1];
-
-          final newDrawingPath = state
-              .letterPathsModels[state.activeIndex].currentDrawingPath
-            ..lineTo(point.dx, point.dy);
-
-          state.letterPathsModels[state.activeIndex].anchorPos = point;
-          state.letterPathsModels[state.activeIndex].currentDrawingPath =
-              newDrawingPath;
-
-          emit(state.copyWith(letterPathsModels: state.letterPathsModels));
-        } else {}
+      
+      // BALL-ON-RAILS: Find the nearest point on the current stroke that user is dragging toward
+      final currentProgress = state.letterPathsModels[state.activeIndex].currentStrokeProgress;
+      int? bestPointIndex;
+      double minDistance = double.infinity;
+      final distanceThreshold = state.letterPathsModels[state.activeIndex].distanceToCheck ?? 50.0;
+      
+      // Check points ahead of current progress (allow moving forward along the path)
+      for (int i = currentProgress; i < currentStrokePoints.length; i++) {
+        final point = currentStrokePoints[i];
+        final distance = (point - position).distance;
+        
+        // Only consider points that are close enough (within distanceToCheck)
+        if (distance < distanceThreshold && distance < minDistance) {
+          minDistance = distance;
+          bestPointIndex = i;
+        }
+      }
+      
+      // If found a nearby point ahead, snap ball to it and fill path up to it
+      if (bestPointIndex != null && bestPointIndex >= currentProgress) {
+        // Update progress to this point
+        state.letterPathsModels[state.activeIndex].currentStrokeProgress = bestPointIndex + 1;
+        
+        // Rebuild the drawing path up to this point
+        final newDrawingPath = Path();
+        if (currentStrokePoints.isNotEmpty) {
+          newDrawingPath.moveTo(currentStrokePoints[0].dx, currentStrokePoints[0].dy);
+          for (int i = 0; i <= bestPointIndex; i++) {
+            newDrawingPath.lineTo(currentStrokePoints[i].dx, currentStrokePoints[i].dy);
+          }
+        }
+        
+        // Update ball position (anchor) to the found point
+        state.letterPathsModels[state.activeIndex].anchorPos = currentStrokePoints[bestPointIndex];
+        state.letterPathsModels[state.activeIndex].currentDrawingPath = newDrawingPath;
+        
+        emit(state.copyWith(letterPathsModels: state.letterPathsModels));
       }
     }
 
+    // Check if stroke is complete
     if (state.letterPathsModels[state.activeIndex].currentStrokeProgress >=
         currentStrokePoints.length) {
       completeStroke();
