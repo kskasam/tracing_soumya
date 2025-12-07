@@ -76,11 +76,13 @@ class _TracingCharsGameState extends State<TracingCharsGame> {
               child: FittedBox(
           
                   child: Center(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: List.generate(
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: List.generate(
                         state.letterPathsModels.length,
                         (index) {
                           return Container(
@@ -235,6 +237,7 @@ class _TracingCharsGameState extends State<TracingCharsGame> {
                     ),
                   ),
                 ),
+              ),
             
             
           );

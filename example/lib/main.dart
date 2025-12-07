@@ -30,8 +30,9 @@ class _MyAppState extends State<MyApp> {
           children: [
             Expanded(
               child: TracingCharsGame(
-                // Test with Telugu letters అ (a) and ఆ (aa)
+                // Telugu letters with multiple pages
                 traceShapeModel: [
+                  // Page 1: అ (a) and ఆ (aa)
                   TraceCharsModel(chars: [
                     TraceCharModel(
                       char: 'అ', // Telugu vowel "a"
@@ -43,6 +44,108 @@ class _MyAppState extends State<MyApp> {
                       char: 'ఆ', // Telugu vowel "aa"
                       traceShapeOptions: const TraceShapeOptions(
                         innerPaintColor: Colors.blue,
+                      ),
+                    ),
+                  ]),
+                  // Page 2: ఇ (i) and ఈ (ii)
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'ఇ', // Telugu vowel "i"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.green,
+                      ),
+                    ),
+                    TraceCharModel(
+                      char: 'ఈ', // Telugu vowel "ii"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.purple,
+                      ),
+                    ),
+                  ]),
+                  // Page 3: ఉ (u) and ఊ (uu)
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'ఉ', // Telugu vowel "u"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.red,
+                      ),
+                    ),
+                    TraceCharModel(
+                      char: 'ఊ', // Telugu vowel "uu"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.pink,
+                      ),
+                    ),
+                  ]),
+                  // Page 4: ఎ (e) and ఏ (ee)
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'ఎ', // Telugu vowel "e"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.teal,
+                      ),
+                    ),
+                    TraceCharModel(
+                      char: 'ఏ', // Telugu vowel "ee"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.cyan,
+                      ),
+                    ),
+                  ]),
+                  // Page 5: ఐ (ai), ఒ (o), and ఓ (oo)
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'ఐ', // Telugu vowel "ai"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.indigo,
+                      ),
+                    ),
+                    TraceCharModel(
+                      char: 'ఒ', // Telugu vowel "o"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.brown,
+                      ),
+                    ),
+                    TraceCharModel(
+                      char: 'ఓ', // Telugu vowel "oo"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.amber,
+                      ),
+                    ),
+                  ]),
+                  // Page 6: ఔ (au), ఋ (ru), and ౠ (ruu)
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'ఔ', // Telugu vowel "au"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.deepOrange,
+                      ),
+                    ),
+                    TraceCharModel(
+                      char: 'ఋ', // Telugu vowel "ru"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.lime,
+                      ),
+                    ),
+                    TraceCharModel(
+                      char: 'ౠ', // Telugu vowel "ruu"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.deepPurple,
+                      ),
+                    ),
+                  ]),
+                  // Page 7: అం (am) and అః (aha)
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'అం', // Telugu combination "am"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.blueGrey,
+                      ),
+                    ),
+                    TraceCharModel(
+                      char: 'అః', // Telugu combination "aha"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.grey,
                       ),
                     ),
                   ]),

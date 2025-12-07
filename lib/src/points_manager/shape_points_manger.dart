@@ -207,6 +207,14 @@ class ShapePointsManger {
   static const teluguOoSmall = '$teluguBase/oo_small_PointsInfo.json';
   static const teluguAuBig = '$teluguBase/au_big_PointsInfo.json';
   static const teluguAuSmall = '$teluguBase/au_small_PointsInfo.json';
+  static const teluguRuBig = '$teluguBase/ru_big_PointsInfo.json';
+  static const teluguRuSmall = '$teluguBase/ru_small_PointsInfo.json';
+  static const teluguRuuBig = '$teluguBase/ruu_big_PointsInfo.json';
+  static const teluguRuuSmall = '$teluguBase/ruu_small_PointsInfo.json';
+  static const teluguAmBig = '$teluguBase/am_big_PointsInfo.json';
+  static const teluguAmSmall = '$teluguBase/am_small_PointsInfo.json';
+  static const teluguAhaBig = '$teluguBase/aha_big_PointsInfo.json';
+  static const teluguAhaSmall = '$teluguBase/aha_small_PointsInfo.json';
   static const teluguKaBig = '$teluguBase/ka_big_PointsInfo.json';
   static const teluguKaSmall = '$teluguBase/ka_small_PointsInfo.json';
   static const teluguKhaBig = '$teluguBase/kha_big_PointsInfo.json';
