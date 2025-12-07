@@ -165,17 +165,20 @@ class PhoneticsPainter extends CustomPainter {
       canvas.drawCircle(Offset(viewSize.width, viewSize.height), 5, cornerPaint);
     }
     
-    // Paint for the letter path
+    // Paint for the letter path - use stroke to show only outline, no fill
     final letterPaint = Paint()
       ..color = letterColor
-      ..style = PaintingStyle.fill;
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 4.0
+      ..strokeCap = StrokeCap.round
+      ..strokeJoin = StrokeJoin.round;
 
     // Apply the shader if provided
     if (letterShader != null) {
       letterPaint.shader = letterShader;
     }
 
-    // Draw the letter path with color
+    // Draw the letter path as outline only (no fill) to keep inner areas plain/transparent
     canvas.drawPath(letterImage, letterPaint);
  
     // Draw centerline (dotted path) with enhanced debugging visualization

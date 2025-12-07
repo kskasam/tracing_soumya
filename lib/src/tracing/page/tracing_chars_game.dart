@@ -91,15 +91,7 @@ class _TracingCharsGameState extends State<TracingCharsGame> {
                                 state.letterPathsModels[index].viewSize.height,
                             width: state
                                 .letterPathsModels[index].viewSize.width,
-                            // RED border: Container bounds (suspicious sizing issue)
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Colors.red,
-                                width: 3.0,
-                              ),
-                            ),
-                            // Padding visualization
-                            padding: const EdgeInsets.all(5),
+                            // No border or padding - clean display
                             margin: const EdgeInsets.all(8), // Visual margin
                             child: FittedBox(
                               fit: BoxFit.contain,
@@ -188,7 +180,7 @@ class _TracingCharsGameState extends State<TracingCharsGame> {
                                         svgBounds: state
                                             .letterPathsModels[index]
                                             .svgBounds,
-                                        showDebugOverlays: true, // Show debug overlays
+                                        showDebugOverlays: false, // Show debug overlays
                                         cursorPosition: state
                                             .letterPathsModels[index]
                                             .cursorPosition,
