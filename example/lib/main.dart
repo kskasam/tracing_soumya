@@ -106,7 +106,8 @@ class _MyAppState extends State<MyApp> {
                         innerPaintColor: Colors.brown,
                       ),
                     ),
-                    TraceCharModel(
+                  ]),
+                    TraceCharsModel(chars: [TraceCharModel(
                       char: 'ఓ', // Telugu vowel "oo"
                       traceShapeOptions: const TraceShapeOptions(
                         innerPaintColor: Colors.amber,
@@ -127,12 +128,7 @@ class _MyAppState extends State<MyApp> {
                         innerPaintColor: Colors.lime,
                       ),
                     ),
-                    TraceCharModel(
-                      char: 'ౠ', // Telugu vowel "ruu"
-                      traceShapeOptions: const TraceShapeOptions(
-                        innerPaintColor: Colors.deepPurple,
-                      ),
-                    ),
+                    
                   ]),
                   // Page 7: అం (am) and అః (aha)
                   TraceCharsModel(chars: [
@@ -163,7 +159,7 @@ class _MyAppState extends State<MyApp> {
                 },
               ),
             ),
-            Expanded(
+            /*Expanded(
               child: TracingGeometricShapesGame(
                 traceGeoMetricShapeModels: [
                   TraceGeoMetricShapeModel(shapes: [
@@ -188,7 +184,7 @@ class _MyAppState extends State<MyApp> {
                   ]),
                 ],
               ),
-            ),
+            ),*/
             // Removed TracingWordGame with 'Hi' (H and I letters)
           ],
         ),

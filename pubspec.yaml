@@ -198,6 +198,10 @@ flutter:
     - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/oo_small_PointsInfo.json
     - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/au_big_PointsInfo.json
     - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/au_small_PointsInfo.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/am_big_PointsInfo.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/am_small_PointsInfo.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/aha_big_PointsInfo.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/aha_small_PointsInfo.json
     - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/ka_big_PointsInfo.json
     - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/ka_small_PointsInfo.json
     - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/kha_big_PointsInfo.json
@@ -252,6 +256,8 @@ flutter:
     - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/ya_small_PointsInfo.json
     - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/ra_big_PointsInfo.json
     - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/ra_small_PointsInfo.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/ru_big_PointsInfo.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/ru_small_PointsInfo.json
     - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/la_big_PointsInfo.json
     - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/la_small_PointsInfo.json
     - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/lla_big_PointsInfo.json

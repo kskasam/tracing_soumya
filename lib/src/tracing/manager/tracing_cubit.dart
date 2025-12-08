@@ -397,33 +397,59 @@ emit(state.copyWith(drawingStates: DrawingStates.tracing));
   }
 
   void handlePanUpdate(Offset position) {
-    final currentStrokePoints =
-        state.letterPathsModels[state.activeIndex].allStrokePoints[
-            state.letterPathsModels[state.activeIndex].currentStroke];
+    final currentModel = state.letterPathsModels[state.activeIndex];
+    final currentStrokePoints = currentModel.allStrokePoints[currentModel.currentStroke];
 
-    if (state.letterPathsModels[state.activeIndex].currentStrokeProgress >= 0 &&
-        state.letterPathsModels[state.activeIndex].currentStrokeProgress <
-            currentStrokePoints.length) {
+    // If stroke hasn't started yet (progress == -1), try to start it
+    if (currentModel.currentStrokeProgress == -1) {
+      // Check if position is near the first point
+      if (currentStrokePoints.isNotEmpty) {
+        final firstPoint = currentStrokePoints[0];
+        final distanceToFirst = (position - firstPoint).distance;
+        final distanceThreshold = currentModel.distanceToCheck ?? 50.0;
+        
+        // If close to first point, initialize the stroke
+        if (distanceToFirst < distanceThreshold) {
+          final newDrawingPath = Path()..moveTo(firstPoint.dx, firstPoint.dy);
+          currentModel.currentDrawingPath = newDrawingPath;
+          currentModel.currentStrokeProgress = 0; // Start at index 0
+          currentModel.anchorPos = firstPoint;
+          currentModel.cursorPosition = firstPoint;
+          emit(state.copyWith(letterPathsModels: state.letterPathsModels));
+        }
+      }
+      // If we couldn't start, return early
+      if (currentModel.currentStrokeProgress == -1) {
+        return;
+      }
+    }
+
+    if (currentModel.currentStrokeProgress >= 0 &&
+        currentModel.currentStrokeProgress < currentStrokePoints.length) {
       
       // BALL-ON-RAILS: Find the nearest point on the current stroke that user is dragging toward
-      final currentProgress = state.letterPathsModels[state.activeIndex].currentStrokeProgress;
+      final currentProgress = currentModel.currentStrokeProgress;
       
       // Get current ball position
-      final currentBallPos = state.letterPathsModels[state.activeIndex].cursorPosition ?? 
-                             currentStrokePoints[currentProgress > 0 ? currentProgress - 1 : 0];
+      final currentBallPos = currentModel.cursorPosition ?? 
+                             (currentProgress > 0 && currentProgress <= currentStrokePoints.length 
+                              ? currentStrokePoints[currentProgress - 1] 
+                              : currentStrokePoints[0]);
       
       // Check if cursor has moved too far from current ball position (prevents jumps at curves)
-      final maxLateralDistance = 45.0; // Maximum distance cursor can be from ball
+      // Increased tolerance for better user experience
+      final maxLateralDistance = 60.0; // Maximum distance cursor can be from ball (increased from 45)
       final cursorDistanceFromBall = (position - currentBallPos).distance;
       
       // If cursor is too far from ball, don't move the ball (user moved cursor off path)
-      if (cursorDistanceFromBall > maxLateralDistance) {
+      // But allow if we're at the very beginning (progress 0 or 1)
+      if (cursorDistanceFromBall > maxLateralDistance && currentProgress > 1) {
         return;
       }
       
       int? bestPointIndex;
       double minDistance = double.infinity;
-      final distanceThreshold = state.letterPathsModels[state.activeIndex].distanceToCheck ?? 50.0;
+      final distanceThreshold = currentModel.distanceToCheck ?? 50.0;
       
       // Limit how many points ahead we can jump in one update to prevent sudden jumps at curves
       // This ensures smooth progression along the path
@@ -442,6 +468,46 @@ emit(state.copyWith(drawingStates: DrawingStates.tracing));
         }
       }
       
+      // NEW: Also check if position is close to any point in previously completed strokes
+      // that also exists in the current stroke (allows tracing over overlaps)
+      // This enables tracing over parts of completed strokes when the current stroke overlaps
+      if (bestPointIndex == null && currentModel.currentStroke > 0) {
+        // Check all completed strokes
+        for (int completedStrokeIdx = 0; completedStrokeIdx < currentModel.currentStroke; completedStrokeIdx++) {
+          final completedStrokePoints = currentModel.allStrokePoints[completedStrokeIdx];
+          
+          // Find closest point in completed stroke
+          for (int completedPointIdx = 0; completedPointIdx < completedStrokePoints.length; completedPointIdx++) {
+            final completedPoint = completedStrokePoints[completedPointIdx];
+            final distanceToCompleted = (position - completedPoint).distance;
+            
+            // If close to a completed stroke point, check if it exists in current stroke
+            if (distanceToCompleted < distanceThreshold) {
+              // Find matching point in current stroke (with tolerance for floating point differences)
+              // Use a small tolerance (2 pixels) to account for floating point precision
+              const pointMatchTolerance = 2.0;
+              for (int currentIdx = currentProgress; currentIdx < currentStrokePoints.length; currentIdx++) {
+                final currentPoint = currentStrokePoints[currentIdx];
+                final pointDistance = (currentPoint - completedPoint).distance;
+                
+                // If points match (within tolerance), allow tracing to this point
+                if (pointDistance < pointMatchTolerance && currentIdx >= currentProgress) {
+                  if (distanceToCompleted < minDistance) {
+                    minDistance = distanceToCompleted;
+                    bestPointIndex = currentIdx;
+                    break; // Found match in this completed stroke, check next completed stroke
+                  }
+                }
+              }
+              // If we found a match, we can break early (best match found)
+              if (bestPointIndex != null) break;
+            }
+          }
+          // If we found a match, no need to check other completed strokes
+          if (bestPointIndex != null) break;
+        }
+      }
+      
       // Only move if we found a point and it's not too small of a movement
       if (bestPointIndex != null && bestPointIndex >= currentProgress) {
         // Prevent tiny movements (similar to _progressEpsilon in flutter_tracing)
@@ -449,7 +515,7 @@ emit(state.copyWith(drawingStates: DrawingStates.tracing));
           return; // Don't move if still at same point
         }
         // Update progress to this point
-        state.letterPathsModels[state.activeIndex].currentStrokeProgress = bestPointIndex + 1;
+        currentModel.currentStrokeProgress = bestPointIndex + 1;
         
         // Rebuild the drawing path up to this point
         final newDrawingPath = Path();
@@ -461,18 +527,49 @@ emit(state.copyWith(drawingStates: DrawingStates.tracing));
         }
         
         // Update ball position (anchor) to the found point
-        state.letterPathsModels[state.activeIndex].anchorPos = currentStrokePoints[bestPointIndex];
-        state.letterPathsModels[state.activeIndex].cursorPosition = currentStrokePoints[bestPointIndex];
-        state.letterPathsModels[state.activeIndex].currentDrawingPath = newDrawingPath;
+        currentModel.anchorPos = currentStrokePoints[bestPointIndex];
+        currentModel.cursorPosition = currentStrokePoints[bestPointIndex];
+        currentModel.currentDrawingPath = newDrawingPath;
         
         emit(state.copyWith(letterPathsModels: state.letterPathsModels));
       }
     }
 
     // Check if stroke is complete
-    if (state.letterPathsModels[state.activeIndex].currentStrokeProgress >=
-        currentStrokePoints.length) {
+    if (currentModel.currentStrokeProgress >= currentStrokePoints.length) {
       completeStroke();
+      return;
+    }
+    
+    // Additional lenient check: If we're at or near the last point, complete the stroke
+    // This helps when the user is very close to the end but hasn't reached the exact last point
+    if (currentStrokePoints.isNotEmpty && 
+        currentModel.currentStrokeProgress >= currentStrokePoints.length - 1) {
+      final lastPoint = currentStrokePoints.last;
+      final distanceToLast = (position - lastPoint).distance;
+      final distanceThreshold = currentModel.distanceToCheck ?? 50.0;
+      
+      // If within 1.5x threshold of last point and we're at second-to-last or last point, complete
+      if (distanceToLast < distanceThreshold * 1.5) {
+        // Force completion by setting progress to the end
+        currentModel.currentStrokeProgress = currentStrokePoints.length;
+        
+        // Rebuild the drawing path to include all points
+        final newDrawingPath = Path();
+        if (currentStrokePoints.isNotEmpty) {
+          newDrawingPath.moveTo(currentStrokePoints[0].dx, currentStrokePoints[0].dy);
+          for (int i = 0; i < currentStrokePoints.length; i++) {
+            newDrawingPath.lineTo(currentStrokePoints[i].dx, currentStrokePoints[i].dy);
+          }
+        }
+        currentModel.currentDrawingPath = newDrawingPath;
+        currentModel.anchorPos = lastPoint;
+        currentModel.cursorPosition = lastPoint;
+        
+        emit(state.copyWith(letterPathsModels: state.letterPathsModels));
+        completeStroke();
+        return;
+      }
     }
   }
 
@@ -484,33 +581,40 @@ emit(state.copyWith(drawingStates: DrawingStates.tracing));
       currentModel.paths.add(currentModel.currentDrawingPath);
 
       currentModel.currentStroke = currentStrokeIndex + 1;
-      currentModel.currentStrokeProgress = 0;
+      // Set to -1 to indicate stroke hasn't started yet (allows handlePanStart to initialize it)
+      currentModel.currentStrokeProgress = -1;
 
-      final previousStrokePoints =
-          currentModel.allStrokePoints[currentStrokeIndex];
-      final endPointOfPreviousStroke = previousStrokePoints.isNotEmpty
-          ? currentModel
-              .allStrokePoints[currentModel.disableDivededStrokes != null &&
-                      currentModel.disableDivededStrokes!
-                  ? currentStrokeIndex + 1
-                  : currentStrokeIndex]
-              .first
-          : Offset.zero;
-
-      final newDrawingPath = Path()
-        ..moveTo(endPointOfPreviousStroke.dx, endPointOfPreviousStroke.dy);
-      currentModel.currentDrawingPath = newDrawingPath;
-      currentModel.anchorPos =
-          currentModel.allStrokePoints[currentModel.currentStroke].first;
-      currentModel.cursorPosition =
-          currentModel.allStrokePoints[currentModel.currentStroke].first;
+      // Initialize anchor and cursor to first point of new stroke
+      final nextStrokePoints = currentModel.allStrokePoints[currentModel.currentStroke];
+      if (nextStrokePoints.isNotEmpty) {
+        currentModel.anchorPos = nextStrokePoints[0];
+        currentModel.cursorPosition = nextStrokePoints[0];
+        // Initialize drawing path with first point (will be properly set in handlePanStart)
+        currentModel.currentDrawingPath = Path()..moveTo(nextStrokePoints[0].dx, nextStrokePoints[0].dy);
+      }
       emit(state.copyWith(letterPathsModels: state.letterPathsModels));
     } else if (!currentModel.letterTracingFinished) {
+      // IMPORTANT: Add the last stroke's path before marking letter as finished
+      currentModel.paths.add(currentModel.currentDrawingPath);
+      
       currentModel.letterTracingFinished = true;
       currentModel.hasFinishedOneStroke = true;
       if (state.activeIndex < state.letterPathsModels.length - 1) {
+        // Move to next letter and ensure it's properly initialized
+        final nextIndex = state.activeIndex + 1;
+        final nextModel = state.letterPathsModels[nextIndex];
+        
+        // Ensure next letter's stroke progress is reset and anchor is set
+        if (nextModel.allStrokePoints.isNotEmpty && nextModel.allStrokePoints[0].isNotEmpty) {
+          nextModel.currentStroke = 0;
+          nextModel.currentStrokeProgress = -1;
+          nextModel.anchorPos = nextModel.allStrokePoints[0][0];
+          nextModel.cursorPosition = nextModel.allStrokePoints[0][0];
+          nextModel.currentDrawingPath = Path()..moveTo(nextModel.allStrokePoints[0][0].dx, nextModel.allStrokePoints[0][0].dy);
+        }
+        
         emit(state.copyWith(
-          activeIndex: (state.activeIndex + 1),
+          activeIndex: nextIndex,
           letterPathsModels: state.letterPathsModels,
         ));
       } else if (state.index == state.numberOfScreens-1 ) {
@@ -529,20 +633,38 @@ emit(state.copyWith(drawingStates: DrawingStates.tracing));
   }
 
   bool isTracingStartPoint(Offset position) {
-    final currentStrokePoints =
-        state.letterPathsModels[state.activeIndex].allStrokePoints[
-            state.letterPathsModels[state.activeIndex].currentStroke];
+    final currentModel = state.letterPathsModels[state.activeIndex];
+    final currentStrokePoints = currentModel.allStrokePoints[currentModel.currentStroke];
 
+    // If stroke has only one point, allow starting anywhere
     if (currentStrokePoints.length == 1) {
       return true;
-    } else if (state.letterPathsModels[state.activeIndex].anchorPos != null) {
+    }
+    
+    // If anchor position is set, check if position is near it
+    if (currentModel.anchorPos != null) {
       final anchorRect = Rect.fromCenter(
-          center: state.letterPathsModels[state.activeIndex].anchorPos!,
+          center: currentModel.anchorPos!,
           width: 50,
           height: 50);
-      bool contains = anchorRect.contains(position);
-      return contains;
+      if (anchorRect.contains(position)) {
+        return true;
+      }
     }
+    
+    // NEW: Also allow starting if position is close to the first point of current stroke
+    // This helps when transitioning to a new letter where anchorPos might not be perfectly set
+    if (currentStrokePoints.isNotEmpty) {
+      final firstPoint = currentStrokePoints[0];
+      final distanceToFirst = (position - firstPoint).distance;
+      final distanceThreshold = currentModel.distanceToCheck ?? 50.0;
+      
+      // If within threshold of first point and stroke hasn't started yet, allow starting
+      if (distanceToFirst < distanceThreshold && currentModel.currentStrokeProgress == -1) {
+        return true;
+      }
+    }
+    
     return false;
   }
 

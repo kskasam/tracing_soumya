@@ -164,6 +164,50 @@
             background: #fff3cd;
             color: #856404;
         }
+        
+        .stroke-controls {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .stroke-controls h3 {
+            margin: 0 0 10px 0;
+            color: #856404;
+        }
+        
+        .stroke-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .stroke-button {
+            background: #ffc107;
+            color: #000;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            font-weight: bold;
+        }
+        
+        .stroke-button:hover {
+            background: #ffb300;
+        }
+        
+        .stroke-button.active {
+            background: #ff9800;
+            border-color: #f57c00;
+            color: white;
+        }
+        
+        button.info {
+            background: #17a2b8;
+        }
     </style>
 </head>
 <body>
@@ -182,7 +226,9 @@
             <div class="control-group">
                 <label>Actions:</label>
                 <button onclick="undoLastPoint()">Undo Last Point</button>
-                <button class="danger" onclick="clearCenterline()">Clear Centerline</button>
+                <button class="info" onclick="startNewStroke()">New Stroke</button>
+                <button class="danger" onclick="clearCurrentStroke()">Clear Current Stroke</button>
+                <button class="danger" onclick="clearCenterline()">Clear All Strokes</button>
                 <button class="success" onclick="exportCenterline()">Export Centerline</button>
             </div>
         </div>
@@ -195,12 +241,25 @@
                 <li>Click anywhere inside the letter shape to place centerline points</li>
                 <li>Points will be placed exactly where you click</li>
                 <li>Hover to see a preview of where the point will be placed</li>
-                <li>Click "Export Centerline" to get the SVG path string</li>
+                <li><strong>Click "New Stroke" to break the flow and start a new disconnected path</strong></li>
+                <li>Use stroke buttons to switch between different strokes</li>
+                <li>Each stroke is color-coded for easy identification</li>
+                <li>Click "Export Centerline" to get the SVG path string (all strokes combined)</li>
                 <li>Copy the output and paste it into <code>telugu_shape_paths.dart</code></li>
             </ol>
         </div>
         
         <div id="status" class="status info">Ready - Paste SVG path and click 'Load SVG Path' to begin</div>
+        
+        <div class="stroke-controls" id="strokeControls" style="display: none;">
+            <h3>📝 Stroke Management</h3>
+            <div>
+                <strong>Current Stroke: <span id="currentStrokeDisplay">1</span></strong>
+                <span style="margin-left: 20px;">Total Strokes: <span id="totalStrokesDisplay">1</span></span>
+                <span style="margin-left: 20px;">Points in Current: <span id="currentPointsDisplay">0</span></span>
+            </div>
+            <div class="stroke-buttons" id="strokeButtons"></div>
+        </div>
         
         <div class="canvas-container">
             <svg id="svgCanvas" width="1000" height="1000" viewBox="0 0 1000 1000"></svg>
@@ -216,11 +275,24 @@
     <script>
         let svgElement = null;
         let mainPathElement = null;
-        let centerlinePathElement = null;
-        let centerlinePoints = [];
+        let centerlinePathElements = []; // Array of path elements for each stroke
+        let centerlineStrokes = []; // Array of arrays, each containing points for a stroke
+        let currentStrokeIndex = 0; // Index of currently active stroke
         let svgBounds = null;
-        let pointCircles = [];
+        let pointCircles = []; // All point circles across all strokes
         let previewCircle = null;
+        
+        // Color palette for different strokes
+        const strokeColors = [
+            '#ff5722', // Red-orange
+            '#2196F3', // Blue
+            '#4CAF50', // Green
+            '#FF9800', // Orange
+            '#9C27B0', // Purple
+            '#00BCD4', // Cyan
+            '#E91E63', // Pink
+            '#795548'  // Brown
+        ];
         
         function loadSVG() {
             const pathInput = document.getElementById('svgPathInput').value.trim();
@@ -231,8 +303,11 @@
             
             svgElement = document.getElementById('svgCanvas');
             svgElement.innerHTML = '';
-            centerlinePoints = [];
+            centerlineStrokes = [[]]; // Start with one empty stroke
+            currentStrokeIndex = 0;
+            centerlinePathElements = [];
             pointCircles = [];
+            updateStrokeControls();
             
             // Create main path
             mainPathElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');
@@ -336,10 +411,17 @@
             
             // Check if point is inside the SVG shape
             if (mainPathElement.isPointInFill(svgPoint)) {
-                // Place point exactly where user clicked
-                centerlinePoints.push({x: svgPoint.x, y: svgPoint.y});
+                // Ensure current stroke exists
+                if (!centerlineStrokes[currentStrokeIndex]) {
+                    centerlineStrokes[currentStrokeIndex] = [];
+                }
+                
+                // Place point exactly where user clicked in current stroke
+                centerlineStrokes[currentStrokeIndex].push({x: svgPoint.x, y: svgPoint.y});
                 updateCenterlinePath();
-                updateStatus(`Added point ${centerlinePoints.length} at (${svgPoint.x.toFixed(2)}, ${svgPoint.y.toFixed(2)})`);
+                const pointCount = centerlineStrokes[currentStrokeIndex].length;
+                updateStatus(`Stroke ${currentStrokeIndex + 1}: Added point ${pointCount} at (${svgPoint.x.toFixed(2)}, ${svgPoint.y.toFixed(2)})`);
+                updateStrokeControls();
             } else {
                 updateStatus('Click inside the letter shape to add points', 'warning');
             }
@@ -348,12 +430,15 @@
         function updateCenterlinePath() {
             if (!svgElement) return;
             
-            // Remove existing centerline path
-            if (centerlinePathElement) {
-                svgElement.removeChild(centerlinePathElement);
-            }
+            // Remove all existing centerline paths
+            centerlinePathElements.forEach(pathEl => {
+                if (pathEl.parentNode) {
+                    pathEl.parentNode.removeChild(pathEl);
+                }
+            });
+            centerlinePathElements = [];
             
-            // Remove existing point circles
+            // Remove all existing point circles
             pointCircles.forEach(circle => {
                 if (circle.parentNode) {
                     circle.parentNode.removeChild(circle);
@@ -361,13 +446,17 @@
             });
             pointCircles = [];
             
-            if (centerlinePoints.length === 0) return;
+            // Create paths for each stroke
+            centerlineStrokes.forEach((strokePoints, strokeIdx) => {
+                if (strokePoints.length === 0) return;
+                
+                const strokeColor = strokeColors[strokeIdx % strokeColors.length];
             
-            // Create new centerline path
-            centerlinePathElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                // Create path element for this stroke
+                const pathElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');
             let pathData = '';
             
-            centerlinePoints.forEach((point, index) => {
+                strokePoints.forEach((point, index) => {
                 if (index === 0) {
                     pathData += `M ${point.x.toFixed(2)} ${point.y.toFixed(2)}`;
                 } else {
@@ -375,35 +464,40 @@
                 }
             });
             
-            centerlinePathElement.setAttribute('d', pathData);
-            centerlinePathElement.setAttribute('fill', 'none');
-            centerlinePathElement.setAttribute('stroke', '#ff5722');
-            centerlinePathElement.setAttribute('stroke-width', '3');
-            centerlinePathElement.setAttribute('stroke-dasharray', '5,5');
-            svgElement.appendChild(centerlinePathElement);
+                pathElement.setAttribute('d', pathData);
+                pathElement.setAttribute('fill', 'none');
+                pathElement.setAttribute('stroke', strokeColor);
+                pathElement.setAttribute('stroke-width', strokeIdx === currentStrokeIndex ? '3' : '2');
+                pathElement.setAttribute('stroke-dasharray', '5,5');
+                pathElement.setAttribute('opacity', strokeIdx === currentStrokeIndex ? '1' : '0.7');
+                svgElement.appendChild(pathElement);
+                centerlinePathElements.push(pathElement);
             
-            // Add point markers
-            centerlinePoints.forEach((point, index) => {
+                // Add point markers for this stroke
+                strokePoints.forEach((point, index) => {
                 const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
                 circle.setAttribute('cx', point.x);
                 circle.setAttribute('cy', point.y);
-                circle.setAttribute('r', '6');
-                circle.setAttribute('fill', '#ff5722');
+                    circle.setAttribute('r', strokeIdx === currentStrokeIndex ? '6' : '5');
+                    circle.setAttribute('fill', strokeColor);
                 circle.setAttribute('stroke', 'white');
                 circle.setAttribute('stroke-width', '2');
-                circle.setAttribute('data-index', index);
+                    circle.setAttribute('data-stroke-index', strokeIdx);
+                    circle.setAttribute('data-point-index', index);
                 circle.style.cursor = 'pointer';
+                    circle.style.opacity = strokeIdx === currentStrokeIndex ? '1' : '0.7';
                 
                 // Add click handler to remove point
                 circle.addEventListener('click', (e) => {
                     e.stopPropagation();
-                    removePoint(index);
+                        removePoint(strokeIdx, index);
                 });
                 
                 svgElement.appendChild(circle);
                 pointCircles.push(circle);
                 
-                // Add point number label
+                    // Add point number label (only for current stroke)
+                    if (strokeIdx === currentStrokeIndex) {
                 const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
                 text.setAttribute('x', point.x);
                 text.setAttribute('y', point.y - 10);
@@ -411,40 +505,71 @@
                 text.setAttribute('font-size', '12');
                 text.setAttribute('font-weight', 'bold');
                 text.setAttribute('fill', '#fff');
-                text.setAttribute('stroke', '#ff5722');
+                        text.setAttribute('stroke', strokeColor);
                 text.setAttribute('stroke-width', '0.5');
                 text.textContent = index + 1;
                 svgElement.appendChild(text);
+                    }
+                });
             });
             
             // Update output
-            document.getElementById('outputPath').value = pathData;
+            exportCenterline();
         }
         
-        function removePoint(index) {
-            if (index >= 0 && index < centerlinePoints.length) {
-                centerlinePoints.splice(index, 1);
+        function removePoint(strokeIndex, pointIndex) {
+            if (strokeIndex >= 0 && strokeIndex < centerlineStrokes.length &&
+                pointIndex >= 0 && pointIndex < centerlineStrokes[strokeIndex].length) {
+                centerlineStrokes[strokeIndex].splice(pointIndex, 1);
                 updateCenterlinePath();
-                updateStatus(`Removed point ${index + 1}. Total points: ${centerlinePoints.length}`);
+                updateStatus(`Removed point ${pointIndex + 1} from stroke ${strokeIndex + 1}`);
+                updateStrokeControls();
             }
         }
         
         function undoLastPoint() {
-            if (centerlinePoints.length > 0) {
-                centerlinePoints.pop();
+            if (centerlineStrokes[currentStrokeIndex] && centerlineStrokes[currentStrokeIndex].length > 0) {
+                centerlineStrokes[currentStrokeIndex].pop();
                 updateCenterlinePath();
-                updateStatus(`Removed last point. Total points: ${centerlinePoints.length}`);
+                const pointCount = centerlineStrokes[currentStrokeIndex].length;
+                updateStatus(`Removed last point from stroke ${currentStrokeIndex + 1}. Points: ${pointCount}`);
+                updateStrokeControls();
             } else {
-                updateStatus('No points to undo', 'warning');
+                updateStatus('No points to undo in current stroke', 'warning');
+            }
+        }
+        
+        function startNewStroke() {
+            // Create a new empty stroke
+            centerlineStrokes.push([]);
+            currentStrokeIndex = centerlineStrokes.length - 1;
+            updateCenterlinePath();
+            updateStatus(`Started new stroke ${currentStrokeIndex + 1}. Click to add points.`);
+            updateStrokeControls();
+        }
+        
+        function switchStroke(strokeIndex) {
+            if (strokeIndex >= 0 && strokeIndex < centerlineStrokes.length) {
+                currentStrokeIndex = strokeIndex;
+                updateCenterlinePath();
+                updateStatus(`Switched to stroke ${currentStrokeIndex + 1}`);
+                updateStrokeControls();
+            }
+        }
+        
+        function clearCurrentStroke() {
+            if (centerlineStrokes[currentStrokeIndex]) {
+                centerlineStrokes[currentStrokeIndex] = [];
+                updateCenterlinePath();
+                updateStatus(`Cleared stroke ${currentStrokeIndex + 1}`);
+                updateStrokeControls();
             }
         }
         
         function clearCenterline() {
-            centerlinePoints = [];
-            if (centerlinePathElement) {
-                svgElement.removeChild(centerlinePathElement);
-                centerlinePathElement = null;
-            }
+            centerlineStrokes = [[]];
+            currentStrokeIndex = 0;
+            centerlinePathElements = [];
             pointCircles.forEach(circle => {
                 if (circle.parentNode) {
                     circle.parentNode.removeChild(circle);
@@ -452,7 +577,33 @@
             });
             pointCircles = [];
             document.getElementById('outputPath').value = '';
-            updateStatus('Centerline cleared');
+            updateStatus('All strokes cleared');
+            updateStrokeControls();
+        }
+        
+        function updateStrokeControls() {
+            const controlsDiv = document.getElementById('strokeControls');
+            if (centerlineStrokes.length > 0) {
+                controlsDiv.style.display = 'block';
+                
+                document.getElementById('currentStrokeDisplay').textContent = currentStrokeIndex + 1;
+                document.getElementById('totalStrokesDisplay').textContent = centerlineStrokes.length;
+                const currentPoints = centerlineStrokes[currentStrokeIndex] ? centerlineStrokes[currentStrokeIndex].length : 0;
+                document.getElementById('currentPointsDisplay').textContent = currentPoints;
+                
+                // Update stroke buttons
+                const buttonsDiv = document.getElementById('strokeButtons');
+                buttonsDiv.innerHTML = '';
+                centerlineStrokes.forEach((stroke, index) => {
+                    const button = document.createElement('button');
+                    button.className = 'stroke-button' + (index === currentStrokeIndex ? ' active' : '');
+                    button.textContent = `Stroke ${index + 1} (${stroke.length} pts)`;
+                    button.onclick = () => switchStroke(index);
+                    buttonsDiv.appendChild(button);
+                });
+            } else {
+                controlsDiv.style.display = 'none';
+            }
         }
         
         function clearAll() {
@@ -471,22 +622,30 @@
         }
         
         function exportCenterline() {
-            if (centerlinePoints.length === 0) {
+            // Filter out empty strokes
+            const nonEmptyStrokes = centerlineStrokes.filter(stroke => stroke.length > 0);
+            
+            if (nonEmptyStrokes.length === 0) {
                 alert('No centerline points to export. Please add some points first.');
                 return;
             }
             
             let pathData = '';
-            centerlinePoints.forEach((point, index) => {
+            let totalPoints = 0;
+            
+            nonEmptyStrokes.forEach((strokePoints, strokeIdx) => {
+                strokePoints.forEach((point, index) => {
                 if (index === 0) {
                     pathData += `M ${point.x.toFixed(2)} ${point.y.toFixed(2)}`;
                 } else {
                     pathData += ` L ${point.x.toFixed(2)} ${point.y.toFixed(2)}`;
                 }
+                    totalPoints++;
+                });
             });
             
             document.getElementById('outputPath').value = pathData;
-            updateStatus(`Exported centerline with ${centerlinePoints.length} points`, 'success');
+            updateStatus(`Exported ${nonEmptyStrokes.length} stroke(s) with ${totalPoints} total points`, 'success');
         }
         
         function copyToClipboard() {
