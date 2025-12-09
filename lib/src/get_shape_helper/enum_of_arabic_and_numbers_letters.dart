@@ -471,6 +471,358 @@ class TypeExtensionTracking {
           isBig: true,
         ));
         break;
+      case 'క': // ka
+        list.add(_createTeluguTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: TeluguShapePaths.kaBig,
+          smallPath: TeluguShapePaths.kaSmall,
+          dottedPath: TeluguShapePaths.kaDotted,
+          bigJsonFile: ShapePointsManger.teluguKaBig,
+          smallJsonFile: ShapePointsManger.teluguKaSmall,
+          isBig: true,
+        ));
+        break;
+      case 'ఖ': // kha
+        list.add(_createTeluguTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: TeluguShapePaths.khaBig,
+          smallPath: TeluguShapePaths.khaSmall,
+          dottedPath: TeluguShapePaths.khaDotted,
+          bigJsonFile: ShapePointsManger.teluguKhaBig,
+          smallJsonFile: ShapePointsManger.teluguKhaSmall,
+          isBig: true,
+        ));
+        break;
+      case 'గ': // ga
+        list.add(_createTeluguTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: TeluguShapePaths.gaBig,
+          smallPath: TeluguShapePaths.gaSmall,
+          dottedPath: TeluguShapePaths.gaDotted,
+          bigJsonFile: ShapePointsManger.teluguGaBig,
+          smallJsonFile: ShapePointsManger.teluguGaSmall,
+          isBig: true,
+        ));
+        break;
+      case 'ఘ': // gha
+        list.add(_createTeluguTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: TeluguShapePaths.ghaBig,
+          smallPath: TeluguShapePaths.ghaSmall,
+          dottedPath: TeluguShapePaths.ghaDotted,
+          bigJsonFile: ShapePointsManger.teluguGhaBig,
+          smallJsonFile: ShapePointsManger.teluguGhaSmall,
+          isBig: true,
+        ));
+        break;
+      case 'చ': // cha
+        list.add(_createTeluguTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: TeluguShapePaths.chaBig,
+          smallPath: TeluguShapePaths.chaSmall,
+          dottedPath: TeluguShapePaths.chaDotted,
+          bigJsonFile: ShapePointsManger.teluguChaBig,
+          smallJsonFile: ShapePointsManger.teluguChaSmall,
+          isBig: true,
+        ));
+        break;
+      case 'ఛ': // chha
+        list.add(_createTeluguTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: TeluguShapePaths.chhaBig,
+          smallPath: TeluguShapePaths.chhaSmall,
+          dottedPath: TeluguShapePaths.chhaDotted,
+          bigJsonFile: ShapePointsManger.teluguChhaBig,
+          smallJsonFile: ShapePointsManger.teluguChhaSmall,
+          isBig: true,
+        ));
+        break;
+      case 'జ': // ja
+        list.add(_createTeluguTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: TeluguShapePaths.jaBig,
+          smallPath: TeluguShapePaths.jaSmall,
+          dottedPath: TeluguShapePaths.jaDotted,
+          bigJsonFile: ShapePointsManger.teluguJaBig,
+          smallJsonFile: ShapePointsManger.teluguJaSmall,
+          isBig: true,
+        ));
+        break;
+      case 'ఝ': // jha
+        list.add(_createTeluguTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: TeluguShapePaths.jhaBig,
+          smallPath: TeluguShapePaths.jhaSmall,
+          dottedPath: TeluguShapePaths.jhaDotted,
+          bigJsonFile: ShapePointsManger.teluguJhaBig,
+          smallJsonFile: ShapePointsManger.teluguJhaSmall,
+          isBig: true,
+        ));
+        break;
+      case 'ట': // ta
+        list.add(_createTeluguTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: TeluguShapePaths.taBig,
+          smallPath: TeluguShapePaths.taSmall,
+          dottedPath: TeluguShapePaths.taDotted,
+          bigJsonFile: ShapePointsManger.teluguTaBig,
+          smallJsonFile: ShapePointsManger.teluguTaSmall,
+          isBig: true,
+        ));
+        break;
+      case 'ఠ': // tha
+        list.add(_createTeluguTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: TeluguShapePaths.thaBig,
+          smallPath: TeluguShapePaths.thaSmall,
+          dottedPath: TeluguShapePaths.thaDotted,
+          bigJsonFile: ShapePointsManger.teluguThaBig,
+          smallJsonFile: ShapePointsManger.teluguThaSmall,
+          isBig: true,
+        ));
+        break;
+      case 'డ': // da
+        list.add(_createTeluguTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: TeluguShapePaths.daBig,
+          smallPath: TeluguShapePaths.daSmall,
+          dottedPath: TeluguShapePaths.daDotted,
+          bigJsonFile: ShapePointsManger.teluguDaBig,
+          smallJsonFile: ShapePointsManger.teluguDaSmall,
+          isBig: true,
+        ));
+        break;
+      case 'ఢ': // dha
+        list.add(_createTeluguTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: TeluguShapePaths.dhaBig,
+          smallPath: TeluguShapePaths.dhaSmall,
+          dottedPath: TeluguShapePaths.dhaDotted,
+          bigJsonFile: ShapePointsManger.teluguDhaBig,
+          smallJsonFile: ShapePointsManger.teluguDhaSmall,
+          isBig: true,
+        ));
+        break;
+      case 'ణ': // na
+        list.add(_createTeluguTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: TeluguShapePaths.naBig,
+          smallPath: TeluguShapePaths.naSmall,
+          dottedPath: TeluguShapePaths.naDotted,
+          bigJsonFile: ShapePointsManger.teluguNaBig,
+          smallJsonFile: ShapePointsManger.teluguNaSmall,
+          isBig: true,
+        ));
+        break;
+      case 'త': // ta2
+        list.add(_createTeluguTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: TeluguShapePaths.ta2Big,
+          smallPath: TeluguShapePaths.ta2Small,
+          dottedPath: TeluguShapePaths.ta2Dotted,
+          bigJsonFile: ShapePointsManger.teluguTa2Big,
+          smallJsonFile: ShapePointsManger.teluguTa2Small,
+          isBig: true,
+        ));
+        break;
+      case 'థ': // tha2
+        list.add(_createTeluguTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: TeluguShapePaths.tha2Big,
+          smallPath: TeluguShapePaths.tha2Small,
+          dottedPath: TeluguShapePaths.tha2Dotted,
+          bigJsonFile: ShapePointsManger.teluguTha2Big,
+          smallJsonFile: ShapePointsManger.teluguTha2Small,
+          isBig: true,
+        ));
+        break;
+      case 'ద': // da2
+        list.add(_createTeluguTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: TeluguShapePaths.da2Big,
+          smallPath: TeluguShapePaths.da2Small,
+          dottedPath: TeluguShapePaths.da2Dotted,
+          bigJsonFile: ShapePointsManger.teluguDa2Big,
+          smallJsonFile: ShapePointsManger.teluguDa2Small,
+          isBig: true,
+        ));
+        break;
+      case 'ధ': // dha2
+        list.add(_createTeluguTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: TeluguShapePaths.dha2Big,
+          smallPath: TeluguShapePaths.dha2Small,
+          dottedPath: TeluguShapePaths.dha2Dotted,
+          bigJsonFile: ShapePointsManger.teluguDha2Big,
+          smallJsonFile: ShapePointsManger.teluguDha2Small,
+          isBig: true,
+        ));
+        break;
+      case 'న': // na2
+        list.add(_createTeluguTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: TeluguShapePaths.na2Big,
+          smallPath: TeluguShapePaths.na2Small,
+          dottedPath: TeluguShapePaths.na2Dotted,
+          bigJsonFile: ShapePointsManger.teluguNa2Big,
+          smallJsonFile: ShapePointsManger.teluguNa2Small,
+          isBig: true,
+        ));
+        break;
+      case 'ప': // pa
+        list.add(_createTeluguTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: TeluguShapePaths.paBig,
+          smallPath: TeluguShapePaths.paSmall,
+          dottedPath: TeluguShapePaths.paDotted,
+          bigJsonFile: ShapePointsManger.teluguPaBig,
+          smallJsonFile: ShapePointsManger.teluguPaSmall,
+          isBig: true,
+        ));
+        break;
+      case 'ఫ': // pha
+        list.add(_createTeluguTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: TeluguShapePaths.phaBig,
+          smallPath: TeluguShapePaths.phaSmall,
+          dottedPath: TeluguShapePaths.phaDotted,
+          bigJsonFile: ShapePointsManger.teluguPhaBig,
+          smallJsonFile: ShapePointsManger.teluguPhaSmall,
+          isBig: true,
+        ));
+        break;
+      case 'బ': // ba
+        list.add(_createTeluguTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: TeluguShapePaths.baBig,
+          smallPath: TeluguShapePaths.baSmall,
+          dottedPath: TeluguShapePaths.baDotted,
+          bigJsonFile: ShapePointsManger.teluguBaBig,
+          smallJsonFile: ShapePointsManger.teluguBaSmall,
+          isBig: true,
+        ));
+        break;
+      case 'భ': // bha
+        list.add(_createTeluguTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: TeluguShapePaths.bhaBig,
+          smallPath: TeluguShapePaths.bhaSmall,
+          dottedPath: TeluguShapePaths.bhaDotted,
+          bigJsonFile: ShapePointsManger.teluguBhaBig,
+          smallJsonFile: ShapePointsManger.teluguBhaSmall,
+          isBig: true,
+        ));
+        break;
+      case 'మ': // ma
+        list.add(_createTeluguTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: TeluguShapePaths.maBig,
+          smallPath: TeluguShapePaths.maSmall,
+          dottedPath: TeluguShapePaths.maDotted,
+          bigJsonFile: ShapePointsManger.teluguMaBig,
+          smallJsonFile: ShapePointsManger.teluguMaSmall,
+          isBig: true,
+        ));
+        break;
+      case 'య': // ya
+        list.add(_createTeluguTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: TeluguShapePaths.yaBig,
+          smallPath: TeluguShapePaths.yaSmall,
+          dottedPath: TeluguShapePaths.yaDotted,
+          bigJsonFile: ShapePointsManger.teluguYaBig,
+          smallJsonFile: ShapePointsManger.teluguYaSmall,
+          isBig: true,
+        ));
+        break;
+      case 'ర': // ra
+        list.add(_createTeluguTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: TeluguShapePaths.raBig,
+          smallPath: TeluguShapePaths.raSmall,
+          dottedPath: TeluguShapePaths.raDotted,
+          bigJsonFile: ShapePointsManger.teluguRaBig,
+          smallJsonFile: ShapePointsManger.teluguRaSmall,
+          isBig: true,
+        ));
+        break;
+      case 'ల': // la
+        list.add(_createTeluguTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: TeluguShapePaths.laBig,
+          smallPath: TeluguShapePaths.laSmall,
+          dottedPath: TeluguShapePaths.laDotted,
+          bigJsonFile: ShapePointsManger.teluguLaBig,
+          smallJsonFile: ShapePointsManger.teluguLaSmall,
+          isBig: true,
+        ));
+        break;
+      case 'ళ': // lla
+        list.add(_createTeluguTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: TeluguShapePaths.llaBig,
+          smallPath: TeluguShapePaths.llaSmall,
+          dottedPath: TeluguShapePaths.llaDotted,
+          bigJsonFile: ShapePointsManger.teluguLlaBig,
+          smallJsonFile: ShapePointsManger.teluguLlaSmall,
+          isBig: true,
+        ));
+        break;
+      case 'వ': // va
+        list.add(_createTeluguTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: TeluguShapePaths.vaBig,
+          smallPath: TeluguShapePaths.vaSmall,
+          dottedPath: TeluguShapePaths.vaDotted,
+          bigJsonFile: ShapePointsManger.teluguVaBig,
+          smallJsonFile: ShapePointsManger.teluguVaSmall,
+          isBig: true,
+        ));
+        break;
+      case 'శ': // sha
+        list.add(_createTeluguTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: TeluguShapePaths.shaBig,
+          smallPath: TeluguShapePaths.shaSmall,
+          dottedPath: TeluguShapePaths.shaDotted,
+          bigJsonFile: ShapePointsManger.teluguShaBig,
+          smallJsonFile: ShapePointsManger.teluguShaSmall,
+          isBig: true,
+        ));
+        break;
+      case 'ష': // ssa
+        list.add(_createTeluguTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: TeluguShapePaths.ssaBig,
+          smallPath: TeluguShapePaths.ssaSmall,
+          dottedPath: TeluguShapePaths.ssaDotted,
+          bigJsonFile: ShapePointsManger.teluguSsaBig,
+          smallJsonFile: ShapePointsManger.teluguSsaSmall,
+          isBig: true,
+        ));
+        break;
+      case 'స': // sa
+        list.add(_createTeluguTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: TeluguShapePaths.saBig,
+          smallPath: TeluguShapePaths.saSmall,
+          dottedPath: TeluguShapePaths.saDotted,
+          bigJsonFile: ShapePointsManger.teluguSaBig,
+          smallJsonFile: ShapePointsManger.teluguSaSmall,
+          isBig: true,
+        ));
+        break;
+      case 'హ': // ha
+        list.add(_createTeluguTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: TeluguShapePaths.haBig,
+          smallPath: TeluguShapePaths.haSmall,
+          dottedPath: TeluguShapePaths.haDotted,
+          bigJsonFile: ShapePointsManger.teluguHaBig,
+          smallJsonFile: ShapePointsManger.teluguHaSmall,
+          isBig: true,
+        ));
+        break;
       default:
         // Return empty list for unsupported Telugu letters
         break;
