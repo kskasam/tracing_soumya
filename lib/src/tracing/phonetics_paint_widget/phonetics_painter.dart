@@ -29,6 +29,11 @@ class PhoneticsPainter extends CustomPainter {
   final List<List<Offset>>? jsonPathPoints;
   final bool showJsonPath;
   
+  // Arrow guidance
+  final bool showArrows;
+  final double arrowSpacing;
+  final double arrowStartOffset; // offset from start for the single arrow
+
   // Debug: SVG bounds for visualization
   final Rect? svgBounds;
   final bool showDebugOverlays;
@@ -57,6 +62,9 @@ class PhoneticsPainter extends CustomPainter {
     this.strokeColors,
     this.jsonPathPoints,
     this.showJsonPath = false,
+    this.showArrows = true,
+    this.arrowSpacing = 40.0,
+    this.arrowStartOffset = 12.0,
     this.svgBounds,
     this.showDebugOverlays = true,
     this.cursorPosition,
@@ -285,6 +293,83 @@ class PhoneticsPainter extends CustomPainter {
         ..style = indexPathPaintStyle ?? PaintingStyle.stroke
         ..strokeWidth = strokeIndex ?? 2.0;
       canvas.drawPath(indexPath!, debugPaint);
+    }
+    
+    // Draw small arrows along each stroke (fallback to dottedPath if paths empty)
+    if (showArrows) {
+      final arrowPaint = Paint()
+        ..color = dottedColor
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 2.0
+        ..strokeJoin = StrokeJoin.round
+        ..strokeCap = StrokeCap.round;
+
+      const double arrowSize = 8.0;
+
+      final List<Path> arrowSources = [];
+      arrowSources.addAll(paths);
+      if (arrowSources.isEmpty && dottedPath != null) {
+        arrowSources.add(dottedPath!);
+      }
+      // If we still have fewer paths than strokes in jsonPathPoints (e.g., after advancing strokes),
+      // build temporary paths from the remaining stroke points so arrows remain visible.
+      if (jsonPathPoints != null && arrowSources.length < jsonPathPoints!.length) {
+        for (int i = arrowSources.length; i < jsonPathPoints!.length; i++) {
+          final pts = jsonPathPoints![i];
+          if (pts.length < 2) continue;
+          final p = Path()..moveTo(pts[0].dx, pts[0].dy);
+          for (int k = 1; k < pts.length; k++) {
+            p.lineTo(pts[k].dx, pts[k].dy);
+          }
+          arrowSources.add(p);
+        }
+      }
+
+      for (int pathIndex = 0; pathIndex < arrowSources.length; pathIndex++) {
+        final path = arrowSources[pathIndex];
+        bool drawnForThisPath = false;
+        for (final metric in path.computeMetrics()) {
+          if (metric.length <= 1e-3) continue;
+
+          // One or two arrows based on point count / length.
+          final bool hasEnoughPoints = (jsonPathPoints != null &&
+              pathIndex < jsonPathPoints!.length &&
+              jsonPathPoints![pathIndex].length >= 15);
+          final bool longEnough = metric.length >= 120;
+          final int arrowCount = (hasEnoughPoints || longEnough) ? 2 : 1;
+
+          for (int a = 0; a < arrowCount; a++) {
+            final double target = (arrowCount == 1)
+                ? 0.25
+                : (a == 0 ? 0.25 : 0.60);
+            final double dist = (metric.length * target).clamp(4.0, metric.length * 0.9);
+            final tangent = metric.getTangentForOffset(dist);
+            if (tangent == null) continue;
+            final tip = tangent.position;
+            final dir = tangent.vector;
+            final len = dir.distance;
+            if (len < 1e-3) continue;
+
+            final unit = dir / len;
+            final perp = Offset(-unit.dy, unit.dx);
+
+            final baseCenter = tip - unit * arrowSize;
+            final left = baseCenter + perp * (arrowSize * 0.5);
+            final right = baseCenter - perp * (arrowSize * 0.5);
+
+            final arrowPath = Path()
+              ..moveTo(tip.dx, tip.dy)
+              ..lineTo(left.dx, left.dy)
+              ..lineTo(right.dx, right.dy)
+              ..close();
+            canvas.drawPath(arrowPath, arrowPaint);
+          }
+          // Only one contour per stroke for arrows
+          drawnForThisPath = true;
+          break;
+        }
+        if (drawnForThisPath) continue;
+      }
     }
     
     // Draw JSON path for debugging alignment (BEFORE clipping)
