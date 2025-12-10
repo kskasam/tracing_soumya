@@ -187,6 +187,9 @@ class _TracingWordGameState extends State<TracingWordGame> {
                                         cursorPosition: state
                                             .letterPathsModels[index]
                                             .cursorPosition,
+                                        customPositions: state
+                                            .letterPathsModels[index]
+                                            .customPositions,
                                       ),
                                     ),
                                     // Ball is now drawn inside the painter

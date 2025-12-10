@@ -1,6 +1,7 @@
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+import '../models/custom_arrow_number_positions.dart';
 
 class LetterPathsModel {
   final bool  isSpace;
@@ -39,6 +40,9 @@ final double? distanceToCheck;
   // Debug: Original SVG bounds (before transformation)
   final Rect? svgBounds;
   
+  // Custom arrow and number positions (from JSON)
+  final CustomArrowNumberPositions? customPositions;
+  
   LetterPathsModel({
         this.isSpace=false,
 
@@ -68,6 +72,7 @@ final double? distanceToCheck;
     this.currentStrokeProgress = -1,
     this.strokeColors,
     this.svgBounds,
+    this.customPositions,
   })  : paths = paths ?? [],
         currentDrawingPath = ui.Path(),
         allStrokePoints = allStrokePoints ?? [];
@@ -95,6 +100,7 @@ final double? distanceToCheck;
 
     PaintingStyle? dottedPathPaintStyle,
     PaintingStyle? indexPathPaintStyle,
+    CustomArrowNumberPositions? customPositions,
 
   }) {
     return LetterPathsModel(
@@ -118,6 +124,7 @@ final double? distanceToCheck;
           currentStrokeProgress ?? this.currentStrokeProgress,
           dottedPathPaintStyle:  dottedPathPaintStyle ?? this.dottedPathPaintStyle ,
           indexPathPaintStyle: indexPathPaintStyle ?? this.indexPathPaintStyle ,
+      customPositions: customPositions ?? this.customPositions,
     );
   }
 }

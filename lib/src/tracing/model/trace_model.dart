@@ -28,6 +28,9 @@ final double? strokeIndex;
 
   // For debugging: Different color for each stroke
   final List<Color>? strokeColors;
+  
+  // Optional path to custom arrow/number positions JSON file
+  final String? customPositionsJsonFile;
 
   TraceModel({
         this.isSpace=false,
@@ -53,6 +56,7 @@ final double? strokeIndex;
     required this.pointsJsonFile,
     // required this.pointColor,
     this.strokeColors,
+    this.customPositionsJsonFile,
 
   });
 
@@ -78,6 +82,7 @@ final double? strokeIndex;
     Size? letterViewSize,
     double? strokeIndex,
     List<Color>? strokeColors,
+    String? customPositionsJsonFile,
   }) {
     return TraceModel(
       isSpace: isSpace ?? this.isSpace,
@@ -101,6 +106,7 @@ final double? strokeIndex;
       letterViewSize: letterViewSize ?? this.letterViewSize,
       strokeIndex: strokeIndex ?? this.strokeIndex,
       strokeColors: strokeColors ?? this.strokeColors,
+      customPositionsJsonFile: customPositionsJsonFile ?? this.customPositionsJsonFile,
     );
   }
 }

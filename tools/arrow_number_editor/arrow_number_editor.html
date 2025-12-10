@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arrow & Number Placement Editor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            padding: 30px;
+        }
+        
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .control-group.full-width {
+            grid-column: 1 / -1;
+        }
+        
+        label {
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+        
+        input, select, button, textarea {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        textarea {
+            font-family: monospace;
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #5568d3;
+        }
+        
+        button.danger {
+            background: #e74c3c;
+        }
+        
+        button.danger:hover {
+            background: #c0392b;
+        }
+        
+        button.success {
+            background: #27ae60;
+        }
+        
+        button.success:hover {
+            background: #229954;
+        }
+        
+        .canvas-container {
+            position: relative;
+            width: 100%;
+            background: #fff;
+            border: 3px solid #667eea;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        
+        #svgCanvas {
+            display: block;
+            width: 100%;
+            height: 600px; /* ensure visible height */
+            background: #f7f9ff;
+            cursor: crosshair;
+        }
+        
+        .preview-arrow {
+            pointer-events: none;
+            opacity: 0.6;
+        }
+        
+        .info-panel {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .info-panel h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .info-panel p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 5px;
+        }
+        
+        .items-list {
+            max-height: 300px;
+            overflow-y: auto;
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        
+        .item-entry {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px;
+            margin-bottom: 5px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border-left: 3px solid #667eea;
+        }
+        
+        .item-entry:hover {
+            background: #e9ecef;
+        }
+        
+        .item-info {
+            flex: 1;
+        }
+        
+        .item-actions {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .btn-small {
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+        
+        .mode-indicator {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        
+        .mode-arrow {
+            background: #3498db;
+            color: white;
+        }
+        
+        .mode-number {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .arrow-type-preview {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 5px;
+        }
+        
+        .arrow-preview-item {
+            padding: 5px 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+        
+        .arrow-preview-item:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+        
+        .arrow-preview-item.selected {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Arrow & Number Placement Editor</h1>
+        <p class="subtitle">Paste SVG paths and centerline, then click to place arrows and numbers</p>
+        
+        <div class="controls">
+            <div class="control-group full-width">
+                <label>SVG Path (Main Letter Outline):</label>
+                <textarea id="svgPath" placeholder="Paste SVG path data here (e.g., M 10 20 L 30 40...)"></textarea>
+            </div>
+            
+            <div class="control-group full-width">
+                <label>Centerline Path (Dotted Path - Optional):</label>
+                <textarea id="centerlinePath" placeholder="Paste centerline path data here (optional)"></textarea>
+            </div>
+            
+            <div class="control-group">
+                <label>ViewBox (e.g., "0 0 200 200"):</label>
+                <input type="text" id="viewBox" value="0 0 200 200" placeholder="0 0 200 200">
+            </div>
+            
+            <div class="control-group">
+                <button id="loadBtn">Load Paths</button>
+            </div>
+            
+            <div class="control-group">
+                <label>Mode:</label>
+                <select id="modeSelect">
+                    <option value="arrow">Place Arrow</option>
+                    <option value="number">Place Number</option>
+                    <option value="line">Draw Line + Arrow</option>
+                </select>
+            </div>
+            
+            <div class="control-group" id="angleGroup" style="display: none;">
+                <label>Arrow Direction (degrees):</label>
+                <input type="number" id="angleDeg" value="0" step="5" min="0" max="360">
+                <small style="color: #666; display: block; margin-top: 5px;">
+                    0° = Right → | 90° = Down ↓ | 180° = Left ← | 270° = Up ↑
+                </small>
+            </div>
+            
+            <div class="control-group" id="arrowTypeGroup" style="display: none;">
+                <label>Arrow Type:</label>
+                <select id="arrowTypeSelect">
+                    <option value="triangle">Triangle (Filled)</option>
+                    <option value="triangle-outline">Triangle (Outline)</option>
+                    <option value="chevron">Chevron</option>
+                    <option value="arrow-line">Arrow Line</option>
+                    <option value="diamond">Diamond</option>
+                </select>
+                <div class="arrow-type-preview" id="arrowPreview"></div>
+            </div>
+            
+            <div class="control-group" id="strokeNumberGroup" style="display: none;">
+                <label>Stroke Number (for numbers):</label>
+                <input type="number" id="strokeNumber" value="1" min="1" max="10">
+            </div>
+            
+            <div class="control-group" id="numberSizeGroup" style="display: none;">
+                <label>Number Size:</label>
+                <select id="numberSizeSelect">
+                    <option value="small">Small (8px)</option>
+                    <option value="medium" selected>Medium (12px)</option>
+                    <option value="large">Large (16px)</option>
+                    <option value="xlarge">Extra Large (20px)</option>
+                </select>
+            </div>
+            
+            <div class="control-group">
+                <button id="clearBtn" class="danger">Clear All</button>
+            </div>
+            
+            <div class="control-group">
+                <button id="exportBtn" class="success">Export JSON</button>
+            </div>
+        </div>
+        
+        <div class="info-panel">
+            <h3>Instructions</h3>
+            <p><strong>Current Mode:</strong> <span id="modeIndicator" class="mode-indicator mode-arrow">Place Arrow</span></p>
+            <p>1. Paste SVG path data and centerline path (optional)</p>
+            <p>2. Set viewBox dimensions</p>
+            <p>3. Click "Load Paths" to render</p>
+            <p>4. Select mode and arrow type</p>
+            <p>5. Move mouse to see arrow preview, click to place</p>
+            <p>6. Export JSON when done</p>
+        </div>
+        
+        <div class="canvas-container">
+            <svg id="svgCanvas" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                <!-- SVG content will be loaded here -->
+            </svg>
+        </div>
+        
+        <div class="info-panel">
+            <h3>Placed Items (<span id="itemCount">0</span>)</h3>
+            <div class="items-list" id="itemsList">
+                <p style="color: #999; text-align: center; padding: 20px;">No items placed yet</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let svgElement = null;
+        let svgViewBox = { x: 0, y: 0, width: 200, height: 200 };
+        let items = [];
+        let currentMode = 'arrow';
+        let currentArrowType = 'triangle';
+        let previewArrow = null;
+        let isLoaded = false;
+        let lineStart = null;
+        let hoverCursor = null;
+        let svgTransform = { translateX: 0, translateY: 0, scale: 1 }; // Store the transform applied to SVG group
+        
+        // Arrow type definitions
+        const arrowTypes = {
+            'triangle': {
+                name: 'Triangle (Filled)',
+                draw: (g, x, y, angle) => {
+                    const size = 8;
+                    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    const tipX = x + Math.cos(angle) * size;
+                    const tipY = y + Math.sin(angle) * size;
+                    const baseX = x - Math.cos(angle) * size;
+                    const baseY = y - Math.sin(angle) * size;
+                    const perpX = -Math.sin(angle) * size * 0.5;
+                    const perpY = Math.cos(angle) * size * 0.5;
+                    
+                    const d = `M ${tipX} ${tipY} L ${baseX + perpX} ${baseY + perpY} L ${baseX - perpX} ${baseY - perpY} Z`;
+                    path.setAttribute('d', d);
+                    path.setAttribute('fill', '#666');
+                    path.setAttribute('stroke', '#333');
+                    path.setAttribute('stroke-width', '1');
+                    g.appendChild(path);
+                }
+            },
+            'triangle-outline': {
+                name: 'Triangle (Outline)',
+                draw: (g, x, y, angle) => {
+                    const size = 8;
+                    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    const tipX = x + Math.cos(angle) * size;
+                    const tipY = y + Math.sin(angle) * size;
+                    const baseX = x - Math.cos(angle) * size;
+                    const baseY = y - Math.sin(angle) * size;
+                    const perpX = -Math.sin(angle) * size * 0.5;
+                    const perpY = Math.cos(angle) * size * 0.5;
+                    
+                    const d = `M ${tipX} ${tipY} L ${baseX + perpX} ${baseY + perpY} L ${baseX - perpX} ${baseY - perpY} Z`;
+                    path.setAttribute('d', d);
+                    path.setAttribute('fill', 'none');
+                    path.setAttribute('stroke', '#666');
+                    path.setAttribute('stroke-width', '2');
+                    g.appendChild(path);
+                }
+            },
+            'chevron': {
+                name: 'Chevron',
+                draw: (g, x, y, angle) => {
+                    const size = 10;
+                    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    const tipX = x + Math.cos(angle) * size;
+                    const tipY = y + Math.sin(angle) * size;
+                    const midX = x;
+                    const midY = y;
+                    const baseX = x - Math.cos(angle) * size;
+                    const baseY = y - Math.sin(angle) * size;
+                    const perpX = -Math.sin(angle) * size * 0.3;
+                    const perpY = Math.cos(angle) * size * 0.3;
+                    
+                    const d = `M ${tipX} ${tipY} L ${midX + perpX} ${midY + perpY} L ${baseX} ${baseY} L ${midX - perpX} ${midY - perpY} Z`;
+                    path.setAttribute('d', d);
+                    path.setAttribute('fill', '#666');
+                    path.setAttribute('stroke', '#333');
+                    path.setAttribute('stroke-width', '1');
+                    g.appendChild(path);
+                }
+            },
+            'arrow-line': {
+                name: 'Arrow Line',
+                draw: (g, x, y, angle) => {
+                    const size = 12;
+                    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                    const tipX = x + Math.cos(angle) * size;
+                    const tipY = y + Math.sin(angle) * size;
+                    const baseX = x - Math.cos(angle) * size * 0.5;
+                    const baseY = y - Math.sin(angle) * size * 0.5;
+                    
+                    line.setAttribute('x1', baseX);
+                    line.setAttribute('y1', baseY);
+                    line.setAttribute('x2', tipX);
+                    line.setAttribute('y2', tipY);
+                    line.setAttribute('stroke', '#666');
+                    line.setAttribute('stroke-width', '2');
+                    line.setAttribute('marker-end', 'url(#arrowhead)');
+                    g.appendChild(line);
+                }
+            },
+            'diamond': {
+                name: 'Diamond',
+                draw: (g, x, y, angle) => {
+                    const size = 6;
+                    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    const tipX = x + Math.cos(angle) * size;
+                    const tipY = y + Math.sin(angle) * size;
+                    const rightX = x - Math.sin(angle) * size;
+                    const rightY = y + Math.cos(angle) * size;
+                    const baseX = x - Math.cos(angle) * size;
+                    const baseY = y - Math.sin(angle) * size;
+                    const leftX = x + Math.sin(angle) * size;
+                    const leftY = y - Math.cos(angle) * size;
+                    
+                    const d = `M ${tipX} ${tipY} L ${rightX} ${rightY} L ${baseX} ${baseY} L ${leftX} ${leftY} Z`;
+                    path.setAttribute('d', d);
+                    path.setAttribute('fill', '#666');
+                    path.setAttribute('stroke', '#333');
+                    path.setAttribute('stroke-width', '1');
+                    g.appendChild(path);
+                }
+            }
+        };
+        
+        // Load paths
+        document.getElementById('loadBtn').addEventListener('click', function() {
+            const svgPathData = document.getElementById('svgPath').value.trim();
+            const centerlinePathData = document.getElementById('centerlinePath').value.trim();
+            const viewBoxStr = document.getElementById('viewBox').value.trim();
+            
+            if (!svgPathData) {
+                alert('Please enter SVG path data');
+                return;
+            }
+            
+            // Parse viewBox
+            const viewBoxParts = viewBoxStr.split(/\s+/);
+            if (viewBoxParts.length === 4) {
+                svgViewBox = {
+                    x: parseFloat(viewBoxParts[0]),
+                    y: parseFloat(viewBoxParts[1]),
+                    width: parseFloat(viewBoxParts[2]),
+                    height: parseFloat(viewBoxParts[3])
+                };
+            }
+            
+            const canvas = document.getElementById('svgCanvas');
+            canvas.setAttribute('viewBox', `${svgViewBox.x} ${svgViewBox.y} ${svgViewBox.width} ${svgViewBox.height}`);
+            canvas.setAttribute('width', svgViewBox.width);
+            canvas.setAttribute('height', svgViewBox.height);
+            canvas.innerHTML = '';
+            
+            // Add defs for arrow markers
+            const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+            const marker = document.createElementNS('http://www.w3.org/2000/svg', 'marker');
+            marker.setAttribute('id', 'arrowhead');
+            marker.setAttribute('markerWidth', '10');
+            marker.setAttribute('markerHeight', '10');
+            marker.setAttribute('refX', '9');
+            marker.setAttribute('refY', '3');
+            marker.setAttribute('orient', 'auto');
+            const polygon = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+            polygon.setAttribute('points', '0 0, 10 3, 0 6');
+            polygon.setAttribute('fill', '#666');
+            marker.appendChild(polygon);
+            defs.appendChild(marker);
+            canvas.appendChild(defs);
+            
+            // Group for auto-fitting paths
+            const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            canvas.appendChild(group);
+            
+            // Add main path
+            const mainPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            mainPath.setAttribute('d', svgPathData);
+            mainPath.setAttribute('fill', 'none');
+            mainPath.setAttribute('stroke', '#4a90e2');
+            mainPath.setAttribute('stroke-width', '3');
+            mainPath.setAttribute('opacity', '0.3');
+            group.appendChild(mainPath);
+            
+            // Add centerline path if provided
+            let centerlinePath = null;
+            if (centerlinePathData) {
+                centerlinePath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                centerlinePath.setAttribute('d', centerlinePathData);
+                centerlinePath.setAttribute('fill', 'none');
+                centerlinePath.setAttribute('stroke', '#999');
+                centerlinePath.setAttribute('stroke-width', '2');
+                centerlinePath.setAttribute('stroke-dasharray', '5,5');
+                group.appendChild(centerlinePath);
+            }
+            
+            // Create a separate group for placed items (on top of paths)
+            const itemsGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            itemsGroup.setAttribute('id', 'itemsGroup');
+            canvas.appendChild(itemsGroup);
+            
+            // Auto-fit: compute bbox and scale/center into viewBox
+            try {
+                const bbox = mainPath.getBBox();
+                const scaleX = svgViewBox.width / bbox.width;
+                const scaleY = svgViewBox.height / bbox.height;
+                const scale = Math.min(scaleX, scaleY) * 0.9; // add padding
+                
+                const translateX = svgViewBox.x + (svgViewBox.width - bbox.width * scale) / 2 - bbox.x * scale;
+                const translateY = svgViewBox.y + (svgViewBox.height - bbox.height * scale) / 2 - bbox.y * scale;
+                
+                group.setAttribute('transform', `translate(${translateX}, ${translateY}) scale(${scale})`);
+                
+                // Store the transform and bbox for coordinate conversion
+                svgTransform = { 
+                    translateX, 
+                    translateY, 
+                    scale,
+                    bboxX: bbox.x,
+                    bboxY: bbox.y,
+                    bboxWidth: bbox.width,
+                    bboxHeight: bbox.height
+                };
+                console.log('SVG Transform applied:', svgTransform);
+                console.log('SVG BBox:', bbox);
+            } catch (err) {
+                console.warn('Auto-fit failed', err);
+                // Reset transform if auto-fit failed
+                svgTransform = { translateX: 0, translateY: 0, scale: 1, bboxX: 0, bboxY: 0, bboxWidth: 200, bboxHeight: 200 };
+            }
+            
+            svgElement = canvas;
+            
+            // Redraw all existing items after loading paths
+            redrawAllItems();
+            
+            isLoaded = true;
+            
+            // Add event listeners
+            canvas.addEventListener('mousemove', handleCanvasMouseMove);
+            canvas.addEventListener('click', handleCanvasClick);
+            canvas.addEventListener('mouseleave', removePreview);
+        });
+        
+        // Mode selection
+        document.getElementById('modeSelect').addEventListener('change', function(e) {
+            currentMode = e.target.value;
+            updateModeIndicator();
+            document.getElementById('arrowTypeGroup').style.display = (currentMode === 'arrow' || currentMode === 'line') ? 'flex' : 'none';
+            document.getElementById('angleGroup').style.display = (currentMode === 'arrow' || currentMode === 'line') ? 'flex' : 'none';
+            document.getElementById('strokeNumberGroup').style.display = currentMode === 'number' ? 'flex' : 'none';
+            document.getElementById('numberSizeGroup').style.display = currentMode === 'number' ? 'flex' : 'none';
+            removePreview();
+        });
+        
+        // Arrow type selection
+        document.getElementById('arrowTypeSelect').addEventListener('change', function(e) {
+            currentArrowType = e.target.value;
+        });
+        
+        function updateModeIndicator() {
+            const indicator = document.getElementById('modeIndicator');
+            indicator.textContent = currentMode === 'arrow' ? 'Place Arrow' : 'Place Number';
+            indicator.className = `mode-indicator mode-${currentMode}`;
+        }
+        
+        // Helper function to convert screen coordinates to original SVG coordinates (accounting for transform)
+        function screenToSvgCoords(screenX, screenY) {
+            const canvas = document.getElementById('svgCanvas');
+            const canvasRect = canvas.getBoundingClientRect();
+            
+            // Step 1: Convert screen coords to viewBox coords
+            const viewBoxX = (screenX / canvasRect.width) * svgViewBox.width + svgViewBox.x;
+            const viewBoxY = (screenY / canvasRect.height) * svgViewBox.height + svgViewBox.y;
+            
+            // Step 2: Apply inverse transform to get actual SVG coordinates
+            // The group has: transform="translate(tx, ty) scale(s)"
+            // To get original SVG coords from viewBox coords:
+            // 1. Subtract translate
+            // 2. Divide by scale
+            const svgX = (viewBoxX - svgTransform.translateX) / svgTransform.scale;
+            const svgY = (viewBoxY - svgTransform.translateY) / svgTransform.scale;
+            
+            // console.log(`Screen(${screenX.toFixed(1)}, ${screenY.toFixed(1)}) -> ViewBox(${viewBoxX.toFixed(1)}, ${viewBoxY.toFixed(1)}) -> SVG(${svgX.toFixed(1)}, ${svgY.toFixed(1)})`);
+            
+            return { svgX, svgY, viewBoxX, viewBoxY };
+        }
+        
+        // Helper function to convert original SVG coordinates to viewBox coordinates (for display)
+        function svgToViewBoxCoords(svgX, svgY) {
+            // Apply forward transform: translate(tx, ty) scale(s)
+            // SVG coords -> scale -> translate -> viewBox coords
+            const viewBoxX = svgX * svgTransform.scale + svgTransform.translateX;
+            const viewBoxY = svgY * svgTransform.scale + svgTransform.translateY;
+            // console.log(`SVG(${svgX.toFixed(1)}, ${svgY.toFixed(1)}) -> ViewBox(${viewBoxX.toFixed(1)}, ${viewBoxY.toFixed(1)})`);
+            return { viewBoxX, viewBoxY };
+        }
+        
+        // Handle canvas mouse move (preview)
+        function handleCanvasMouseMove(e) {
+            if (!isLoaded) {
+                removePreview();
+                removeHover();
+                return;
+            }
+            
+            const canvas = document.getElementById('svgCanvas');
+            const canvasRect = canvas.getBoundingClientRect();
+            
+            const x = e.clientX - canvasRect.left;
+            const y = e.clientY - canvasRect.top;
+            
+            // Convert to viewBox coordinates for display (what you see)
+            const viewBoxX = (x / canvasRect.width) * svgViewBox.width + svgViewBox.x;
+            const viewBoxY = (y / canvasRect.height) * svgViewBox.height + svgViewBox.y;
+            
+            // Show hover marker in viewBox coordinates (visible space)
+            showHover(viewBoxX, viewBoxY);
+            
+            // Get actual SVG coordinates for preview/placement (accounting for transform)
+            const { svgX, svgY } = screenToSvgCoords(x, y);
+            
+            if (currentMode === 'arrow') {
+                const angleDeg = parseFloat(document.getElementById('angleDeg').value) || 0;
+                const angle = angleDeg * Math.PI / 180;
+                // Preview in viewBox coords (visible position)
+                showPreview(viewBoxX, viewBoxY, angle);
+            } else if (currentMode === 'line' && lineStart) {
+                // Show line preview from start to current mouse (in viewBox coords for display)
+                const { viewBoxX: startVX, viewBoxY: startVY } = svgToViewBoxCoords(lineStart.x, lineStart.y);
+                const angle = Math.atan2(viewBoxY - startVY, viewBoxX - startVX);
+                showLinePreview(startVX, startVY, viewBoxX, viewBoxY, angle);
+            } else {
+                removePreview();
+            }
+        }
+        
+        function showPreview(x, y, angle) {
+            removePreview();
+            
+            const canvas = document.getElementById('svgCanvas');
+            const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            g.setAttribute('class', 'preview-arrow');
+            g.setAttribute('id', 'previewArrow');
+            
+            arrowTypes[currentArrowType].draw(g, x, y, angle);
+            canvas.appendChild(g);
+            previewArrow = g;
+        }
+        
+        function showLinePreview(x1, y1, x2, y2, angle) {
+            removePreview();
+            const canvas = document.getElementById('svgCanvas');
+            const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            g.setAttribute('class', 'preview-arrow');
+            g.setAttribute('id', 'previewArrow');
+            
+            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            line.setAttribute('x1', x1);
+            line.setAttribute('y1', y1);
+            line.setAttribute('x2', x2);
+            line.setAttribute('y2', y2);
+            line.setAttribute('stroke', '#777');
+            line.setAttribute('stroke-width', '2');
+            g.appendChild(line);
+            
+            // Draw arrow at end
+            arrowTypes[currentArrowType].draw(g, x2, y2, angle);
+            
+            canvas.appendChild(g);
+            previewArrow = g;
+        }
+        
+        function removePreview() {
+            if (previewArrow) {
+                previewArrow.remove();
+                previewArrow = null;
+            }
+        }
+        
+        function showHover(x, y) {
+            const canvas = document.getElementById('svgCanvas');
+            removeHover();
+            const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            c.setAttribute('id', 'hoverCursor');
+            c.setAttribute('cx', x);
+            c.setAttribute('cy', y);
+            c.setAttribute('r', 3);
+            c.setAttribute('fill', '#ff5722');
+            c.setAttribute('opacity', '0.8');
+            canvas.appendChild(c);
+            hoverCursor = c;
+        }
+        
+        function removeHover() {
+            if (hoverCursor) {
+                hoverCursor.remove();
+                hoverCursor = null;
+            }
+        }
+        
+        // Handle canvas click
+        function handleCanvasClick(e) {
+            if (!isLoaded) return;
+            
+            const canvas = document.getElementById('svgCanvas');
+            const canvasRect = canvas.getBoundingClientRect();
+            
+            const x = e.clientX - canvasRect.left;
+            const y = e.clientY - canvasRect.top;
+            
+            // Get both viewBox (for display) and SVG (for storage) coordinates
+            const { svgX, svgY, viewBoxX, viewBoxY } = screenToSvgCoords(x, y);
+            
+            showHover(viewBoxX, viewBoxY);
+            
+            if (currentMode === 'arrow') {
+                const angleDeg = parseFloat(document.getElementById('angleDeg').value) || 0;
+                const angle = angleDeg * Math.PI / 180;
+                // Store ORIGINAL SVG coordinates
+                addArrow(svgX, svgY, angle, currentArrowType);
+            } else if (currentMode === 'line') {
+                if (!lineStart) {
+                    // Store both SVG and viewBox coordinates
+                    lineStart = { 
+                        x: svgX, 
+                        y: svgY,
+                        viewBoxX: viewBoxX,
+                        viewBoxY: viewBoxY
+                    };
+                } else {
+                    const angle = Math.atan2(svgY - lineStart.y, svgX - lineStart.x);
+                    // Store ORIGINAL SVG coordinates
+                    addLine(lineStart.x, lineStart.y, svgX, svgY, angle, currentArrowType);
+                    lineStart = null;
+                    removePreview();
+                }
+            } else {
+                const strokeNum = parseInt(document.getElementById('strokeNumber').value);
+                const numberSize = document.getElementById('numberSizeSelect').value;
+                // Store ORIGINAL SVG coordinates
+                addNumber(svgX, svgY, strokeNum, numberSize);
+            }
+            
+            updateItemsList();
+        }
+        
+        function addArrow(x, y, angle, arrowType) {
+            const item = {
+                type: 'arrow',
+                x: x,
+                y: y,
+                angle: angle,
+                arrowType: arrowType,
+                id: `arrow_${Date.now()}`
+            };
+            items.push(item);
+            
+            drawArrow(x, y, angle, arrowType, false);
+        }
+        
+        function addLine(x1, y1, x2, y2, angle, arrowType) {
+            const item = {
+                type: 'line',
+                x1: x1,
+                y1: y1,
+                x2: x2,
+                y2: y2,
+                angle: angle,
+                arrowType: arrowType,
+                id: `line_${Date.now()}`
+            };
+            items.push(item);
+            drawLineArrow(x1, y1, x2, y2, angle, arrowType, false);
+        }
+        
+        // Number size mapping
+        const numberSizes = {
+            'small': { radius: 8, fontSize: 8 },
+            'medium': { radius: 12, fontSize: 12 },
+            'large': { radius: 16, fontSize: 16 },
+            'xlarge': { radius: 20, fontSize: 20 }
+        };
+        
+        function addNumber(x, y, strokeNumber, size = 'medium') {
+            const item = {
+                type: 'number',
+                x: x,
+                y: y,
+                strokeNumber: strokeNumber,
+                size: size,
+                id: `number_${Date.now()}`
+            };
+            items.push(item);
+            
+            drawNumber(x, y, strokeNumber, size);
+        }
+        
+        function drawArrow(x, y, angle, arrowType, isPreview) {
+            const canvas = document.getElementById('svgCanvas');
+            const itemsGroup = document.getElementById('itemsGroup') || canvas;
+            const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            g.setAttribute('class', isPreview ? 'preview-arrow' : 'placed-arrow');
+            g.setAttribute('data-id', isPreview ? `preview_${Date.now()}` : `arrow_${Date.now()}`);
+            
+            // x, y are in original SVG space - convert to viewBox space for display
+            const { viewBoxX, viewBoxY } = svgToViewBoxCoords(x, y);
+            arrowTypes[arrowType].draw(g, viewBoxX, viewBoxY, angle);
+            itemsGroup.appendChild(g);
+        }
+        
+        function drawLineArrow(x1, y1, x2, y2, angle, arrowType, isPreview) {
+            const canvas = document.getElementById('svgCanvas');
+            const itemsGroup = document.getElementById('itemsGroup') || canvas;
+            const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            g.setAttribute('class', isPreview ? 'preview-arrow' : 'placed-arrow');
+            g.setAttribute('data-id', isPreview ? `preview_${Date.now()}` : `line_${Date.now()}`);
+            
+            // x1,y1,x2,y2 are in original SVG space - convert to viewBox space for display
+            const { viewBoxX: vx1, viewBoxY: vy1 } = svgToViewBoxCoords(x1, y1);
+            const { viewBoxX: vx2, viewBoxY: vy2 } = svgToViewBoxCoords(x2, y2);
+            
+            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            line.setAttribute('x1', vx1);
+            line.setAttribute('y1', vy1);
+            line.setAttribute('x2', vx2);
+            line.setAttribute('y2', vy2);
+            line.setAttribute('stroke', '#333');
+            line.setAttribute('stroke-width', '2');
+            g.appendChild(line);
+            
+            arrowTypes[arrowType].draw(g, vx2, vy2, angle);
+            itemsGroup.appendChild(g);
+        }
+        
+        function drawNumber(x, y, number, size = 'medium') {
+            const canvas = document.getElementById('svgCanvas');
+            const itemsGroup = document.getElementById('itemsGroup') || canvas;
+            const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            g.setAttribute('class', 'placed-number');
+            g.setAttribute('data-id', `number_${Date.now()}`);
+            
+            // x, y are in original SVG space - convert to viewBox space for display
+            const { viewBoxX, viewBoxY } = svgToViewBoxCoords(x, y);
+            
+            // Get size from mapping
+            const sizeConfig = numberSizes[size] || numberSizes['medium'];
+            const radius = sizeConfig.radius;
+            const fontSize = sizeConfig.fontSize;
+            
+            const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            circle.setAttribute('cx', viewBoxX);
+            circle.setAttribute('cy', viewBoxY);
+            circle.setAttribute('r', radius);
+            circle.setAttribute('fill', '#000');
+            
+            const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            text.setAttribute('x', viewBoxX);
+            text.setAttribute('y', viewBoxY);
+            text.setAttribute('text-anchor', 'middle');
+            text.setAttribute('dominant-baseline', 'central');
+            text.setAttribute('fill', '#fff');
+            text.setAttribute('font-size', fontSize);
+            text.setAttribute('font-weight', 'bold');
+            text.textContent = number;
+            
+            g.appendChild(circle);
+            g.appendChild(text);
+            itemsGroup.appendChild(g);
+        }
+        
+        // Redraw all items after loading paths (to account for new transform)
+        function redrawAllItems() {
+            if (!svgTransform || items.length === 0) return;
+            
+            const canvas = document.getElementById('svgCanvas');
+            const itemsGroup = document.getElementById('itemsGroup');
+            if (!itemsGroup) return;
+            
+            // Clear existing visual items (keep data)
+            const existingItems = itemsGroup.querySelectorAll('.placed-arrow, .placed-number');
+            existingItems.forEach(item => item.remove());
+            
+            // Redraw all items
+            items.forEach(item => {
+                if (item.type === 'arrow') {
+                    drawArrow(item.x, item.y, item.angle, item.arrowType, false);
+                } else if (item.type === 'line') {
+                    drawLineArrow(item.x1, item.y1, item.x2, item.y2, item.angle, item.arrowType, false);
+                } else if (item.type === 'number') {
+                    drawNumber(item.x, item.y, item.strokeNumber, item.size || 'medium');
+                }
+            });
+            
+            console.log(`Redrew ${items.length} items`);
+        }
+        
+        function updateItemsList() {
+            const list = document.getElementById('itemsList');
+            const count = document.getElementById('itemCount');
+            count.textContent = items.length;
+            
+            if (items.length === 0) {
+                list.innerHTML = '<p style="color: #999; text-align: center; padding: 20px;">No items placed yet</p>';
+                return;
+            }
+            
+            list.innerHTML = items.map((item, index) => {
+                const label = item.type === 'arrow' 
+                    ? `Arrow (${item.arrowType}) at (${item.x.toFixed(1)}, ${item.y.toFixed(1)})`
+                    : item.type === 'line'
+                    ? `Line (${item.arrowType}) from (${item.x1.toFixed(1)}, ${item.y1.toFixed(1)}) to (${item.x2.toFixed(1)}, ${item.y2.toFixed(1)})`
+                    : `Number ${item.strokeNumber} (${item.size || 'medium'}) at (${item.x.toFixed(1)}, ${item.y.toFixed(1)})`;
+                
+                return `
+                    <div class="item-entry">
+                        <div class="item-info">
+                            <strong>${item.type === 'arrow' ? '→' : (item.type === 'line' ? '—' : '#')}</strong> ${label}
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn-small danger" onclick="removeItem(${index})">Remove</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function removeItem(index) {
+            items.splice(index, 1);
+            const canvas = document.getElementById('svgCanvas');
+            const itemsGroup = document.getElementById('itemsGroup') || canvas;
+            const placedItems = itemsGroup.querySelectorAll('.placed-arrow, .placed-number');
+            placedItems.forEach(item => item.remove());
+            
+            items.forEach(item => {
+                if (item.type === 'arrow') {
+                    drawArrow(item.x, item.y, item.angle, item.arrowType, false);
+                } else if (item.type === 'line') {
+                    drawLineArrow(item.x1, item.y1, item.x2, item.y2, item.angle, item.arrowType, false);
+                } else {
+                    drawNumber(item.x, item.y, item.strokeNumber, item.size || 'medium');
+                }
+            });
+            
+            updateItemsList();
+        }
+        
+        // Clear all
+        document.getElementById('clearBtn').addEventListener('click', function() {
+            if (confirm('Clear all placed items?')) {
+                items = [];
+                const canvas = document.getElementById('svgCanvas');
+                const itemsGroup = document.getElementById('itemsGroup') || canvas;
+                const placedItems = itemsGroup.querySelectorAll('.placed-arrow, .placed-number');
+                placedItems.forEach(item => item.remove());
+                removePreview();
+                removeHover();
+                updateItemsList();
+            }
+        });
+        
+        // Export JSON
+        document.getElementById('exportBtn').addEventListener('click', function() {
+            const exportData = {
+                svgViewBox: svgViewBox,
+                svgBounds: {
+                    x: svgTransform.bboxX || 0,
+                    y: svgTransform.bboxY || 0,
+                    width: svgTransform.bboxWidth || 200,
+                    height: svgTransform.bboxHeight || 200
+                },
+                svgPath: document.getElementById('svgPath').value,
+                centerlinePath: document.getElementById('centerlinePath').value,
+                items: items,
+                exportDate: new Date().toISOString()
+            };
+            
+            const jsonStr = JSON.stringify(exportData, null, 2);
+            const blob = new Blob([jsonStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'arrow_number_placement.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+        
+        // Initialize
+        updateModeIndicator();
+        // Show angle and arrow type for arrow mode by default
+        document.getElementById('angleGroup').style.display = 'flex';
+        document.getElementById('arrowTypeGroup').style.display = 'flex';
+        document.getElementById('strokeNumberGroup').style.display = 'none';
+        document.getElementById('numberSizeGroup').style.display = 'none';
+    </script>
+</body>
+</html>

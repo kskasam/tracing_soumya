@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:svg_path_parser/svg_path_parser.dart';
 import 'package:tracing_game/src/tracing/model/letter_paths_model.dart';
 import 'package:tracing_game/src/tracing/model/trace_model.dart';
+import 'package:tracing_game/src/tracing/models/custom_arrow_number_positions.dart';
 import 'package:tracing_game/tracing_game.dart';
 
 import '../../get_shape_helper/enum_of_arabic_and_numbers_letters.dart';
@@ -108,6 +109,11 @@ class TracingCubit extends Cubit<TracingState> {
       final anchorPos =
           allStrokePoints.isNotEmpty ? allStrokePoints[0][0] : Offset.zero;
       
+      // Load custom arrow/number positions if available
+      final customPositions = await _loadCustomPositions(
+        letterModel.customPositionsJsonFile,
+      );
+      
       // Debug Telugu coordinates (originalSvgBounds already declared above)
       if (letterModel.pointsJsonFile.contains('telugu')) {
         print('=== Telugu Debug ===');
@@ -139,7 +145,8 @@ class TracingCubit extends Cubit<TracingState> {
           indexPathPaintStyle: letterModel.indexPathPaintStyle,
           dottedPathPaintStyle: letterModel.dottedPathPaintStyle,
           strokeColors: letterModel.strokeColors,
-          svgBounds: originalSvgBounds));
+          svgBounds: originalSvgBounds,
+          customPositions: customPositions));
     }
 
     emit(state.copyWith(
@@ -330,6 +337,33 @@ class TracingCubit extends Cubit<TracingState> {
     }
 
     return strokePointsList;
+  }
+
+  Future<CustomArrowNumberPositions?> _loadCustomPositions(
+      String? jsonPath) async {
+    if (jsonPath == null || jsonPath.isEmpty) {
+      return null;
+    }
+    
+    try {
+      final jsonString = await rootBundle.loadString('packages/tracing_game/$jsonPath');
+      final jsonData = jsonDecode(jsonString);
+      final positions = CustomArrowNumberPositions.fromJson(jsonData);
+      print('✅ Loaded custom positions: ${positions.arrows.length} arrows, ${positions.numbers.length} stroke groups');
+      if (positions.arrows.isNotEmpty) {
+        print('   First arrow: normalized(${positions.arrows[0].normalizedX}, ${positions.arrows[0].normalizedY}), angle: ${positions.arrows[0].angle}');
+      }
+      if (positions.numbers.isNotEmpty) {
+        positions.numbers.forEach((stroke, nums) {
+          print('   Stroke $stroke: ${nums.length} numbers');
+        });
+      }
+      return positions;
+    } catch (e) {
+      // If file doesn't exist or parsing fails, return null (fall back to auto-calculated)
+      print('❌ Could not load custom positions from $jsonPath: $e');
+      return null;
+    }
   }
 
   void handlePanStart(Offset position) {

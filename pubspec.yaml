@@ -198,6 +198,54 @@ flutter:
     - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/oo_small_PointsInfo.json
     - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/au_big_PointsInfo.json
     - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/au_small_PointsInfo.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/au_custom_positions.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/a_custom_positions.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/aa_custom_positions.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/i_custom_positions.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/ii_custom_positions.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/u_custom_positions.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/uu_custom_positions.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/e_custom_positions.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/ee_custom_positions.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/ai_custom_positions.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/o_custom_positions.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/oo_custom_positions.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/ru_custom_positions.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/ruu_custom_positions.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/am_custom_positions.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/aha_custom_positions.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/ka_custom_positions.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/kha_custom_positions.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/ga_custom_positions.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/gha_custom_positions.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/cha_custom_positions.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/chha_custom_positions.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/ja_custom_positions.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/jha_custom_positions.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/ta_custom_positions.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/tha_custom_positions.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/da_custom_positions.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/dha_custom_positions.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/na_custom_positions.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/ta2_custom_positions.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/tha2_custom_positions.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/da2_custom_positions.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/dha2_custom_positions.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/na2_custom_positions.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/pa_custom_positions.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/pha_custom_positions.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/ba_custom_positions.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/bha_custom_positions.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/ma_custom_positions.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/ya_custom_positions.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/ra_custom_positions.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/la_custom_positions.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/lla_custom_positions.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/va_custom_positions.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/sha_custom_positions.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/ssa_custom_positions.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/sa_custom_positions.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/ha_custom_positions.json
     - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/am_big_PointsInfo.json
     - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/am_small_PointsInfo.json
     - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/aha_big_PointsInfo.json

@@ -251,6 +251,7 @@ class TypeExtensionTracking {
     required String bigJsonFile,
     required String smallJsonFile,
     bool isBig = true,
+    String? customPositionsJsonFile,
   }) {
     // Debug colors for each stroke - bright and distinctive
     const debugStrokeColors = [
@@ -287,6 +288,7 @@ class TypeExtensionTracking {
       innerPaintColor: AppColorPhonetics.lightBlueColor5,
       outerPaintColor: AppColorPhonetics.lightBlueColor5,
       strokeColors: debugStrokeColors, // DEBUG: Different color for each stroke
+      customPositionsJsonFile: customPositionsJsonFile,
     );
   }
 
@@ -304,6 +306,7 @@ class TypeExtensionTracking {
           bigJsonFile: ShapePointsManger.teluguABig,
           smallJsonFile: ShapePointsManger.teluguASmall,
           isBig: true,
+          customPositionsJsonFile: ShapePointsManger.teluguACustomPositions,
         ));
         break;
       case 'ఆ': // aa
@@ -315,6 +318,7 @@ class TypeExtensionTracking {
           bigJsonFile: ShapePointsManger.teluguAaBig,
           smallJsonFile: ShapePointsManger.teluguAaSmall,
           isBig: true,
+          customPositionsJsonFile: ShapePointsManger.teluguAaCustomPositions,
         ));
         break;
       case 'ఇ': // i
@@ -326,6 +330,7 @@ class TypeExtensionTracking {
           bigJsonFile: ShapePointsManger.teluguIBig,
           smallJsonFile: ShapePointsManger.teluguISmall,
           isBig: true,
+          customPositionsJsonFile: ShapePointsManger.teluguICustomPositions,
         ));
         break;
       case 'ఈ': // ii
@@ -337,6 +342,7 @@ class TypeExtensionTracking {
           bigJsonFile: ShapePointsManger.teluguIiBig,
           smallJsonFile: ShapePointsManger.teluguIiSmall,
           isBig: true,
+          customPositionsJsonFile: ShapePointsManger.teluguIiCustomPositions,
         ));
         break;
       case 'ఉ': // u
@@ -348,6 +354,7 @@ class TypeExtensionTracking {
           bigJsonFile: ShapePointsManger.teluguUBig,
           smallJsonFile: ShapePointsManger.teluguUSmall,
           isBig: true,
+          customPositionsJsonFile: ShapePointsManger.teluguUCustomPositions,
         ));
         break;
       case 'ఊ': // uu
@@ -359,6 +366,7 @@ class TypeExtensionTracking {
           bigJsonFile: ShapePointsManger.teluguUuBig,
           smallJsonFile: ShapePointsManger.teluguUuSmall,
           isBig: true,
+          customPositionsJsonFile: ShapePointsManger.teluguUuCustomPositions,
         ));
         break;
       case 'ఎ': // e
@@ -370,6 +378,7 @@ class TypeExtensionTracking {
           bigJsonFile: ShapePointsManger.teluguEBig,
           smallJsonFile: ShapePointsManger.teluguESmall,
           isBig: true,
+          customPositionsJsonFile: ShapePointsManger.teluguECustomPositions,
         ));
         break;
       case 'ఏ': // ee
@@ -381,6 +390,7 @@ class TypeExtensionTracking {
           bigJsonFile: ShapePointsManger.teluguEeBig,
           smallJsonFile: ShapePointsManger.teluguEeSmall,
           isBig: true,
+          customPositionsJsonFile: ShapePointsManger.teluguEeCustomPositions,
         ));
         break;
       case 'ఐ': // ai
@@ -392,6 +402,7 @@ class TypeExtensionTracking {
           bigJsonFile: ShapePointsManger.teluguAiBig,
           smallJsonFile: ShapePointsManger.teluguAiSmall,
           isBig: true,
+          customPositionsJsonFile: ShapePointsManger.teluguAiCustomPositions,
         ));
         break;
       case 'ఒ': // o
@@ -403,6 +414,7 @@ class TypeExtensionTracking {
           bigJsonFile: ShapePointsManger.teluguOBig,
           smallJsonFile: ShapePointsManger.teluguOSmall,
           isBig: true,
+          customPositionsJsonFile: ShapePointsManger.teluguOCustomPositions,
         ));
         break;
       case 'ఓ': // oo
@@ -414,6 +426,7 @@ class TypeExtensionTracking {
           bigJsonFile: ShapePointsManger.teluguOoBig,
           smallJsonFile: ShapePointsManger.teluguOoSmall,
           isBig: true,
+          customPositionsJsonFile: ShapePointsManger.teluguOoCustomPositions,
         ));
         break;
       case 'ఔ': // au
@@ -425,6 +438,7 @@ class TypeExtensionTracking {
           bigJsonFile: ShapePointsManger.teluguAuBig,
           smallJsonFile: ShapePointsManger.teluguAuSmall,
           isBig: true,
+          customPositionsJsonFile: ShapePointsManger.teluguAuCustomPositions,
         ));
         break;
       case 'ఋ': // ru
@@ -436,6 +450,7 @@ class TypeExtensionTracking {
           bigJsonFile: ShapePointsManger.teluguRuBig,
           smallJsonFile: ShapePointsManger.teluguRuSmall,
           isBig: true,
+          customPositionsJsonFile: ShapePointsManger.teluguRuCustomPositions,
         ));
         break;
       case 'ౠ': // ruu
@@ -447,6 +462,7 @@ class TypeExtensionTracking {
           bigJsonFile: ShapePointsManger.teluguRuuBig,
           smallJsonFile: ShapePointsManger.teluguRuuSmall,
           isBig: true,
+          customPositionsJsonFile: ShapePointsManger.teluguRuuCustomPositions,
         ));
         break;
       case 'అం': // am
@@ -458,6 +474,7 @@ class TypeExtensionTracking {
           bigJsonFile: ShapePointsManger.teluguAmBig,
           smallJsonFile: ShapePointsManger.teluguAmSmall,
           isBig: true,
+          customPositionsJsonFile: ShapePointsManger.teluguAmCustomPositions,
         ));
         break;
       case 'అః': // aha
@@ -469,6 +486,7 @@ class TypeExtensionTracking {
           bigJsonFile: ShapePointsManger.teluguAhaBig,
           smallJsonFile: ShapePointsManger.teluguAhaSmall,
           isBig: true,
+          customPositionsJsonFile: ShapePointsManger.teluguAhaCustomPositions,
         ));
         break;
       case 'క': // ka
@@ -480,6 +498,7 @@ class TypeExtensionTracking {
           bigJsonFile: ShapePointsManger.teluguKaBig,
           smallJsonFile: ShapePointsManger.teluguKaSmall,
           isBig: true,
+          customPositionsJsonFile: ShapePointsManger.teluguKaCustomPositions,
         ));
         break;
       case 'ఖ': // kha
@@ -491,6 +510,7 @@ class TypeExtensionTracking {
           bigJsonFile: ShapePointsManger.teluguKhaBig,
           smallJsonFile: ShapePointsManger.teluguKhaSmall,
           isBig: true,
+          customPositionsJsonFile: ShapePointsManger.teluguKhaCustomPositions,
         ));
         break;
       case 'గ': // ga
@@ -502,6 +522,7 @@ class TypeExtensionTracking {
           bigJsonFile: ShapePointsManger.teluguGaBig,
           smallJsonFile: ShapePointsManger.teluguGaSmall,
           isBig: true,
+          customPositionsJsonFile: ShapePointsManger.teluguGaCustomPositions,
         ));
         break;
       case 'ఘ': // gha
@@ -513,6 +534,7 @@ class TypeExtensionTracking {
           bigJsonFile: ShapePointsManger.teluguGhaBig,
           smallJsonFile: ShapePointsManger.teluguGhaSmall,
           isBig: true,
+          customPositionsJsonFile: ShapePointsManger.teluguGhaCustomPositions,
         ));
         break;
       case 'చ': // cha
@@ -524,6 +546,7 @@ class TypeExtensionTracking {
           bigJsonFile: ShapePointsManger.teluguChaBig,
           smallJsonFile: ShapePointsManger.teluguChaSmall,
           isBig: true,
+          customPositionsJsonFile: ShapePointsManger.teluguChaCustomPositions,
         ));
         break;
       case 'ఛ': // chha
@@ -535,6 +558,7 @@ class TypeExtensionTracking {
           bigJsonFile: ShapePointsManger.teluguChhaBig,
           smallJsonFile: ShapePointsManger.teluguChhaSmall,
           isBig: true,
+          customPositionsJsonFile: ShapePointsManger.teluguChhaCustomPositions,
         ));
         break;
       case 'జ': // ja
@@ -546,6 +570,7 @@ class TypeExtensionTracking {
           bigJsonFile: ShapePointsManger.teluguJaBig,
           smallJsonFile: ShapePointsManger.teluguJaSmall,
           isBig: true,
+          customPositionsJsonFile: ShapePointsManger.teluguJaCustomPositions,
         ));
         break;
       case 'ఝ': // jha
@@ -557,6 +582,7 @@ class TypeExtensionTracking {
           bigJsonFile: ShapePointsManger.teluguJhaBig,
           smallJsonFile: ShapePointsManger.teluguJhaSmall,
           isBig: true,
+          customPositionsJsonFile: ShapePointsManger.teluguJhaCustomPositions,
         ));
         break;
       case 'ట': // ta
@@ -568,6 +594,7 @@ class TypeExtensionTracking {
           bigJsonFile: ShapePointsManger.teluguTaBig,
           smallJsonFile: ShapePointsManger.teluguTaSmall,
           isBig: true,
+          customPositionsJsonFile: ShapePointsManger.teluguTaCustomPositions,
         ));
         break;
       case 'ఠ': // tha
@@ -579,6 +606,7 @@ class TypeExtensionTracking {
           bigJsonFile: ShapePointsManger.teluguThaBig,
           smallJsonFile: ShapePointsManger.teluguThaSmall,
           isBig: true,
+          customPositionsJsonFile: ShapePointsManger.teluguThaCustomPositions,
         ));
         break;
       case 'డ': // da
@@ -590,6 +618,7 @@ class TypeExtensionTracking {
           bigJsonFile: ShapePointsManger.teluguDaBig,
           smallJsonFile: ShapePointsManger.teluguDaSmall,
           isBig: true,
+          customPositionsJsonFile: ShapePointsManger.teluguDaCustomPositions,
         ));
         break;
       case 'ఢ': // dha
@@ -601,6 +630,7 @@ class TypeExtensionTracking {
           bigJsonFile: ShapePointsManger.teluguDhaBig,
           smallJsonFile: ShapePointsManger.teluguDhaSmall,
           isBig: true,
+          customPositionsJsonFile: ShapePointsManger.teluguDhaCustomPositions,
         ));
         break;
       case 'ణ': // na
@@ -612,6 +642,7 @@ class TypeExtensionTracking {
           bigJsonFile: ShapePointsManger.teluguNaBig,
           smallJsonFile: ShapePointsManger.teluguNaSmall,
           isBig: true,
+          customPositionsJsonFile: ShapePointsManger.teluguNaCustomPositions,
         ));
         break;
       case 'త': // ta2
@@ -623,6 +654,7 @@ class TypeExtensionTracking {
           bigJsonFile: ShapePointsManger.teluguTa2Big,
           smallJsonFile: ShapePointsManger.teluguTa2Small,
           isBig: true,
+          customPositionsJsonFile: ShapePointsManger.teluguTa2CustomPositions,
         ));
         break;
       case 'థ': // tha2
@@ -634,6 +666,7 @@ class TypeExtensionTracking {
           bigJsonFile: ShapePointsManger.teluguTha2Big,
           smallJsonFile: ShapePointsManger.teluguTha2Small,
           isBig: true,
+          customPositionsJsonFile: ShapePointsManger.teluguTha2CustomPositions,
         ));
         break;
       case 'ద': // da2
@@ -645,6 +678,7 @@ class TypeExtensionTracking {
           bigJsonFile: ShapePointsManger.teluguDa2Big,
           smallJsonFile: ShapePointsManger.teluguDa2Small,
           isBig: true,
+          customPositionsJsonFile: ShapePointsManger.teluguDa2CustomPositions,
         ));
         break;
       case 'ధ': // dha2
@@ -656,6 +690,7 @@ class TypeExtensionTracking {
           bigJsonFile: ShapePointsManger.teluguDha2Big,
           smallJsonFile: ShapePointsManger.teluguDha2Small,
           isBig: true,
+          customPositionsJsonFile: ShapePointsManger.teluguDha2CustomPositions,
         ));
         break;
       case 'న': // na2
@@ -667,6 +702,7 @@ class TypeExtensionTracking {
           bigJsonFile: ShapePointsManger.teluguNa2Big,
           smallJsonFile: ShapePointsManger.teluguNa2Small,
           isBig: true,
+          customPositionsJsonFile: ShapePointsManger.teluguNa2CustomPositions,
         ));
         break;
       case 'ప': // pa
@@ -678,6 +714,7 @@ class TypeExtensionTracking {
           bigJsonFile: ShapePointsManger.teluguPaBig,
           smallJsonFile: ShapePointsManger.teluguPaSmall,
           isBig: true,
+          customPositionsJsonFile: ShapePointsManger.teluguPaCustomPositions,
         ));
         break;
       case 'ఫ': // pha
@@ -689,6 +726,7 @@ class TypeExtensionTracking {
           bigJsonFile: ShapePointsManger.teluguPhaBig,
           smallJsonFile: ShapePointsManger.teluguPhaSmall,
           isBig: true,
+          customPositionsJsonFile: ShapePointsManger.teluguPhaCustomPositions,
         ));
         break;
       case 'బ': // ba
@@ -700,6 +738,7 @@ class TypeExtensionTracking {
           bigJsonFile: ShapePointsManger.teluguBaBig,
           smallJsonFile: ShapePointsManger.teluguBaSmall,
           isBig: true,
+          customPositionsJsonFile: ShapePointsManger.teluguBaCustomPositions,
         ));
         break;
       case 'భ': // bha
@@ -711,6 +750,7 @@ class TypeExtensionTracking {
           bigJsonFile: ShapePointsManger.teluguBhaBig,
           smallJsonFile: ShapePointsManger.teluguBhaSmall,
           isBig: true,
+          customPositionsJsonFile: ShapePointsManger.teluguBhaCustomPositions,
         ));
         break;
       case 'మ': // ma
@@ -722,6 +762,7 @@ class TypeExtensionTracking {
           bigJsonFile: ShapePointsManger.teluguMaBig,
           smallJsonFile: ShapePointsManger.teluguMaSmall,
           isBig: true,
+          customPositionsJsonFile: ShapePointsManger.teluguMaCustomPositions,
         ));
         break;
       case 'య': // ya
@@ -733,6 +774,7 @@ class TypeExtensionTracking {
           bigJsonFile: ShapePointsManger.teluguYaBig,
           smallJsonFile: ShapePointsManger.teluguYaSmall,
           isBig: true,
+          customPositionsJsonFile: ShapePointsManger.teluguYaCustomPositions,
         ));
         break;
       case 'ర': // ra
@@ -744,6 +786,7 @@ class TypeExtensionTracking {
           bigJsonFile: ShapePointsManger.teluguRaBig,
           smallJsonFile: ShapePointsManger.teluguRaSmall,
           isBig: true,
+          customPositionsJsonFile: ShapePointsManger.teluguRaCustomPositions,
         ));
         break;
       case 'ల': // la
@@ -755,6 +798,7 @@ class TypeExtensionTracking {
           bigJsonFile: ShapePointsManger.teluguLaBig,
           smallJsonFile: ShapePointsManger.teluguLaSmall,
           isBig: true,
+          customPositionsJsonFile: ShapePointsManger.teluguLaCustomPositions,
         ));
         break;
       case 'ళ': // lla
@@ -766,6 +810,7 @@ class TypeExtensionTracking {
           bigJsonFile: ShapePointsManger.teluguLlaBig,
           smallJsonFile: ShapePointsManger.teluguLlaSmall,
           isBig: true,
+          customPositionsJsonFile: ShapePointsManger.teluguLlaCustomPositions,
         ));
         break;
       case 'వ': // va
@@ -777,6 +822,7 @@ class TypeExtensionTracking {
           bigJsonFile: ShapePointsManger.teluguVaBig,
           smallJsonFile: ShapePointsManger.teluguVaSmall,
           isBig: true,
+          customPositionsJsonFile: ShapePointsManger.teluguVaCustomPositions,
         ));
         break;
       case 'శ': // sha
@@ -788,6 +834,7 @@ class TypeExtensionTracking {
           bigJsonFile: ShapePointsManger.teluguShaBig,
           smallJsonFile: ShapePointsManger.teluguShaSmall,
           isBig: true,
+          customPositionsJsonFile: ShapePointsManger.teluguShaCustomPositions,
         ));
         break;
       case 'ష': // ssa
@@ -799,6 +846,7 @@ class TypeExtensionTracking {
           bigJsonFile: ShapePointsManger.teluguSsaBig,
           smallJsonFile: ShapePointsManger.teluguSsaSmall,
           isBig: true,
+          customPositionsJsonFile: ShapePointsManger.teluguSsaCustomPositions,
         ));
         break;
       case 'స': // sa
@@ -810,6 +858,7 @@ class TypeExtensionTracking {
           bigJsonFile: ShapePointsManger.teluguSaBig,
           smallJsonFile: ShapePointsManger.teluguSaSmall,
           isBig: true,
+          customPositionsJsonFile: ShapePointsManger.teluguSaCustomPositions,
         ));
         break;
       case 'హ': // ha
@@ -821,6 +870,7 @@ class TypeExtensionTracking {
           bigJsonFile: ShapePointsManger.teluguHaBig,
           smallJsonFile: ShapePointsManger.teluguHaSmall,
           isBig: true,
+          customPositionsJsonFile: ShapePointsManger.teluguHaCustomPositions,
         ));
         break;
       default:
