@@ -172,7 +172,7 @@ class _TracingGeometricShapesGameState
                                       jsonPathPoints: state
                                           .letterPathsModels[index]
                                           .allStrokePoints,
-                                      showJsonPath: true, // Show JSON path for debugging
+                                      showJsonPath: false, // Hide JSON debug path
                                       svgBounds: state
                                           .letterPathsModels[index]
                                           .svgBounds,
