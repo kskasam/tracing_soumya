@@ -295,6 +295,7 @@ class PhoneticsPainter extends CustomPainter {
       canvas.drawPath(indexPath!, debugPaint);
     }
     
+    
     // Draw JSON path for debugging alignment (BEFORE clipping)
     if (showJsonPath && jsonPathPoints != null && jsonPathPoints!.isNotEmpty) {
       final jsonPathPaint = Paint()
@@ -361,6 +362,11 @@ class PhoneticsPainter extends CustomPainter {
         }
       }
 
+      // Store arrow positions and directions for stroke numbering
+      final List<Offset> arrowTipPositions = [];
+      final List<Offset> arrowDirections = [];
+      final List<int> arrowStrokeIndices = [];
+
       for (int pathIndex = 0; pathIndex < arrowSources.length; pathIndex++) {
         final path = arrowSources[pathIndex];
         bool drawnForThisPath = false;
@@ -398,11 +404,45 @@ class PhoneticsPainter extends CustomPainter {
               ..lineTo(right.dx, right.dy)
               ..close();
             canvas.drawPath(arrowPath, arrowPaint);
+
+            // Store arrow tip position and direction for stroke numbering
+            arrowTipPositions.add(tip);
+            arrowDirections.add(unit);
+            arrowStrokeIndices.add(pathIndex + 1);
           }
           drawnForThisPath = true;
           break;
         }
         if (drawnForThisPath) continue;
+      }
+
+      // Draw stroke numbers at arrow head positions (on centerline, with 4mm gap from arrow tip)
+      const double badgeRadius = 10.0;
+      const double gapFromArrow = 12.0; // ~4mm gap (approximately 3 pixels per mm)
+      final badgePaint = Paint()
+        ..color = Colors.black
+        ..style = PaintingStyle.fill;
+
+      for (int i = 0; i < arrowTipPositions.length; i++) {
+        // Position number forward from arrow tip with 2mm gap
+        final pos = arrowTipPositions[i] + arrowDirections[i] * gapFromArrow;
+        canvas.drawCircle(pos, badgeRadius, badgePaint);
+
+        final textPainter = TextPainter(
+          text: TextSpan(
+            text: arrowStrokeIndices[i].toString(),
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 10,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          textDirection: TextDirection.ltr,
+        )..layout();
+        textPainter.paint(
+          canvas,
+          pos - Offset(textPainter.width / 2, textPainter.height / 2),
+        );
       }
     }
 
