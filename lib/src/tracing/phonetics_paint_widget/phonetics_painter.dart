@@ -340,7 +340,7 @@ class PhoneticsPainter extends CustomPainter {
         ..strokeJoin = StrokeJoin.round
         ..strokeCap = StrokeCap.round;
 
-      const double arrowSize = 8.0; // smaller, outlined
+      const double arrowSize = 10.0; // slightly larger, outlined
 
       final List<Path> arrowSources = [];
       arrowSources.addAll(paths);
