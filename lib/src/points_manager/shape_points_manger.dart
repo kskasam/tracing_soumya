@@ -283,6 +283,8 @@ class ShapePointsManger {
   static const teluguSaSmall = '$teluguBase/sa_small_PointsInfo.json';
   static const teluguHaBig = '$teluguBase/ha_big_PointsInfo.json';
   static const teluguHaSmall = '$teluguBase/ha_small_PointsInfo.json';
+  static const teluguKshaBig = '$teluguBase/ksha_big_PointsInfo.json';
+  static const teluguKshaSmall = '$teluguBase/ksha_small_PointsInfo.json';
 
   // Telugu custom positions JSON files
   static const teluguACustomPositions = '$teluguBase/a_custom_positions.json';
@@ -333,4 +335,5 @@ class ShapePointsManger {
   static const teluguSsaCustomPositions = '$teluguBase/ssa_custom_positions.json';
   static const teluguSaCustomPositions = '$teluguBase/sa_custom_positions.json';
   static const teluguHaCustomPositions = '$teluguBase/ha_custom_positions.json';
+  static const teluguKshaCustomPositions = '$teluguBase/ksha_custom_positions.json';
 }

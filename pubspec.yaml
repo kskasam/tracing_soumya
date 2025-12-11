@@ -320,6 +320,9 @@ flutter:
     - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/sa_small_PointsInfo.json
     - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/ha_big_PointsInfo.json
     - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/ha_small_PointsInfo.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/ksha_big_PointsInfo.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/ksha_small_PointsInfo.json
+    - packages/tracing_game/assets/phontics_assets_points/telugu_phontics/ksha_custom_positions.json
 
     #     - packages/tracing_game/assets/phontics_assets_points/math_shapes/
 

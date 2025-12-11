@@ -297,6 +297,7 @@ class TypeExtensionTracking {
     List<TraceModel> list = [];
 
     switch (letter) {
+
       case 'అ': // a
         list.add(_createTeluguTraceModel(
           sizeOfLetter: sizeOfLetter,
@@ -871,6 +872,18 @@ class TypeExtensionTracking {
           smallJsonFile: ShapePointsManger.teluguHaSmall,
           isBig: true,
           customPositionsJsonFile: ShapePointsManger.teluguHaCustomPositions,
+        ));
+        break;
+        case 'క్ష': // ksha
+        list.add(_createTeluguTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: TeluguShapePaths.kshaBig,
+          smallPath: TeluguShapePaths.kshaSmall,
+          dottedPath: TeluguShapePaths.kshaDotted,
+          bigJsonFile: ShapePointsManger.teluguKshaBig,
+          smallJsonFile: ShapePointsManger.teluguKshaSmall,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.teluguKshaCustomPositions,
         ));
         break;
       default:

@@ -114,7 +114,15 @@ class _MyAppState extends State<MyApp> {
                       ),
                     ),
                   ]),*/
-                  // Each letter gets its own screen, starting from ఔ
+                  // Each letter gets its own screen, starting with క్ష (ksha) as the first letter
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'క్ష', // Telugu consonant "ksha"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.deepPurple,
+                      ),
+                    ),
+                  ]),
                   TraceCharsModel(chars: [
                     TraceCharModel(
                       char: 'ఔ', // Telugu vowel "au"
