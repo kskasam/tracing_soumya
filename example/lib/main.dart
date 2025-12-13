@@ -33,7 +33,7 @@ class _MyAppState extends State<MyApp> {
                 // Telugu letters with multiple pages
                 traceShapeModel: [
                   // Page 1: అ (a) and ఆ (aa)
-                  /*TraceCharsModel(chars: [
+                  TraceCharsModel(chars: [
                     TraceCharModel(
                       char: 'అ', // Telugu vowel "a"
                       traceShapeOptions: const TraceShapeOptions(
@@ -77,6 +77,14 @@ class _MyAppState extends State<MyApp> {
                       ),
                     ),
                   ]),
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'ఋ', // Telugu vowel "ru"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.lime,
+                      ),
+                    ),
+                  ]),
                   // Page 4: ఎ (e) and ఏ (ee)
                   TraceCharsModel(chars: [
                     TraceCharModel(
@@ -113,29 +121,12 @@ class _MyAppState extends State<MyApp> {
                         innerPaintColor: Colors.amber,
                       ),
                     ),
-                  ]),*/
-                  // Each letter gets its own screen, starting with క్ష (ksha) as the first letter
-                  TraceCharsModel(chars: [
-                    TraceCharModel(
-                      char: 'క్ష', // Telugu consonant "ksha"
-                      traceShapeOptions: const TraceShapeOptions(
-                        innerPaintColor: Colors.deepPurple,
-                      ),
-                    ),
                   ]),
                   TraceCharsModel(chars: [
                     TraceCharModel(
                       char: 'ఔ', // Telugu vowel "au"
                       traceShapeOptions: const TraceShapeOptions(
                         innerPaintColor: Colors.deepOrange,
-                      ),
-                    ),
-                  ]),
-                  TraceCharsModel(chars: [
-                    TraceCharModel(
-                      char: 'ఋ', // Telugu vowel "ru"
-                      traceShapeOptions: const TraceShapeOptions(
-                        innerPaintColor: Colors.lime,
                       ),
                     ),
                   ]),
@@ -408,6 +399,15 @@ class _MyAppState extends State<MyApp> {
                       char: 'హ', // Telugu consonant "ha"
                       traceShapeOptions: const TraceShapeOptions(
                         innerPaintColor: Colors.blue,
+                      ),
+                    ),
+                  ]),
+                  // Each letter gets its own screen, starting with క్ష (ksha) as the first letter
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'క్ష', // Telugu consonant "ksha"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.deepPurple,
                       ),
                     ),
                   ]),
