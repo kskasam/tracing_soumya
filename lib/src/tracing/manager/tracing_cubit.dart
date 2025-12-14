@@ -200,6 +200,13 @@ class TracingCubit extends Cubit<TracingState> {
   Path _applyTransformationForOtherPathsIndex(
       Path path, Size viewSize, Size? size, double? pathscale) {
     final Rect originalBounds = path.getBounds();
+    
+    // Handle empty paths - return empty path if bounds are invalid
+    if (originalBounds.width <= 0 || originalBounds.height <= 0 || 
+        !originalBounds.width.isFinite || !originalBounds.height.isFinite) {
+      return Path();
+    }
+    
     final Size originalSize = Size(originalBounds.width, originalBounds.height);
 
     // Calculate the scale factor to fit the path within the view size
@@ -208,6 +215,11 @@ class TracingCubit extends Cubit<TracingState> {
 
     double scale = math.min(scaleX, scaleY);
     scale = pathscale == null ? scale : scale * pathscale;
+    
+    // Ensure scale is finite
+    if (!scale.isFinite || scale <= 0) {
+      return Path();
+    }
 
     // FIXED: Use the same 3-step transformation as main SVG path
     // 1. Translate to origin (remove path's offset)
@@ -245,6 +257,13 @@ class TracingCubit extends Cubit<TracingState> {
     // IMPORTANT: Use the main SVG's bounds for transformation, not the centerline's own bounds
     // This ensures the centerline aligns with the main SVG path
     final Rect originalBounds = svgBounds ?? path.getBounds();
+    
+    // Handle empty paths - return empty path if bounds are invalid
+    if (originalBounds.width <= 0 || originalBounds.height <= 0 || 
+        !originalBounds.width.isFinite || !originalBounds.height.isFinite) {
+      return Path();
+    }
+    
     final Size originalSize = Size(originalBounds.width, originalBounds.height);
 
     // Calculate the scale factor to fit the SVG within the view size
@@ -252,6 +271,11 @@ class TracingCubit extends Cubit<TracingState> {
     final double scaleY = viewSize.height / originalSize.height;
     double scale = math.min(scaleX, scaleY);
     scale = pathscale == null ? scale : scale * pathscale;
+    
+    // Ensure scale is finite
+    if (!scale.isFinite || scale <= 0) {
+      return Path();
+    }
 
     // FIXED: Use the same 3-step transformation as main SVG path
     // 1. Translate to origin (remove SVG's offset)

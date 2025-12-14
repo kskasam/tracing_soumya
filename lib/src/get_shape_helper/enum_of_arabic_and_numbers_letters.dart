@@ -7,6 +7,7 @@ import 'package:tracing_game/src/phontics_constants/math_trace_shape_paths.dart'
 import 'package:tracing_game/src/phontics_constants/numbers_svg.dart';
 import 'package:tracing_game/src/phontics_constants/shape_paths.dart';
 import 'package:tracing_game/src/phontics_constants/telugu_shape_paths.dart';
+import 'package:tracing_game/src/phontics_constants/hindi_shape_paths.dart';
 import 'package:tracing_game/src/points_manager/shape_points_manger.dart';
 import 'package:tracing_game/src/tracing/model/trace_model.dart';
 import 'package:tracing_game/tracing_game.dart';
@@ -203,6 +204,15 @@ class TypeExtensionTracking {
                       indexColor: char.traceShapeOptions.indexColor,
                       dottedColor: char.traceShapeOptions.dottedColor,
                     ));
+          } else if (_isHindiCharacter(letters)) {
+            // Check for Hindi characters (Unicode block U+0900 - U+097F)
+            tracingDataList.add(
+                _getTracingDataHindi(letter: letters).first.copyWith(
+                      innerPaintColor: char.traceShapeOptions.innerPaintColor,
+                      outerPaintColor: char.traceShapeOptions.outerPaintColor,
+                      indexColor: char.traceShapeOptions.indexColor,
+                      dottedColor: char.traceShapeOptions.dottedColor,
+                    ));
           } else {
             throw Exception('Unsupported character type for tracing.');
           }
@@ -240,6 +250,11 @@ class TypeExtensionTracking {
   bool _isTeluguCharacter(String letter) {
     // Telugu Unicode block U+0C00 - U+0C7F
     return RegExp(r'[\u0C00-\u0C7F]').hasMatch(letter);
+  }
+
+  bool _isHindiCharacter(String letter) {
+    // Hindi (Devanagari) Unicode block U+0900 - U+097F
+    return RegExp(r'[\u0900-\u097F]').hasMatch(letter);
   }
 
   // Helper function to create Telugu TraceModel
@@ -888,6 +903,654 @@ class TypeExtensionTracking {
         break;
       default:
         // Return empty list for unsupported Telugu letters
+        break;
+    }
+
+    return list;
+  }
+
+  // Helper function to create Hindi TraceModel
+  TraceModel _createHindiTraceModel({
+    required Size sizeOfLetter,
+    required String bigPath,
+    required String smallPath,
+    required String dottedPath,
+    required String bigJsonFile,
+    required String smallJsonFile,
+    bool isBig = true,
+    String? customPositionsJsonFile,
+  }) {
+    return _createTeluguTraceModel(
+      sizeOfLetter: sizeOfLetter,
+      bigPath: bigPath,
+      smallPath: smallPath,
+      dottedPath: dottedPath,
+      bigJsonFile: bigJsonFile,
+      smallJsonFile: smallJsonFile,
+      isBig: isBig,
+      customPositionsJsonFile: customPositionsJsonFile,
+    );
+  }
+
+  List<TraceModel> _getTracingDataHindi(
+      {required String letter, Size sizeOfLetter = const Size(240, 240)}) {
+    List<TraceModel> list = [];
+
+    switch (letter) {
+      case 'अ': // a
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.aBig,
+          smallPath: HindiShapePaths.aSmall,
+          dottedPath: HindiShapePaths.aDotted,
+          bigJsonFile: ShapePointsManger.hindiABig,
+          smallJsonFile: ShapePointsManger.hindiASmall,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiACustomPositions,
+        ));
+        break;
+      case 'आ': // aa
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.aaBig,
+          smallPath: HindiShapePaths.aaSmall,
+          dottedPath: HindiShapePaths.aaDotted,
+          bigJsonFile: ShapePointsManger.hindiAaBig,
+          smallJsonFile: ShapePointsManger.hindiAaSmall,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiAaCustomPositions,
+        ));
+        break;
+      case 'इ': // i
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.iBig,
+          smallPath: HindiShapePaths.iSmall,
+          dottedPath: HindiShapePaths.iDotted,
+          bigJsonFile: ShapePointsManger.hindiIBig,
+          smallJsonFile: ShapePointsManger.hindiISmall,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiICustomPositions,
+        ));
+        break;
+      case 'ई': // ii
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.iiBig,
+          smallPath: HindiShapePaths.iiSmall,
+          dottedPath: HindiShapePaths.iiDotted,
+          bigJsonFile: ShapePointsManger.hindiIiBig,
+          smallJsonFile: ShapePointsManger.hindiIiSmall,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiIiCustomPositions,
+        ));
+        break;
+      case 'उ': // u
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.uBig,
+          smallPath: HindiShapePaths.uSmall,
+          dottedPath: HindiShapePaths.uDotted,
+          bigJsonFile: ShapePointsManger.hindiUBig,
+          smallJsonFile: ShapePointsManger.hindiUSmall,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiUCustomPositions,
+        ));
+        break;
+      case 'ऊ': // uu
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.uuBig,
+          smallPath: HindiShapePaths.uuSmall,
+          dottedPath: HindiShapePaths.uuDotted,
+          bigJsonFile: ShapePointsManger.hindiUuBig,
+          smallJsonFile: ShapePointsManger.hindiUuSmall,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiUuCustomPositions,
+        ));
+        break;
+      case 'ऋ': // ri
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.riBig,
+          smallPath: HindiShapePaths.riSmall,
+          dottedPath: HindiShapePaths.riDotted,
+          bigJsonFile: ShapePointsManger.hindiRiBig,
+          smallJsonFile: ShapePointsManger.hindiRiSmall,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiRiCustomPositions,
+        ));
+        break;
+      case 'ॠ': // ri_long
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.riLongBig,
+          smallPath: HindiShapePaths.riLongSmall,
+          dottedPath: HindiShapePaths.riLongDotted,
+          bigJsonFile: ShapePointsManger.hindiRiLongBig,
+          smallJsonFile: ShapePointsManger.hindiRiLongSmall,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiRiLongCustomPositions,
+        ));
+        break;
+      case 'ऌ': // lri
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.lriBig,
+          smallPath: HindiShapePaths.lriSmall,
+          dottedPath: HindiShapePaths.lriDotted,
+          bigJsonFile: ShapePointsManger.hindiLriBig,
+          smallJsonFile: ShapePointsManger.hindiLriSmall,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiLriCustomPositions,
+        ));
+        break;
+      case 'ॡ': // lri_long
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.lriLongBig,
+          smallPath: HindiShapePaths.lriLongSmall,
+          dottedPath: HindiShapePaths.lriLongDotted,
+          bigJsonFile: ShapePointsManger.hindiLriLongBig,
+          smallJsonFile: ShapePointsManger.hindiLriLongSmall,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiLriLongCustomPositions,
+        ));
+        break;
+      case 'ए': // e
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.eBig,
+          smallPath: HindiShapePaths.eSmall,
+          dottedPath: HindiShapePaths.eDotted,
+          bigJsonFile: ShapePointsManger.hindiEBig,
+          smallJsonFile: ShapePointsManger.hindiESmall,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiECustomPositions,
+        ));
+        break;
+      case 'ऐ': // ee
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.eeBig,
+          smallPath: HindiShapePaths.eeSmall,
+          dottedPath: HindiShapePaths.eeDotted,
+          bigJsonFile: ShapePointsManger.hindiEeBig,
+          smallJsonFile: ShapePointsManger.hindiEeSmall,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiEeCustomPositions,
+        ));
+        break;
+      case 'ओ': // o
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.oBig,
+          smallPath: HindiShapePaths.oSmall,
+          dottedPath: HindiShapePaths.oDotted,
+          bigJsonFile: ShapePointsManger.hindiOBig,
+          smallJsonFile: ShapePointsManger.hindiOSmall,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiOCustomPositions,
+        ));
+        break;
+      case 'औ': // oo
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.ooBig,
+          smallPath: HindiShapePaths.ooSmall,
+          dottedPath: HindiShapePaths.ooDotted,
+          bigJsonFile: ShapePointsManger.hindiOoBig,
+          smallJsonFile: ShapePointsManger.hindiOoSmall,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiOoCustomPositions,
+        ));
+        break;
+      case 'क': // ka
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.kaBig,
+          smallPath: HindiShapePaths.kaSmall,
+          dottedPath: HindiShapePaths.kaDotted,
+          bigJsonFile: ShapePointsManger.hindiKaBig,
+          smallJsonFile: ShapePointsManger.hindiKaSmall,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiKaCustomPositions,
+        ));
+        break;
+      case 'ख': // kha
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.khaBig,
+          smallPath: HindiShapePaths.khaSmall,
+          dottedPath: HindiShapePaths.khaDotted,
+          bigJsonFile: ShapePointsManger.hindiKhaBig,
+          smallJsonFile: ShapePointsManger.hindiKhaSmall,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiKhaCustomPositions,
+        ));
+        break;
+      case 'ग': // ga
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.gaBig,
+          smallPath: HindiShapePaths.gaSmall,
+          dottedPath: HindiShapePaths.gaDotted,
+          bigJsonFile: ShapePointsManger.hindiGaBig,
+          smallJsonFile: ShapePointsManger.hindiGaSmall,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiGaCustomPositions,
+        ));
+        break;
+      case 'घ': // gha
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.ghaBig,
+          smallPath: HindiShapePaths.ghaSmall,
+          dottedPath: HindiShapePaths.ghaDotted,
+          bigJsonFile: ShapePointsManger.hindiGhaBig,
+          smallJsonFile: ShapePointsManger.hindiGhaSmall,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiGhaCustomPositions,
+        ));
+        break;
+      case 'ङ': // nga
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.ngaBig,
+          smallPath: HindiShapePaths.ngaSmall,
+          dottedPath: HindiShapePaths.ngaDotted,
+          bigJsonFile: ShapePointsManger.hindiNgaBig,
+          smallJsonFile: ShapePointsManger.hindiNgaSmall,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiNgaCustomPositions,
+        ));
+        break;
+      case 'च': // cha
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.chaBig,
+          smallPath: HindiShapePaths.chaSmall,
+          dottedPath: HindiShapePaths.chaDotted,
+          bigJsonFile: ShapePointsManger.hindiChaBig,
+          smallJsonFile: ShapePointsManger.hindiChaSmall,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiChaCustomPositions,
+        ));
+        break;
+      case 'छ': // chha
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.chhaBig,
+          smallPath: HindiShapePaths.chhaSmall,
+          dottedPath: HindiShapePaths.chhaDotted,
+          bigJsonFile: ShapePointsManger.hindiChhaBig,
+          smallJsonFile: ShapePointsManger.hindiChhaSmall,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiChhaCustomPositions,
+        ));
+        break;
+      case 'ज': // ja
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.jaBig,
+          smallPath: HindiShapePaths.jaSmall,
+          dottedPath: HindiShapePaths.jaDotted,
+          bigJsonFile: ShapePointsManger.hindiJaBig,
+          smallJsonFile: ShapePointsManger.hindiJaSmall,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiJaCustomPositions,
+        ));
+        break;
+      case 'झ': // jha
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.jhaBig,
+          smallPath: HindiShapePaths.jhaSmall,
+          dottedPath: HindiShapePaths.jhaDotted,
+          bigJsonFile: ShapePointsManger.hindiJhaBig,
+          smallJsonFile: ShapePointsManger.hindiJhaSmall,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiJhaCustomPositions,
+        ));
+        break;
+      case 'ञ': // nya
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.nyaBig,
+          smallPath: HindiShapePaths.nyaSmall,
+          dottedPath: HindiShapePaths.nyaDotted,
+          bigJsonFile: ShapePointsManger.hindiNyaBig,
+          smallJsonFile: ShapePointsManger.hindiNyaSmall,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiNyaCustomPositions,
+        ));
+        break;
+      case 'ट': // ta
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.taBig,
+          smallPath: HindiShapePaths.taSmall,
+          dottedPath: HindiShapePaths.taDotted,
+          bigJsonFile: ShapePointsManger.hindiTaBig,
+          smallJsonFile: ShapePointsManger.hindiTaSmall,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiTaCustomPositions,
+        ));
+        break;
+      case 'ठ': // tha
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.thaBig,
+          smallPath: HindiShapePaths.thaSmall,
+          dottedPath: HindiShapePaths.thaDotted,
+          bigJsonFile: ShapePointsManger.hindiThaBig,
+          smallJsonFile: ShapePointsManger.hindiThaSmall,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiThaCustomPositions,
+        ));
+        break;
+      case 'ड': // da
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.daBig,
+          smallPath: HindiShapePaths.daSmall,
+          dottedPath: HindiShapePaths.daDotted,
+          bigJsonFile: ShapePointsManger.hindiDaBig,
+          smallJsonFile: ShapePointsManger.hindiDaSmall,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiDaCustomPositions,
+        ));
+        break;
+      case 'ढ': // dha
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.dhaBig,
+          smallPath: HindiShapePaths.dhaSmall,
+          dottedPath: HindiShapePaths.dhaDotted,
+          bigJsonFile: ShapePointsManger.hindiDhaBig,
+          smallJsonFile: ShapePointsManger.hindiDhaSmall,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiDhaCustomPositions,
+        ));
+        break;
+      case 'ण': // na
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.naBig,
+          smallPath: HindiShapePaths.naSmall,
+          dottedPath: HindiShapePaths.naDotted,
+          bigJsonFile: ShapePointsManger.hindiNaBig,
+          smallJsonFile: ShapePointsManger.hindiNaSmall,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiNaCustomPositions,
+        ));
+        break;
+      case 'त': // ta2
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.ta2Big,
+          smallPath: HindiShapePaths.ta2Small,
+          dottedPath: HindiShapePaths.ta2Dotted,
+          bigJsonFile: ShapePointsManger.hindiTa2Big,
+          smallJsonFile: ShapePointsManger.hindiTa2Small,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiTa2CustomPositions,
+        ));
+        break;
+      case 'थ': // tha2
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.tha2Big,
+          smallPath: HindiShapePaths.tha2Small,
+          dottedPath: HindiShapePaths.tha2Dotted,
+          bigJsonFile: ShapePointsManger.hindiTha2Big,
+          smallJsonFile: ShapePointsManger.hindiTha2Small,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiTha2CustomPositions,
+        ));
+        break;
+      case 'द': // da2
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.da2Big,
+          smallPath: HindiShapePaths.da2Small,
+          dottedPath: HindiShapePaths.da2Dotted,
+          bigJsonFile: ShapePointsManger.hindiDa2Big,
+          smallJsonFile: ShapePointsManger.hindiDa2Small,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiDa2CustomPositions,
+        ));
+        break;
+      case 'ध': // dha2
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.dha2Big,
+          smallPath: HindiShapePaths.dha2Small,
+          dottedPath: HindiShapePaths.dha2Dotted,
+          bigJsonFile: ShapePointsManger.hindiDha2Big,
+          smallJsonFile: ShapePointsManger.hindiDha2Small,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiDha2CustomPositions,
+        ));
+        break;
+      case 'न': // na2
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.na2Big,
+          smallPath: HindiShapePaths.na2Small,
+          dottedPath: HindiShapePaths.na2Dotted,
+          bigJsonFile: ShapePointsManger.hindiNa2Big,
+          smallJsonFile: ShapePointsManger.hindiNa2Small,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiNa2CustomPositions,
+        ));
+        break;
+      case 'प': // pa
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.paBig,
+          smallPath: HindiShapePaths.paSmall,
+          dottedPath: HindiShapePaths.paDotted,
+          bigJsonFile: ShapePointsManger.hindiPaBig,
+          smallJsonFile: ShapePointsManger.hindiPaSmall,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiPaCustomPositions,
+        ));
+        break;
+      case 'फ': // pha
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.phaBig,
+          smallPath: HindiShapePaths.phaSmall,
+          dottedPath: HindiShapePaths.phaDotted,
+          bigJsonFile: ShapePointsManger.hindiPhaBig,
+          smallJsonFile: ShapePointsManger.hindiPhaSmall,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiPhaCustomPositions,
+        ));
+        break;
+      case 'ब': // ba
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.baBig,
+          smallPath: HindiShapePaths.baSmall,
+          dottedPath: HindiShapePaths.baDotted,
+          bigJsonFile: ShapePointsManger.hindiBaBig,
+          smallJsonFile: ShapePointsManger.hindiBaSmall,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiBaCustomPositions,
+        ));
+        break;
+      case 'भ': // bha
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.bhaBig,
+          smallPath: HindiShapePaths.bhaSmall,
+          dottedPath: HindiShapePaths.bhaDotted,
+          bigJsonFile: ShapePointsManger.hindiBhaBig,
+          smallJsonFile: ShapePointsManger.hindiBhaSmall,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiBhaCustomPositions,
+        ));
+        break;
+      case 'म': // ma
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.maBig,
+          smallPath: HindiShapePaths.maSmall,
+          dottedPath: HindiShapePaths.maDotted,
+          bigJsonFile: ShapePointsManger.hindiMaBig,
+          smallJsonFile: ShapePointsManger.hindiMaSmall,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiMaCustomPositions,
+        ));
+        break;
+      case 'य': // ya
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.yaBig,
+          smallPath: HindiShapePaths.yaSmall,
+          dottedPath: HindiShapePaths.yaDotted,
+          bigJsonFile: ShapePointsManger.hindiYaBig,
+          smallJsonFile: ShapePointsManger.hindiYaSmall,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiYaCustomPositions,
+        ));
+        break;
+      case 'र': // ra
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.raBig,
+          smallPath: HindiShapePaths.raSmall,
+          dottedPath: HindiShapePaths.raDotted,
+          bigJsonFile: ShapePointsManger.hindiRaBig,
+          smallJsonFile: ShapePointsManger.hindiRaSmall,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiRaCustomPositions,
+        ));
+        break;
+      case 'ल': // la
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.laBig,
+          smallPath: HindiShapePaths.laSmall,
+          dottedPath: HindiShapePaths.laDotted,
+          bigJsonFile: ShapePointsManger.hindiLaBig,
+          smallJsonFile: ShapePointsManger.hindiLaSmall,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiLaCustomPositions,
+        ));
+        break;
+      case 'ळ': // lla
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.llaBig,
+          smallPath: HindiShapePaths.llaSmall,
+          dottedPath: HindiShapePaths.llaDotted,
+          bigJsonFile: ShapePointsManger.hindiLlaBig,
+          smallJsonFile: ShapePointsManger.hindiLlaSmall,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiLlaCustomPositions,
+        ));
+        break;
+      case 'व': // va
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.vaBig,
+          smallPath: HindiShapePaths.vaSmall,
+          dottedPath: HindiShapePaths.vaDotted,
+          bigJsonFile: ShapePointsManger.hindiVaBig,
+          smallJsonFile: ShapePointsManger.hindiVaSmall,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiVaCustomPositions,
+        ));
+        break;
+      case 'श': // sha
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.shaBig,
+          smallPath: HindiShapePaths.shaSmall,
+          dottedPath: HindiShapePaths.shaDotted,
+          bigJsonFile: ShapePointsManger.hindiShaBig,
+          smallJsonFile: ShapePointsManger.hindiShaSmall,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiShaCustomPositions,
+        ));
+        break;
+      case 'ष': // ssa
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.ssaBig,
+          smallPath: HindiShapePaths.ssaSmall,
+          dottedPath: HindiShapePaths.ssaDotted,
+          bigJsonFile: ShapePointsManger.hindiSsaBig,
+          smallJsonFile: ShapePointsManger.hindiSsaSmall,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiSsaCustomPositions,
+        ));
+        break;
+      case 'स': // sa
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.saBig,
+          smallPath: HindiShapePaths.saSmall,
+          dottedPath: HindiShapePaths.saDotted,
+          bigJsonFile: ShapePointsManger.hindiSaBig,
+          smallJsonFile: ShapePointsManger.hindiSaSmall,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiSaCustomPositions,
+        ));
+        break;
+      case 'ह': // ha
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.haBig,
+          smallPath: HindiShapePaths.haSmall,
+          dottedPath: HindiShapePaths.haDotted,
+          bigJsonFile: ShapePointsManger.hindiHaBig,
+          smallJsonFile: ShapePointsManger.hindiHaSmall,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiHaCustomPositions,
+        ));
+        break;
+      case 'क्ष': // ksha
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.kshaBig,
+          smallPath: HindiShapePaths.kshaSmall,
+          dottedPath: HindiShapePaths.kshaDotted,
+          bigJsonFile: ShapePointsManger.hindiKshaBig,
+          smallJsonFile: ShapePointsManger.hindiKshaSmall,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiKshaCustomPositions,
+        ));
+        break;
+      case 'त्र': // tra
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.traBig,
+          smallPath: HindiShapePaths.traSmall,
+          dottedPath: HindiShapePaths.traDotted,
+          bigJsonFile: ShapePointsManger.hindiTraBig,
+          smallJsonFile: ShapePointsManger.hindiTraSmall,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiTraCustomPositions,
+        ));
+        break;
+      case 'ज्ञ': // gya
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.gyaBig,
+          smallPath: HindiShapePaths.gyaSmall,
+          dottedPath: HindiShapePaths.gyaDotted,
+          bigJsonFile: ShapePointsManger.hindiGyaBig,
+          smallJsonFile: ShapePointsManger.hindiGyaSmall,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiGyaCustomPositions,
+        ));
+        break;
+      default:
+        // Return empty list for unsupported Hindi letters
         break;
     }
 

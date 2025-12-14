@@ -33,7 +33,7 @@ class _MyAppState extends State<MyApp> {
                 // Telugu letters with multiple pages
                 traceShapeModel: [
                   // Page 1: అ (a) and ఆ (aa)
-                  TraceCharsModel(chars: [
+                  /*TraceCharsModel(chars: [
                     TraceCharModel(
                       char: 'అ', // Telugu vowel "a"
                       traceShapeOptions: const TraceShapeOptions(
@@ -225,7 +225,7 @@ class _MyAppState extends State<MyApp> {
                         innerPaintColor: Colors.brown,
                       ),
                     ),
-                  ]),
+                  ]),*/
                   TraceCharsModel(chars: [
                     TraceCharModel(
                       char: 'డ', // Telugu consonant "da"
@@ -406,6 +406,361 @@ class _MyAppState extends State<MyApp> {
                   TraceCharsModel(chars: [
                     TraceCharModel(
                       char: 'క్ష', // Telugu consonant "ksha"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.deepPurple,
+                      ),
+                    ),
+                  ]),
+                  // Hindi letters - Vowels
+                  // Each letter on its own screen
+                  /*TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'अ', // Hindi vowel "a"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.orange,
+                      ),
+                    ),
+                  ]),
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'आ', // Hindi vowel "aa"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.blue,
+                      ),
+                    ),
+                  ]),
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'इ', // Hindi vowel "i"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.green,
+                      ),
+                    ),
+                  ]),
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'ई', // Hindi vowel "ii"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.purple,
+                      ),
+                    ),
+                  ]),
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'उ', // Hindi vowel "u"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.red,
+                      ),
+                    ),
+                  ]),
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'ऊ', // Hindi vowel "uu"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.pink,
+                      ),
+                    ),
+                  ]),*/
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'ऋ', // Hindi vowel "ri"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.lime,
+                      ),
+                    ),
+                  ]),
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'ए', // Hindi vowel "e"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.teal,
+                      ),
+                    ),
+                  ]),
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'ऐ', // Hindi vowel "ee"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.cyan,
+                      ),
+                    ),
+                  ]),
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'ओ', // Hindi vowel "o"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.brown,
+                      ),
+                    ),
+                  ]),
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'औ', // Hindi vowel "oo"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.amber,
+                      ),
+                    ),
+                  ]),
+                  // Hindi Consonants
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'क', // Hindi consonant "ka"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.orange,
+                      ),
+                    ),
+                  ]),
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'ख', // Hindi consonant "kha"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.blue,
+                      ),
+                    ),
+                  ]),
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'ग', // Hindi consonant "ga"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.green,
+                      ),
+                    ),
+                  ]),
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'घ', // Hindi consonant "gha"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.purple,
+                      ),
+                    ),
+                  ]),
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'च', // Hindi consonant "cha"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.red,
+                      ),
+                    ),
+                  ]),
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'छ', // Hindi consonant "chha"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.pink,
+                      ),
+                    ),
+                  ]),
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'ज', // Hindi consonant "ja"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.teal,
+                      ),
+                    ),
+                  ]),
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'झ', // Hindi consonant "jha"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.cyan,
+                      ),
+                    ),
+                  ]),
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'ट', // Hindi consonant "ta"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.indigo,
+                      ),
+                    ),
+                  ]),
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'ठ', // Hindi consonant "tha"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.brown,
+                      ),
+                    ),
+                  ]),
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'ड', // Hindi consonant "da"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.amber,
+                      ),
+                    ),
+                  ]),
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'ढ', // Hindi consonant "dha"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.deepOrange,
+                      ),
+                    ),
+                  ]),
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'त', // Hindi consonant "ta2"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.blueGrey,
+                      ),
+                    ),
+                  ]),
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'थ', // Hindi consonant "tha2"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.grey,
+                      ),
+                    ),
+                  ]),
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'द', // Hindi consonant "da2"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.orange,
+                      ),
+                    ),
+                  ]),
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'ध', // Hindi consonant "dha2"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.blue,
+                      ),
+                    ),
+                  ]),
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'न', // Hindi consonant "na2"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.green,
+                      ),
+                    ),
+                  ]),
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'प', // Hindi consonant "pa"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.purple,
+                      ),
+                    ),
+                  ]),
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'फ', // Hindi consonant "pha"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.red,
+                      ),
+                    ),
+                  ]),
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'ब', // Hindi consonant "ba"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.pink,
+                      ),
+                    ),
+                  ]),
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'भ', // Hindi consonant "bha"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.teal,
+                      ),
+                    ),
+                  ]),
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'म', // Hindi consonant "ma"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.cyan,
+                      ),
+                    ),
+                  ]),
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'य', // Hindi consonant "ya"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.indigo,
+                      ),
+                    ),
+                  ]),
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'र', // Hindi consonant "ra"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.brown,
+                      ),
+                    ),
+                  ]),
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'ल', // Hindi consonant "la"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.amber,
+                      ),
+                    ),
+                  ]),
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'व', // Hindi consonant "va"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.lime,
+                      ),
+                    ),
+                  ]),
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'श', // Hindi consonant "sha"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.blueGrey,
+                      ),
+                    ),
+                  ]),
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'ष', // Hindi consonant "ssa"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.grey,
+                      ),
+                    ),
+                  ]),
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'स', // Hindi consonant "sa"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.orange,
+                      ),
+                    ),
+                  ]),
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'ह', // Hindi consonant "ha"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.blue,
+                      ),
+                    ),
+                  ]),
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'क्ष', // Hindi consonant "ksha"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.deepPurple,
+                      ),
+                    ),
+                  ]),
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'त्र', // Hindi consonant "tra"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.deepPurple,
+                      ),
+                    ),
+                  ]),
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'ज्ञ', // Hindi consonant "gya"
                       traceShapeOptions: const TraceShapeOptions(
                         innerPaintColor: Colors.deepPurple,
                       ),
