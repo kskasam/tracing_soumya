@@ -225,7 +225,7 @@ class _MyAppState extends State<MyApp> {
                         innerPaintColor: Colors.brown,
                       ),
                     ),
-                  ]),*/
+                  ]),
                   TraceCharsModel(chars: [
                     TraceCharModel(
                       char: 'డ', // Telugu consonant "da"
@@ -410,7 +410,7 @@ class _MyAppState extends State<MyApp> {
                         innerPaintColor: Colors.deepPurple,
                       ),
                     ),
-                  ]),
+                  ]),*/
                   // Hindi letters - Vowels
                   // Each letter on its own screen
                   /*TraceCharsModel(chars: [
@@ -460,7 +460,7 @@ class _MyAppState extends State<MyApp> {
                         innerPaintColor: Colors.pink,
                       ),
                     ),
-                  ]),*/
+                  ]),
                   TraceCharsModel(chars: [
                     TraceCharModel(
                       char: 'ऋ', // Hindi vowel "ri"
@@ -685,7 +685,7 @@ class _MyAppState extends State<MyApp> {
                         innerPaintColor: Colors.indigo,
                       ),
                     ),
-                  ]),
+                  ]),*/
                   TraceCharsModel(chars: [
                     TraceCharModel(
                       char: 'र', // Hindi consonant "ra"
