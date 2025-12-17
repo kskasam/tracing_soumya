@@ -328,6 +328,12 @@ flutter:
     - packages/tracing_game/assets/phontics_assets_points/hindi_phontics/a_big_PointsInfo.json
     - packages/tracing_game/assets/phontics_assets_points/hindi_phontics/a_small_PointsInfo.json
     - packages/tracing_game/assets/phontics_assets_points/hindi_phontics/a_custom_positions.json
+    - packages/tracing_game/assets/phontics_assets_points/hindi_phontics/am_big_PointsInfo.json
+    - packages/tracing_game/assets/phontics_assets_points/hindi_phontics/am_small_PointsInfo.json
+    - packages/tracing_game/assets/phontics_assets_points/hindi_phontics/am_custom_positions.json
+    - packages/tracing_game/assets/phontics_assets_points/hindi_phontics/aha_big_PointsInfo.json
+    - packages/tracing_game/assets/phontics_assets_points/hindi_phontics/aha_small_PointsInfo.json
+    - packages/tracing_game/assets/phontics_assets_points/hindi_phontics/aha_custom_positions.json
     - packages/tracing_game/assets/phontics_assets_points/hindi_phontics/aa_big_PointsInfo.json
     - packages/tracing_game/assets/phontics_assets_points/hindi_phontics/aa_small_PointsInfo.json
     - packages/tracing_game/assets/phontics_assets_points/hindi_phontics/aa_custom_positions.json

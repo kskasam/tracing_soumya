@@ -341,6 +341,10 @@ class ShapePointsManger {
   // Hindi letters
   static const hindiABig = '$hindiBase/a_big_PointsInfo.json';
   static const hindiASmall = '$hindiBase/a_small_PointsInfo.json';
+  static const hindiAmBig = '$hindiBase/am_big_PointsInfo.json';
+  static const hindiAmSmall = '$hindiBase/am_small_PointsInfo.json';
+  static const hindiAhaBig = '$hindiBase/aha_big_PointsInfo.json';
+  static const hindiAhaSmall = '$hindiBase/aha_small_PointsInfo.json';
   static const hindiAaBig = '$hindiBase/aa_big_PointsInfo.json';
   static const hindiAaSmall = '$hindiBase/aa_small_PointsInfo.json';
   static const hindiBaBig = '$hindiBase/ba_big_PointsInfo.json';
@@ -445,6 +449,8 @@ class ShapePointsManger {
   // Hindi custom positions JSON files
   static const hindiACustomPositions = '$hindiBase/a_custom_positions.json';
   static const hindiAaCustomPositions = '$hindiBase/aa_custom_positions.json';
+  static const hindiAmCustomPositions = '$hindiBase/am_custom_positions.json';
+  static const hindiAhaCustomPositions = '$hindiBase/aha_custom_positions.json';
   static const hindiBaCustomPositions = '$hindiBase/ba_custom_positions.json';
   static const hindiBhaCustomPositions = '$hindiBase/bha_custom_positions.json';
   static const hindiChaCustomPositions = '$hindiBase/cha_custom_positions.json';

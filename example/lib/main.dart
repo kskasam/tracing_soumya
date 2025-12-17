@@ -501,6 +501,22 @@ class _MyAppState extends State<MyApp> {
                       ),
                     ),
                   ]),
+                   TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'अं', // Hindi "am"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.blue,
+                      ),
+                    ),
+                  ]),
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'अः', // Hindi "aha"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.deepPurple,
+                      ),
+                    ),
+                  ]),
                   // Hindi Consonants
                   TraceCharsModel(chars: [
                     TraceCharModel(
@@ -685,7 +701,7 @@ class _MyAppState extends State<MyApp> {
                         innerPaintColor: Colors.indigo,
                       ),
                     ),
-                  ]),*/
+                  ]),
                   TraceCharsModel(chars: [
                     TraceCharModel(
                       char: 'र', // Hindi consonant "ra"
@@ -738,7 +754,7 @@ class _MyAppState extends State<MyApp> {
                     TraceCharModel(
                       char: 'ह', // Hindi consonant "ha"
                       traceShapeOptions: const TraceShapeOptions(
-                        innerPaintColor: Colors.blue,
+                        innerPaintColor: Colors.deepPurple,
                       ),
                     ),
                   ]),
@@ -766,6 +782,31 @@ class _MyAppState extends State<MyApp> {
                       ),
                     ),
                   ]),
+                   TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'ङ', // Hindi consonant "nga"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.deepPurple,
+                      ),
+                    ),
+                  ]),*/
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'ञ', // Hindi consonant "nya"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.deepPurple,
+                      ),
+                    ),
+                  ]),
+                  TraceCharsModel(chars: [
+                    TraceCharModel(
+                      char: 'ण', // Hindi consonant "na"
+                      traceShapeOptions: const TraceShapeOptions(
+                        innerPaintColor: Colors.deepPurple,
+                      ),
+                    ),
+                  ]),
+                  
                 ],
                 onTracingUpdated: (int currentTracingIndex) async {
                   print('/////onTracingUpdated:' +

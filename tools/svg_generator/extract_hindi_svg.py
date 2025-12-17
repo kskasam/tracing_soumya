@@ -84,9 +84,6 @@ HINDI_LETTERS = {
     'sa': 0x0938,     # स
     'ha': 0x0939,     # ह
     'lla': 0x0933,    # ळ
-    'ksha': 0x0915,   # क्ष (composite, but we'll use base)
-    'tra': 0x0924,    # त्र (composite, but we'll use base)
-    'gya': 0x091C,    # ज्ञ (composite, but we'll use base)
 }
 
 # Try multiple possible URLs for Noto Sans Devanagari (fallback)

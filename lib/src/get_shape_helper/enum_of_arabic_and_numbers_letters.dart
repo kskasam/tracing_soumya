@@ -949,6 +949,30 @@ class TypeExtensionTracking {
           customPositionsJsonFile: ShapePointsManger.hindiACustomPositions,
         ));
         break;
+      case 'अं': // am
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.amBig,
+          smallPath: HindiShapePaths.amSmall,
+          dottedPath: HindiShapePaths.amDotted,
+          bigJsonFile: ShapePointsManger.hindiAmBig,
+          smallJsonFile: ShapePointsManger.hindiAmSmall,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiAmCustomPositions,
+        ));
+        break;
+      case 'अः': // aha
+        list.add(_createHindiTraceModel(
+          sizeOfLetter: sizeOfLetter,
+          bigPath: HindiShapePaths.ahaBig,
+          smallPath: HindiShapePaths.ahaSmall,
+          dottedPath: HindiShapePaths.ahaDotted,
+          bigJsonFile: ShapePointsManger.hindiAhaBig,
+          smallJsonFile: ShapePointsManger.hindiAhaSmall,
+          isBig: true,
+          customPositionsJsonFile: ShapePointsManger.hindiAhaCustomPositions,
+        ));
+        break;
       case 'आ': // aa
         list.add(_createHindiTraceModel(
           sizeOfLetter: sizeOfLetter,
