@@ -85,12 +85,14 @@ class _TracingCharsGameState extends State<TracingCharsGame> {
                         children: List.generate(
                         state.letterPathsModels.length,
                         (index) {
+                          // Scale factor to increase character size (1.5x = 50% larger)
+                          const double scaleFactor = 1.0;
                           return Container(
                             // FIXED: Was swapped - now correct
                             height:
-                                state.letterPathsModels[index].viewSize.height,
+                                state.letterPathsModels[index].viewSize.height * scaleFactor,
                             width: state
-                                .letterPathsModels[index].viewSize.width,
+                                .letterPathsModels[index].viewSize.width * scaleFactor,
                             // No border or padding - clean display
                             margin: const EdgeInsets.all(8), // Visual margin
                             child: FittedBox(
@@ -115,8 +117,8 @@ class _TracingCharsGameState extends State<TracingCharsGame> {
                                   // alignment: Alignment.b,
                                   children: [
                                     CustomPaint(
-                                      // isComplex: true,
-                                      size: state.letterPathsModels[index].viewSize, // Use per-letter viewSize
+                                      // isComplex: true
+                                      size: state.letterPathsModels[index].viewSize, // Use original viewSize
               
                                       painter: PhoneticsPainter(
                                         strokeIndex: state
@@ -149,7 +151,7 @@ class _TracingCharsGameState extends State<TracingCharsGame> {
                                             .innerPaintColor,
                                         viewSize: state
                                             .letterPathsModels[index]
-                                            .viewSize,
+                                            .viewSize, // Use original viewSize
                                         strokePoints: state
                                                 .letterPathsModels[index]
                                                 .allStrokePoints[
